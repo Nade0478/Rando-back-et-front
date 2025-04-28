@@ -1,0 +1,25 @@
+.sidebar {
+  position:fixed;
+  max-height: 100vh;
+  overflow-y: auto; /* Active le défilement vertical si nécessaire */
+  border-right: 1px solid #ccc; /* Bordure légère */
+  top: 0;
+  left: 0;
+  width: 155px; /* Largeur constante */
+  height: 100vh; /* Hauteur égale à celle de la fenêtre */
+  background-color: #000000; /* Couleur de fond sombre */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  z-index: 10; /* Priorité visuelle au-dessus des cartes */
+  text-align: left;
+}
+ul {
+  list-style-type: none;
+}
+
+ol {
+  list-style-type: none;
+}
+

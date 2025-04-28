@@ -1,0 +1,38 @@
+body {
+    align-items: center;
+    font-family: 'Lato', sans-serif;
+}
+
+h1 {
+    margin-bottom: 60px;
+}
+
+label {
+    color: #000000;
+}
+
+.btn-send {
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    width: 80%;
+    margin-left: 3px;
+    }
+
+    .btn-select {
+        background-color: #198754;
+        color: white;
+    }
+
+   .form-group {
+.help-block.with-errors {
+    color: #19440c;
+    margin-top: 5px;
+
+}
+
+.card{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+   }

@@ -1,0 +1,46 @@
+.homeNewArticle {
+  padding: 50px 20px;
+}
+
+.homeNewArticle .items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.homeNewArticle .item {
+  width: 250px; /* Taille uniforme des cartes */
+  text-align: center;
+  position: relative;
+}
+
+.homeNewArticle .image-container {
+  width: 100%;
+  height: 200px; /* Hauteur fixe pour uniformiser les images */
+  overflow: hidden;
+}
+
+.homeNewArticle .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ajuste l’image sans déformation */
+  border-radius: 10px;
+}
+
+.homeNewArticle .item-title {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  max-width: 90%;
+}
+
+/* Responsive pour petits écrans */
+@media (max-width: 568px) {
+  .homeNewArticle .items {
+    flex-direction: column;
+    align-items: center;
+  }
+  .homeNewArticle .item {
+    width: 100%;
+  }
+}

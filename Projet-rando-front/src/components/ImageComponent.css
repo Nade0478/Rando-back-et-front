@@ -1,0 +1,9 @@
+.image-component {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement si une hauteur est définie */
+    margin: auto; /* Optionnel : centre aussi en fonction de l'espace disponible */
+    max-width: 500px; /* Fixe une largeur maximale (optionnel) */
+    height: auto; /* Ajuste la hauteur automatiquement */
+  }
+  

@@ -1,0 +1,44 @@
+.navbar-dark {
+  background-color: black;
+}
+
+.navbar-dark .nav-link {
+  color: white !important;
+  font-size: x-large; /* Augmentation de la taille de la police */
+}
+
+.navbar-dark .dropdown-item {
+  color: rgb(2, 2, 2) !important;
+  font-weight: 200;
+  font-size: x-large; /* Agrandir la taille du texte */
+}
+
+.navbar-dark .navbar-brand {
+  color: white !important;
+  font-size: x-large; /* Agrandir la taille de la marque */
+}
+
+.container-fluid {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.font-style {
+  font-size: 60px; /* Encore plus grand */
+  font-weight: 600; /* Texte plus épais */
+  letter-spacing: 0.5px; /* Espacement plus visible */
+}
+
+.navbar-custom {
+  height: 180px; /* Ajustez la hauteur selon vos besoins */
+  line-height: 180px; /* Alignement vertical des éléments */
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.nav-link {
+  line-height: 80px; /* Alignement vertical */
+  font-size: xx-large; /* Texte plus grand */
+}

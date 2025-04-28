@@ -1,0 +1,30 @@
+.footer {
+  background-color: #5b3e23;
+  color: black;
+  font-family: "Inknut Antiqua", serif;
+}
+
+.social-icons a {
+  margin: 0 20px;
+  font-size: 1.5em;
+  color: white;
+  transition: transform 0.3s ease-in-out;
+}
+.social-icons a:hover {
+  transform: scale(1.2);
+  color: #f8d7da;
+}
+
+.copyright {
+  font-size: 0.9em;
+  color: #ddd;
+}
+
+.h4 {
+  font-size: larger;
+}
+
+.h5 {
+  font-size: medium;
+}
+/*# sourceMappingURL=style-footer.css.map */
