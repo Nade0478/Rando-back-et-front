@@ -5,8 +5,8 @@ services:
     ports:
       - 8000:80
 
-  vue-docker:
-    container_name: vue-docker
+  react-docker:
+    container_name: react-docker
     build: ./Projet-rando-front
     ports:
       - 80:80
