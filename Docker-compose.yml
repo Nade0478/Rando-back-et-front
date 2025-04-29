@@ -7,7 +7,7 @@ services:
 
   vue-docker:
     container_name: vue-docker
-    build: ./rando-rando-front
+    build: ./Projet-rando-front
     ports:
       - 80:80
 
