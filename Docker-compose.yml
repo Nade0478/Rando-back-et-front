@@ -1,6 +1,6 @@
 services:
-  laravel-docker:
-    container_name: laravel-docker
+  laravel-api-docker:
+    container_name: laravel-api-docker
     build: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
     ports:
       - 8000:80
