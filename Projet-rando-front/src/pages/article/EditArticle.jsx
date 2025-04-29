@@ -25,7 +25,7 @@ const EditArticle = () => {
   const getArticle = useCallback(async () => {
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/api/article/${article}`,
+        `${process.env.REACT_APP_API_URL}/article/${article}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
       );
       setTitle_article(res.data.title_article || "");
@@ -41,7 +41,7 @@ const EditArticle = () => {
   // Récupérer les utilisateurs
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/user");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
       setUsers(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des utilisateurs :", error);
@@ -51,7 +51,7 @@ const EditArticle = () => {
   // Récupérer les catégories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/category");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/category`);
       setCategories(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des catégories :", error);
@@ -96,7 +96,7 @@ const EditArticle = () => {
 
     try {
       await axios.post(
-        `http://127.0.0.1:8000/api/article/${article}`, 
+        `${process.env.REACT_APP_API_URL}/article/${article}`, 
         formData
       );
       navigate("/article"); // Redirection après la mise à jour

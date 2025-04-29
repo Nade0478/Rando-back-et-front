@@ -13,24 +13,25 @@ const Category = () => {
     displayCategory();
   }, []);
 
-  // Fonction pour récupérer les catégories depuis l'API
-  const displayCategory = async () => {
-    try {
-      const res = await axios.get("http://127.0.0.1:8000/api/category",
-        { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
-    )
-      if (res.data) {
-        setCategory(res.data);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des données :", error);
+// Fonction pour récupérer les catégories depuis l'API
+const displayCategory = async () => {
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/category`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
+    });
+
+    if (res.data) {
+      setCategory(res.data);
     }
-  };
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données :", error);
+  }
+};
 
   // Fonction pour supprimer une catégorie
   const deleteCategory = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/category/${id}`,
+      await axios.delete(`${process.env.REACT_APP_API_URL}/category/${id}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )
       displayCategory(); // Rafraîchit la liste après suppression

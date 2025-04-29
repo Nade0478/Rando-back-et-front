@@ -22,7 +22,7 @@ const EditUser = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/user/${id}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/user/${id}`);
         setName(res.data.name || res.data.name_user);
         setEmail(res.data.email || res.data.email_user);
         setRoleId(res.data.role_id);
@@ -33,7 +33,7 @@ const EditUser = () => {
 
     const fetchRoles = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/role");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/role`);
         setRoles(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des rôles :", error);
@@ -59,7 +59,7 @@ const EditUser = () => {
     }
 
     try {
-      await axios.patch(`http://127.0.0.1:8000/api/user/${id}`, formData, {
+      await axios.patch(`${process.env.REACT_APP_API_URL}/user/${id}`, formData, {
         headers: { "Content-Type": "application/json" },
       });
 

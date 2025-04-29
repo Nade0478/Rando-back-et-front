@@ -23,7 +23,7 @@ const EditCategory = () => {
         }
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/category/${category}`,
+          `${process.env.REACT_APP_API_URL}/category/${category}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ const EditCategory = () => {
         return;
       }
 
-      await axios.put(`http://127.0.0.1:8000/api/category/${category}`, data, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/category/${category}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json", // Spécifie l'envoi en JSON

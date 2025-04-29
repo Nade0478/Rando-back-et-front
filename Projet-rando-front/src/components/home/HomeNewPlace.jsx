@@ -9,19 +9,19 @@ const HomeNewPlace = () => {
     {
       id: 72,
       title: "Parcours de randonnée ville",
-      image: "http://127.0.0.1:8000/storage/public/uploads/cite-plantagenet72.jpg",
+      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/cite-plantagenet72.jpg`,
       alt: "parcours cité Plantagenet 72 ville"
     },
     {
       id: 64,
       title: "Parcours de randonnée mer",
-      image: "http://127.0.0.1:8000/storage/public/uploads/GR34-Bretagne.jpg",
+      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/GR34-Bretagne.jpg`,
       alt: "Parcours GR34 Bretagne"
     },
     {
       id: 66,
       title: "Parcours de randonnée campagne",
-      image: "http://127.0.0.1:8000/storage/public/uploads/Vallee-Blavet56.jpg",
+      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/Vallee-Blavet56.jpg`,
       alt: "parcours vallée Blavet 56 campagne"
     },
   ];

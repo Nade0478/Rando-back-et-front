@@ -8,7 +8,7 @@ const AboutForm4 = () => {
     <section
     // className="presentation"
     // style={{
-    //     backgroundImage: `url('http://127.0.0.1:8000/storage/public/uploads/cheminForet_1742477581.png')`, // Assurez-vous que ce chemin est correct
+    //     backgroundImage: `url(`${process.env.REACT_APP_API_URL}/storage/public/uploads/cheminForet_1742477581.png`)`, // Assurez-vous que ce chemin est correct
     //     backgroundSize: 'cover',
     //     backgroundPosition: 'center'
     // }}

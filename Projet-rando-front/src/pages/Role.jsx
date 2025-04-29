@@ -15,7 +15,7 @@ const Role = () => {
 
   const displayRole = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/role",       
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/role`,	       
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )
       if (res.data ) {
@@ -27,7 +27,7 @@ const Role = () => {
   };
 
   const deleteRole = (id) => {
-    axios.delete(`http://127.0.0.1:8000/api/role/${id}`).then(displayRole);
+    axios.delete(`${process.env.REACT_APP_API_URL}/role/${id}`).then(displayRole);
   };
 
   return (

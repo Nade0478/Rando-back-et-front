@@ -23,7 +23,7 @@ if (storedUserId) {
 
   const getCurrentUser = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/currentuser",
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/currentuser`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
       );
       setUser(response.data.data);

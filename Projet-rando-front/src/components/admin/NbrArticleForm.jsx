@@ -11,14 +11,14 @@ function NbrArticleForm() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/article");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/article`);
 
         if (!response.ok) {
           throw new Error("Erreur réseau : " + response.statusText);
         }
 
         const data = await response.json();
-        console.log("Données reçues :", data); // 👀 Vérifie ce que l'API renvoie
+        console.log("Données reçues :", data); // Vérifie ce que l'API renvoie
 
         // Vérifie si la pagination est activée et récupère le total des articles
         if (data.meta && data.meta.total) {

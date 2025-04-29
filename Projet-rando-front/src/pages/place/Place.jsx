@@ -11,7 +11,7 @@ import Sidebar from "../../components/admin/Sidebar";
 
 // Déclaration correcte de l'icône personnalisée
 const customIcon = new L.Icon({
-  iconUrl: "http://127.0.0.1:8000/storage/public/uploads/icon-randonneur.png",
+  iconUrl: `${process.env.REACT_APP_API_URL}/storage/public/uploads/icon-randonneur.png`,
   alt: "Icons",
   iconSize: [25, 25],
   iconAnchor: [16, 32],
@@ -31,7 +31,7 @@ const Place = () => {
   // Fonction pour récupérer les lieux depuis l'API
   const displayPlace = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/place");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/place`);
       setPlace(response.data); // Met à jour les lieux
       setName_place(response.data.map((place) => place.name_place)); // Met à jour la liste des noms
     } catch (error) {
@@ -42,7 +42,7 @@ const Place = () => {
   // Fonction pour supprimer un lieu
   const deletePlace = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/place/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/place/${id}`);
       displayPlace(); // Rafraîchit la liste après suppression
     } catch (error) {
       console.error("Erreur lors de la suppression du lieu :", error);
@@ -91,7 +91,7 @@ const Place = () => {
                 <td>{place.name_place}</td>
                 <td>
                   <img
-                    src={`http://127.0.0.1:8000/storage/public/uploads/${place.image_place}`}
+                    src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${place.image_place}`}
                     alt={place.name_place}
                     width="75px"
                   />

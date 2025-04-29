@@ -12,7 +12,7 @@ const PlaceForm = () => {
           id: 1,
           title: "Alpes Mancelles",
           description: "Découvrez les paysages époustouflants des Alpes Mancelles.",
-          image: "http://127.0.0.1:8000/storage/public/uploads/alpes-mancelle72_1742481051.jpg",
+          image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/alpes-mancelle72_1742481051.jpg`,
           alt: "Alpes Mancelles",
     
         },
@@ -20,14 +20,14 @@ const PlaceForm = () => {
           id: 2,
           title: "Circuit des vignes",
           description: "Parcourez les vignobles pittoresques de la région.",
-          image: "http://127.0.0.1:8000/storage/public/uploads/circuit-des-vignes72_1743030460.jpg",
+          image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/circuit-des-vignes72_1743030460.jpg`,
           alt: "Circuit des vignes"
         },
         {
           id: 3,
           title: "Vallée Ernée",
           description: "Explorez la beauté naturelle de la Vallée Ernée.",
-          image: "http://127.0.0.1:8000/storage/public/uploads/vallée-ernée49_1742477785.jpg",
+          image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/vallée-ernée49_1742477785.jpg`,
           alt: "Vallée Ernée"
         }
     

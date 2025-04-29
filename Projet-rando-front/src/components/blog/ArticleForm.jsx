@@ -13,7 +13,7 @@ const ArticleForm = () => {
   // Fonction pour récupérer les articles depuis l'API
   const fetchArticles = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/article");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/article/`);	
       if (response.data && response.data.data) {
         setArticles(response.data.data); // Mise à jour de l'état avec les articles récupérés
       } else {

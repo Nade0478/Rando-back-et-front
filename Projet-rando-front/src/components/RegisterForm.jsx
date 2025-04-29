@@ -26,7 +26,7 @@ function RegisterForm() {
     try {
       // Appel à l'API pour l'inscription
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/register/",
+        `${process.env.REACT_APP_API_URL}/register/`,
         data,
         {
           headers: {

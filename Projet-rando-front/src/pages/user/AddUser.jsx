@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const AddUser = () => {
   const navigate = useNavigate();
 
-  // ✅ States for each input field
+  // States for each input field
   const [nameUser, setNameUser] = useState("");
   const [emailUser, setEmailUser] = useState("");
   const [passwordUser, setPasswordUser] = useState("");
@@ -18,7 +18,7 @@ const AddUser = () => {
   const addUser = async (e) => {
     e.preventDefault();
 
-    // ✅ Correcting field names expected by Laravel backend
+    // Correcting field names expected by Laravel backend
     const formData = new FormData();
     formData.append("name", nameUser);
     formData.append("email", emailUser);
@@ -26,7 +26,7 @@ const AddUser = () => {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/api/user",
+        `${process.env.REACT_APP_API_URL}/user`,	
         formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )

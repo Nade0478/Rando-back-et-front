@@ -23,7 +23,7 @@ const EditOpinion = () => {
   useEffect(() => {
     const getOpinion = async () => {
       try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/opinion/${opinion}`
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/opinion/${opinion}`
 
         );
         setTitle_opinion(res.data.title_opinion);
@@ -36,7 +36,7 @@ const EditOpinion = () => {
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/user");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
         setUsers(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des utilisateurs :", error);
@@ -45,7 +45,7 @@ const EditOpinion = () => {
 
     const fetchPlaces = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/place");
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/place`);
         setPlaces(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des lieux :", error);
@@ -69,7 +69,7 @@ const EditOpinion = () => {
     formData.append("place_id", parseInt(placeId, 10));
 
     try {
-      await axios.post(`http://127.0.0.1:8000/api/opinion/${opinion}`,formData,
+      await axios.post(`${process.env.REACT_APP_API_URL}/${opinion}`,formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )
       navigate("/opinion");

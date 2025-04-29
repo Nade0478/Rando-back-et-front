@@ -12,29 +12,39 @@ const AddCategory = () => {
   const [nameCategory, setNameCategory] = useState(""); 
   const [validationError, setValidationError] = useState({});
 
+  // Fonction pour ajouter une catégorie
   const addCategory = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name_category", nameCategory);
 
-    await axios
-      .post("http://127.0.0.1:8000/api/category",  formData ,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
-    )
-      .then(() => navigate("/category",         
-    ))
-      .catch(({ response }) => {
-        if (response.status === 422) {
-          setValidationError(response.data.errors);
+    try {
+      // Envoi de la requête POST
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/category`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`, // Authentification
+          },
         }
-      });
+      );
+      navigate("/category"); // Redirection après succès
+    } catch (error) {
+      const { response } = error;
+      if (response && response.status === 422) {
+        setValidationError(response.data.errors); // Gestion des erreurs de validation
+      } else {
+        console.error("Erreur inattendue :", response || "Pas de réponse reçue");
+      }
+    }
   };
 
   return (
     <div className="container mt-5">
       <Sidebar />
       <h4>Créer une nouvelle catégorie</h4>
-      <Form onSubmit={addCategory}>
+      <Form onSubmit={addCategory}> {/* La fonction est utilisée ici */}
         <Row>
           <Col>
             <Form.Group controlId="Name">
@@ -53,7 +63,7 @@ const AddCategory = () => {
       </Form>
       {Object.keys(validationError).length > 0 && (
         <div className="mt-3">
-          <h6>Erreurs de validation:</h6>
+          <h6>Erreurs de validation :</h6>
           <ul>
             {Object.entries(validationError).map(([key, value]) => (
               <li key={key}>{value}</li>

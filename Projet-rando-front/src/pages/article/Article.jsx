@@ -18,7 +18,7 @@ const Article = () => {
 
   const displayArticles = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/article");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/article`);
       const fetchedArticles = response.data.data || []; // Vérification de la structure des données
       setArticles(fetchedArticles);
       setTitles(fetchedArticles.map((article) => article.title_article));
@@ -30,7 +30,7 @@ const Article = () => {
 
   const deleteArticle = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/article/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/article/${id}`);
       alert("Article supprimé avec succès !");
       displayArticles(); // Actualise la liste après suppression
     } catch (error) {
@@ -86,7 +86,7 @@ const Article = () => {
                 <td>
                   {article.image_article ? (
                     <img
-                      src={`http://127.0.0.1:8000/storage/public/uploads/${article.image_article}`}
+                      src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${article.image_article}`}
                       alt={article.title_article}
                       width="75px"
                     />

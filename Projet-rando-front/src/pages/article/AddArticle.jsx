@@ -11,6 +11,7 @@ import Menu from "../../components/Menu";
 const AddArticle = () => {
   const navigate = useNavigate();
 
+  // Déclaration des états
   const [title_article, setTitle_article] = useState("");
   const [date_article, setDate_article] = useState("");
   const [content_article, setContent_article] = useState("");
@@ -27,32 +28,36 @@ const AddArticle = () => {
     fetchCategories();
   }, []);
 
+  // Fonction pour récupérer les utilisateurs
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/user");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
       setUsers(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des utilisateurs :", error);
     }
   };
 
+  // Fonction pour récupérer les catégories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/category");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/category`);
       setCategories(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des catégories :", error);
     }
   };
 
+  // Fonction pour gérer le changement de fichier (image)
   const changeHandler = (e) => {
     setImage_article(e.target.files[0]);
   };
 
-  // Ajouter un article
+  // Fonction pour ajouter un article
   const addArticle = async (e) => {
     e.preventDefault();
 
+    // Créer et remplir le formulaire de données
     const formData = new FormData();
     formData.append("title_article", title_article);
     formData.append("date_article", date_article);
@@ -63,22 +68,21 @@ const AddArticle = () => {
       formData.append("image_article", image_article);
     }
 
-    await axios
-      .post(
-        `http://127.0.0.1:8000/api/article`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
-        }
-      )
-      .then(() => navigate("/article")) // Redirection après succès
-      .catch(({ response }) => {
-        if (response && response.status === 422) {
-          setValidationError(response.data.errors); // Gestion des erreurs de validation
-        } else {
-          console.error("Erreur inattendue :", response);
-        }
+    // Envoi des données à l'API
+    try {
+      await axios.post(`${process.env.REACT_APP_API_URL}/article`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
       });
+      navigate("/article"); // Redirection après succès
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        setValidationError(error.response.data.errors); // Gestion des erreurs de validation
+      } else {
+        console.error("Erreur inattendue :", error.response || "Pas de réponse reçue");
+      }
+    }
   };
 
   return (

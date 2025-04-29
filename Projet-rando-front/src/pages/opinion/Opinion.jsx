@@ -17,7 +17,7 @@ const Opinion = () => {
 
   const displayOpinion = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:8000/api/opinion",
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/opinion`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )
       if (res.data && res.data.data) {
@@ -35,7 +35,7 @@ const Opinion = () => {
 
   const deleteOpinion = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/opinion/${id}`,
+      await axios.delete(`${process.env.REACT_APP_API_URL}/opinion/${id}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
       );
       displayOpinion(); // Rafraîchir la liste après suppression

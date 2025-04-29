@@ -12,7 +12,7 @@ const ShowOpinion = () => {
   // Utilisation de useCallback pour stabiliser la fonction fetchOpinion
   const fetchOpinion = useCallback(async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/opinion/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/opinion/${id}`);
       setOpinion(response.data);
       setLoading(false);
     } catch (error) {

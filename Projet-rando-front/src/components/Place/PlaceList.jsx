@@ -17,7 +17,7 @@ const PlaceList = () => {
   // Fonction pour récupérer les lieux depuis l'API
   const displayPlace = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/place");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/place`);
       setPlace(response.data); // Met à jour les lieux
       setName_place(response.data.map((place) => place.name_place)); // Met à jour la liste des noms
     } catch (error) {
@@ -58,7 +58,7 @@ const PlaceList = () => {
                 <td>{place.name_place}</td>
                 <td>
                   <img
-                    src={`http://127.0.0.1:8000/storage/public/uploads/${place.image_place}`}
+                    src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${place.image_place}`}
                     alt={place.name_place}
                     width="75px"
                   />

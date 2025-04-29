@@ -20,7 +20,7 @@ function LoginForm() {
     try {
       // API call for authentication
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/login/",
+        `${process.env.REACT_APP_API_URL}/login/`,
         data,
         {
           headers: {

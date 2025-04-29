@@ -10,19 +10,19 @@ const HomeNewArticle = () => {
       id: 52,
       title: "Expertise locale",
       description: "Nos itinéraires sont conçus pour vous faire découvrir les trésors cachés.",
-      image: "http://127.0.0.1:8000/storage/public/uploads/cartes-trésor.png",
+      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/cartes-trésor.png`,
     },
     {
       id: 54,
       title: "Descriptions des parcours",
       description: "Chaque itinéraire est accompagné de descriptions détaillées.",
-      image: "http://127.0.0.1:8000/storage/public/uploads/Site-historique.jpg",
+      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/Site-historique.jpg`,
     },
     {
       id: 53,
       title: "Cartes interactives",
       description: "Accédez à des cartes détaillées et interactives pour planifier vos randonnées.",
-      image: "http://127.0.0.1:8000/storage/public/uploads/carte-randonnée.png",
+      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/carte-randonnée.png`,
     },
   ];
 

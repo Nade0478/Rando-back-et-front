@@ -10,7 +10,7 @@ function NbrLieuxForm() {
 
   useEffect(() => {
     // Récupération des lieux depuis une API
-    fetch('http://127.0.0.1:8000/api/place/')
+    fetch(`${process.env.REACT_APP_API_URL}/place/`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Erreur réseau : ' + response.statusText);

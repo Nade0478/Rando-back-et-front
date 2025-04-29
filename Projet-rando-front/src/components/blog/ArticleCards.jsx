@@ -17,7 +17,7 @@ const ArticleCards = ({ articles }) => {
             <Card>
               <Card.Img
                 variant="top"
-                src={`http://127.0.0.1:8000/storage/public/uploads/${article.image_article}`}
+                src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${article.image_article}`}
                 alt={article.title_article || "Image non disponible"}
                 onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
               />

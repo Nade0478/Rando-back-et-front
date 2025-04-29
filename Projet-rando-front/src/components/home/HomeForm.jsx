@@ -7,7 +7,7 @@ const HomeForm = () => {
         <section
             className="presentation"
             style={{
-                // backgroundImage: `url('http://127.0.0.1:8000/storage/public/uploads/arbre-centenaire.jpg')`, // Assurez-vous que ce chemin est correct
+                // backgroundImage: `${process.env.REACT_APP_API_URL}/storage/public/uploads/arbre-centenaire.jpg')`, // Assurez-vous que ce chemin est correct
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
             }}

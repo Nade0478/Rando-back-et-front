@@ -12,7 +12,7 @@ const PagePlace = () => {
   useEffect(() => {
     const fetchPlace = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/place/${id}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/place/${id}`);
         setPlace(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération du lieu :", error);

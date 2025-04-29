@@ -27,7 +27,7 @@ const EditPlace = () => {
   // Fetch the Place details
   const getPlace = useCallback(async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/api/place/${place}`,
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/place/${place}`,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )
       const placeData = res.data;
@@ -78,7 +78,7 @@ const EditPlace = () => {
     }
 
     await axios
-      .post(`http://127.0.0.1:8000/api/place/${place}`, formData,
+      .post(`${process.env.REACT_APP_API_URL}/place/${place}`, formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
     )
       .then(() => navigate("/place"))

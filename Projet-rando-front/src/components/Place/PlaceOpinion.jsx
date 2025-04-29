@@ -21,7 +21,7 @@ const PlaceOpinion = () => {
         // Récupération des opinions depuis l'API
         const fetchOpinions = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/opinion");
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/opinion`);
                 if (response.data && response.data.data) {
                     setOpinion(response.data.data);
                     setTitleOpinion(
@@ -37,7 +37,7 @@ const PlaceOpinion = () => {
         // Suppression d'une opinion
         const deleteOpinion = async (id) => {
             try {
-                await axios.delete(`http://127.0.0.1:8000/api/opinion/${id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/opinion/${id}`);
                 fetchOpinions(); // Rafraîchir la liste après suppression
             } catch (error) {
                 console.error("Erreur lors de la suppression de l'opinion :", error);

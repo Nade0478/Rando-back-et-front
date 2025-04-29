@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Menu from "../../components/Menu";
@@ -10,14 +10,10 @@ const ShowArticle = () => {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchArticle();
-  }, [id]);
-
-  const fetchArticle = async () => {
+  const fetchArticle = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/article/${id}`
+        `${process.env.REACT_APP_API_URL}/article/${id}`
       );
       setArticle(response.data);
       setLoading(false);
@@ -25,7 +21,11 @@ const ShowArticle = () => {
       console.error("Erreur lors de la récupération des détails :", error);
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchArticle();
+  }, [fetchArticle]);
 
   if (loading) {
     return <p>Chargement des informations...</p>;
@@ -57,14 +57,12 @@ const ShowArticle = () => {
           <strong>Image :</strong> {article.image_article}
         </p>
 
-        {/* Image Component */}
         <div className="row">
-          {/* Image Component */}
           <div className="col-md-6-center">
             {article.image_article && (
               <div className="image-component">
                 <img
-                  src={`http://127.0.0.1:8000/storage/public/uploads/${article.image_article}`}
+                  src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${article.image_article}`}
                   alt={article.title_article}
                 />
               </div>
