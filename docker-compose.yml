@@ -6,7 +6,7 @@ services:
       - 8000:80
 
     volumes:
-      - ~/storage:/var/www/app/storage/app/public/public/uploads 
+      - ~/storage/var/www/app/storage 
 
   react-docker:
     container_name: react-docker
