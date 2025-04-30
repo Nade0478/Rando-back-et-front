@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title_article');
             $table->dateTime('date_article');
-            $table->textarea('content_article');
+            $table->text('content_article');
             $table->string('image_article');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
