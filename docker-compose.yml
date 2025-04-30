@@ -5,6 +5,9 @@ services:
     ports:
       - 8000:80
 
+    volumes:
+      - ~/storage/var/www/app/storage 
+
   react-docker:
     container_name: react-docker
     build: ./Projet-rando-front
@@ -18,3 +21,6 @@ services:
       MYSQL_DATABASE: rando-ouest
     ports:
       - 3306:3306
+
+    volumes:
+      - ~/datadir:/var/lib/mysql
