@@ -46,7 +46,7 @@ describe("User Login", () => {
 // Places
 // ------------------------------------------------------------------------------
 
-const Axios = require("axios");
+const Axios = require("axios"); // Déclaration unique au début
 
 describe("Place API Tests", () => {
   test("Get Show", async () => {
@@ -67,6 +67,7 @@ describe("Place API Tests", () => {
       console.error("Erreur lors du GET Show :", error.response?.status, error.response?.data);
     }
   });
+});
 
   test("Get Paginate", async () => {
     try {
@@ -161,7 +162,6 @@ describe("Place API Tests", () => {
       console.error("Erreur lors de la suppression :", error.response?.status, error.response?.data);
     }
   });
-});
 
 // ------------------------------------------------------------------------------
 // admin place
