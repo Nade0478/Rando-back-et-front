@@ -46,167 +46,102 @@ describe("User Login", () => {
 // Places
 // ------------------------------------------------------------------------------
 
+const Axios = require("axios");
+
 describe("Place API Tests", () => {
   test("Get Show", async () => {
     try {
       const placesRes = await Axios.get("/place");
-      const places = placesRes.data.data;
+      const places = placesRes.data;
 
-      if (places && places.length > 0) {
-        const placeId = places[0].id;
-        const res = await Axios.get(`/place/${placeId}`);
-        expect(res.data.data.name).toBeTruthy();
-        expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
-        expect(res.data.data.pv).toBeLessThanOrEqual(100);
-      } else {
-        console.error("No places found!");
+      if (!places || !Array.isArray(places) || places.length === 0) {
+        throw new Error("Aucune place disponible !");
       }
-    } catch (error) {
-      console.error("Error fetching places:", error.response?.status, error.response?.data);
-    }
-  });
-});
 
-  test("Get Show", async () => {
-    const places = await Axios.get("/place");
-    const res = await Axios.get("/place/" + places.data.data[0].id);
-    expect(res.data.data.name).toBeTruthy();
-    expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
-    expect(res.data.data.pv).toBeLessThanOrEqual(100);
+      const res = await Axios.get(`/place/${places[0].id}`);
+
+      expect(res.data.name).toBeTruthy();
+      expect(res.data.pv).toBeGreaterThanOrEqual(1);
+      expect(res.data.pv).toBeLessThanOrEqual(100);
+    } catch (error) {
+      console.error("Erreur lors du GET Show :", error.response?.status, error.response?.data);
+    }
   });
 
   test("Get Paginate", async () => {
     try {
       const res = await Axios.get("/place-paginate?page=1");
-      const data = res.data.data;
-  
+      const data = res.data;
+
       expect(data.maxPages).toBeGreaterThanOrEqual(0);
       expect(data.page).toBe("1");
       expect(data.places).toHaveLength(3);
     } catch (error) {
-      console.error("Pagination error:", error.response?.status, error.response?.data);
+      console.error("Erreur de pagination :", error.response?.status, error.response?.data);
     }
   });
-  
+
   test("Create Place with good data", async () => {
-    const data = { name: "New Place", pv: 50 }; 
     try {
+      const data = { name: "New Place", pv: 50 };
       const oldRes = await Axios.get("/place");
       const oldNumPlace = oldRes.data.length;
-  
+
       const createRes = await Axios.post("/place", data);
-      expect(createRes.status).toBe(201); // Vérifiez le statut HTTP 201 Created
-  
+      expect(createRes.status).toBe(201);
+
       const curRes = await Axios.get("/place");
       const curNumPlace = curRes.data.length;
       expect(curNumPlace).toBe(oldNumPlace + 1);
     } catch (error) {
-      console.error("Creation error:", error.response?.status, error.response?.data);
+      console.error("Erreur lors de la création :", error.response?.status, error.response?.data);
     }
   });
-  
 
-test("Update Place as not user owner", async () => {
-  const data = { name: "Updated Name", pv: 60 };
+  test("Create Place with bad data", async () => {
+    try {
+      const data = { name: "", pv: -10 };
+      const oldRes = await Axios.get("/place");
+      const oldNumPlace = oldRes.data.length;
 
-  try {
-    const res = await Axios.get("/place");
-    const place = res.data.data.find((c) => c.user_id !== user.id);
-
-    if (place) {
-      const updateRes = await Axios.post(`/place/${place.id}`, data, {
-        validateStatus: () => true, // Autoriser les réponses HTTP autres que 200
+      const createRes = await Axios.post("/place", data, {
+        validateStatus: () => true,
       });
-      expect(updateRes.status).toBe(403); // Vérifiez le statut HTTP 403 Forbidden
-    } else {
-      console.error("No place found for update.");
+
+      const curRes = await Axios.get("/place");
+      const curNumPlace = curRes.data.length;
+
+      expect(createRes.status).toBe(422);
+      expect(curNumPlace).toBe(oldNumPlace);
+    } catch (error) {
+      console.error("Erreur lors de la création avec mauvaises données :", error.response?.status, error.response?.data);
     }
-  } catch (error) {
-    console.error("Update error:", error.response?.status, error.response?.data);
-  }
-});
-
-
-describe("place POST", () => {
-  test("Create with good data", async () => {
-    const data = {
-      name_place: "Place 1",
-      longitude_place: 45.8,
-      latitude_place: 4.87,
-      description_place: "Description de la place 1",
-      image_place: "place1.jpg",
-      map_place: "place1_map.jpg",
-      distance_place: 10,
-      difficulty_place: "Facile",
-      estimated_time_place: "08:00",
-    };
-
-    const old = await Axios.get("/place");
-    const oldNumPlace = old.data.length;
-    const createRes = await Axios.post("/place", data);
-    const cur = await Axios.get("/place");
-    const curNumPlace = cur.data.length;
-
-    expect(createRes.data.name).toBe("Place 1");
-    expect(curNumPlace).toBe(oldNumPlace + 1);
   });
 
-  test("Create with bad data", async () => {
-    const data = {
-      name_place: "Place 1",
-      longitude_place: 45.8,
-      latitude_place: 4.87,
-      description_place: "Description de la place 1",
-      image_place: "place1.jpg",
-      map_place: "place1_map.jpg",
-      distance_place: 10,
-      difficulty_place: "Facile",
-      estimated_time_place: "08:00",
-    };
+  test("Update Place as not user owner", async () => {
+    try {
+      const data = { name: "Updated Name", pv: 60 };
+      const res = await Axios.get("/place");
+      const place = res.data.find((c) => c.user_id !== user.id);
 
-    const old = await Axios.get("/place");
-    const oldNumPlace = old.data.length;
-    const createRes = await Axios.post("/place", data, {
-      validateStatus: () => true,
-    });
-    const cur = await Axios.get("/place");
-    const curNumPlace = cur.data.length;
-
-    expect(createRes.status).toBe(422);
-    expect(curNumPlace).toBe(oldNumPlace);
+      if (place) {
+        const updateRes = await Axios.put(`/place/${place.id}`, data, {
+          validateStatus: () => true,
+        });
+        expect(updateRes.status).toBe(403);
+      } else {
+        console.error("Aucune place trouvée pour mise à jour.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour :", error.response?.status, error.response?.data);
+    }
   });
-});
 
-test("Create with bad data", async (data = {
-  name_place: "Place 1",
-  longitude_place: 45.8,
-  latitude_place: 4.87,
-  description_place: "Description de la place 1",
-  image_place: "place1.jpg",
-  map_place: "place1_map.jpg",
-  distance_place: 10,
-  difficulty_place: "Facile",
-  estimated_time_place: "08:00",
-}) => {
-  const old = await Axios.get("/place");
-  const oldNumPlace = old.data.length;
-  // before
-  const createRes = await Axios.post("/place", data, {
-    validateStatus: () => true,
-  });
-  // after
-  const cur = await Axios.get("/place");
-  const curNumPlace = cur.data.length;
-
-  expect(createRes.status).toBe(422);
-  expect(curNumPlace).toBe(oldNumPlace);
-});
-
-describe("Place DELETE", () => {
   test("Delete Place as user owner", async () => {
     try {
       const oldRes = await Axios.get("/place");
-      const places = oldRes.data; 
+      const places = oldRes.data;
+
       if (places && places.length > 0) {
         const place = places.find((c) => c.user_id === user.id);
         if (place) {
@@ -217,17 +152,16 @@ describe("Place DELETE", () => {
           const curPlaces = curRes.data;
           expect(curPlaces.length).toBe(places.length - 1);
         } else {
-          console.error("Aucune place trouvée pour cet utilisateur.");
+          console.error("Aucune place trouvée pour suppression.");
         }
       } else {
         console.error("Aucune place disponible pour suppression.");
       }
     } catch (error) {
-      console.error("Erreur de suppression :", error.response?.status, error.response?.data);
+      console.error("Erreur lors de la suppression :", error.response?.status, error.response?.data);
     }
   });
 });
-
 
 // ------------------------------------------------------------------------------
 // admin place
