@@ -89,7 +89,7 @@ describe("Place API Tests", () => {
   });
   
   test("Create Place with good data", async () => {
-    const data = { name: "New Place", pv: 50 }; // Exemple de données valides
+    const data = { name: "New Place", pv: 50 }; 
     try {
       const oldRes = await Axios.get("/place");
       const oldNumPlace = oldRes.data.length;
@@ -1021,8 +1021,13 @@ async function testConnection() {
     console.log(res.data); // Affichez la réponse
   } catch (error) {
     console.error("Connexion refusée :", error.message);
-    console.error("Détails :", error.response?.data);
-  }
-}
+    if (error.response) {
+      console.error("Statut de l'erreur :", error.response.status);
+      console.error("Détails :", error.response.data);
+    } else {
+      console.error("Erreur sans réponse du serveur :", error);
+    }
+  }}
+  
 
 testConnection();
