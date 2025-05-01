@@ -207,28 +207,28 @@ describe("Place DELETE", () => {
   test("Delete Place as user owner", async () => {
     try {
       const oldRes = await Axios.get("/place");
-      const places = oldRes.data.data;
-  
+      const places = oldRes.data; 
       if (places && places.length > 0) {
         const place = places.find((c) => c.user_id === user.id);
         if (place) {
           const deleteRes = await Axios.delete(`/place/${place.id}`);
           expect(deleteRes.status).toBe(200);
-  
+
           const curRes = await Axios.get("/place");
-          const curNumPlace = curRes.data.length;
-          expect(curNumPlace).toBe(oldRes.data.data.length - 1);
+          const curPlaces = curRes.data;
+          expect(curPlaces.length).toBe(places.length - 1);
         } else {
-          console.error("No place found for user owner.");
+          console.error("Aucune place trouvée pour cet utilisateur.");
         }
       } else {
-        console.error("No places available for deletion.");
+        console.error("Aucune place disponible pour suppression.");
       }
     } catch (error) {
-      console.error("Deletion error:", error.response?.status, error.response?.data);
+      console.error("Erreur de suppression :", error.response?.status, error.response?.data);
     }
   });
-  
+});
+
 
 // ------------------------------------------------------------------------------
 // admin place
@@ -987,11 +987,18 @@ describe("Admin Role PUT", () => {
 describe("Admin Role DELETE", () => {
   test("Delete as admin", async () => {
     const old = await Axios.get("/role");
-    const role = old.data.find((c) => c.user_id != user.id);
+    const role = old.data.find((c) => c.user_id !== user.id);
     const oldNumRole = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/role/" + role-id);
-    // after
+    
+    // Vérification que `role` est défini
+    if (!role) {
+      throw new Error("Aucun rôle correspondant trouvé pour suppression.");
+    }
+
+    // Correction de `role-id` en `role.id`
+    const deleteRes = await Axios.delete("/role/" + role.id);
+    
+    // après suppression
     const cur = await Axios.get("/role");
     const curNumRole = cur.data.length;
 
@@ -999,3 +1006,24 @@ describe("Admin Role DELETE", () => {
     expect(curNumRole).toBe(oldNumRole - 1);
   });
 });
+
+
+  
+  // ------------------------------------------------------------------------------
+// TEST CONNEXION
+// ------------------------------------------------------------------------------
+async function testConnection() {
+  try {
+    const res = await axios.get("http://localhost:3000/admin", {
+      headers: {
+        Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...", // Remplace par un vrai token
+      },
+    });
+    console.log(res.data); // Affichez la réponse
+  } catch (error) {
+    console.error("Connexion refusée :", error.message);
+    console.error("Détails :", error.response?.data);
+  }
+}
+
+testConnection();
