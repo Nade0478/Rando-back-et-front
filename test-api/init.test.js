@@ -1006,16 +1006,14 @@ describe("Admin Role DELETE", () => {
   });
 });
 
-
-  
-  // ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
 // TEST CONNEXION
 // ------------------------------------------------------------------------------
 async function testConnection() {
   try {
     const res = await axios.get("http://localhost:3000/admin", {
       headers: {
-        Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...", // Remplace par un vrai token
+        Authorization: "Bearer 2c633cd2-e00b-4d99-8905-baf203ca9224", // Remplace par un vrai token
       },
     });
     console.log(res.data); // Affichez la réponse
@@ -1029,5 +1027,4 @@ async function testConnection() {
     }
   }}
   
-
 testConnection();
