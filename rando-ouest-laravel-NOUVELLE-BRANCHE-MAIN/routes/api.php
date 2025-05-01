@@ -4,7 +4,6 @@ use App\Http\Controllers\API\ArticleController;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\Manage_placeController;
-use App\Http\Controllers\API\ManagePlaceController;
 use App\Http\Controllers\API\OpinionController;
 use App\Http\Controllers\API\PlaceController;
 use App\Http\Controllers\API\RoleController;

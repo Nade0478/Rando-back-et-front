@@ -20,10 +20,12 @@ class UserController extends Controller
     {
         $formFields = $request->validate([
             'name' => 'required|string',
-            'role_id' => ['required', 'integer'],
+            // 'role_id' => ['required', 'integer'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'confirmed', Password::defaults()]
         ]);
+         // Définir le role_id par défaut (remplace 2 par l'ID du rôle "user")
+        $formFields['role_id'] = 2;
 
         $user = new User();
         $user->fill($formFields);
@@ -63,6 +65,4 @@ class UserController extends Controller
         $user->delete();
         return response()->json(['success' => 'Utilisateur supprimé avec succès']);
     }
-
-
 }

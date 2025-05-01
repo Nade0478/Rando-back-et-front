@@ -13,29 +13,36 @@ const AddUser = () => {
   const [nameUser, setNameUser] = useState("");
   const [emailUser, setEmailUser] = useState("");
   const [passwordUser, setPasswordUser] = useState("");
+  const [confirmPasswordUser, setConfirmPasswordUser] = useState(""); // Ajout de la confirmation
   const [validationError, setValidationError] = useState({});
 
   const addUser = async (e) => {
     e.preventDefault();
 
-    // Correcting field names expected by Laravel backend
+    // Vérifier que les mots de passe correspondent
+    if (passwordUser !== confirmPasswordUser) {
+      setValidationError({ password: ["Les mots de passe ne correspondent pas."] });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", nameUser);
     formData.append("email", emailUser);
     formData.append("password", passwordUser);
+    formData.append("password_confirmation", confirmPasswordUser); // Ajout de la confirmation
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/user`,	
+        `${process.env.REACT_APP_API_URL}/user`,
         formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
-    )
-      navigate("/user"); // Redirect after successful user creation
+      );
+      navigate("/user"); // Redirection après succès
     } catch ({ response }) {
       if (response && response.status === 422) {
-        setValidationError(response.data.errors); // Handle validation errors
+        setValidationError(response.data.errors); // Gestion des erreurs de validation côté Laravel
       } else {
-        console.error("Unexpected error:", response);
+        console.error("Erreur inattendue :", response);
       }
     }
   };
@@ -80,10 +87,24 @@ const AddUser = () => {
             </Form.Group>
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <Form.Group controlId="confirmPassword">
+              <Form.Label>Confirmer le mot de passe</Form.Label>
+              <Form.Control
+                type="password"
+                value={confirmPasswordUser}
+                onChange={(e) => setConfirmPasswordUser(e.target.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
         <Button variant="dark" type="submit" className="mt-3">
           Créer un utilisateur
         </Button>
       </Form>
+
+      {/* Affichage des erreurs */}
       {Object.keys(validationError).length > 0 && (
         <div className="mt-3">
           <h6>Erreurs de validation :</h6>

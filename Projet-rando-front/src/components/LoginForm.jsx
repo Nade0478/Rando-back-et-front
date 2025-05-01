@@ -12,13 +12,19 @@ function LoginForm() {
   const {
     register,
     handleSubmit,
+    watch, // Pour surveiller la valeur du champ password
     formState: { errors },
-  } = useForm({ mode: "onChange" }); // Enables validation on change
-  const [serverError, setServerError] = useState(""); // For handling server errors
+  } = useForm({ mode: "onChange" });
+  const [serverError, setServerError] = useState("");
 
   const onSubmit = async (data) => {
     try {
-      // API call for authentication
+      // Vérification côté frontend
+      if (data.password !== data.password_confirmation) {
+        setServerError("Les mots de passe ne correspondent pas.");
+        return;
+      }
+
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/login/`,
         data,
@@ -31,11 +37,11 @@ function LoginForm() {
       );
 
       if (response.status === 200) {
-        const token = response.data.data.access_token; // Correct token extraction
-        const role_id = parseInt(response.data.data.user.role_id, 10); // Ensure role_id is an integer
-        localStorage.setItem("access_token", token); // Save token in localStorage
+        const token = response.data.data.access_token;
+        const role_id = parseInt(response.data.data.user.role_id, 10);
+        localStorage.setItem("access_token", token);
 
-        // Navigate based on role_id
+        // Redirection selon le rôle
         if (role_id === 1) {
           navigate("/dashboard", { replace: true });
         } else if (role_id === 2) {
@@ -45,7 +51,6 @@ function LoginForm() {
         }
       }
     } catch (error) {
-      // Error handling
       if (error.response && error.response.status === 401) {
         setServerError("Identifiants incorrects. Veuillez réessayer.");
       } else if (error.response && error.response.data.message) {
@@ -92,6 +97,22 @@ function LoginForm() {
           {errors.password && <Form.Text className="text-danger">{errors.password.message}</Form.Text>}
         </Form.Group>
 
+        {/* ✅ Champ confirmation de mot de passe ajouté */}
+        <Form.Group controlId="formBasicPasswordConfirmation" className="mb-3">
+          <Form.Label>Confirmer le mot de passe</Form.Label>
+          <Form.Control
+            type="password"
+            placeholder="Confirmez votre mot de passe"
+            {...register("password_confirmation", {
+              required: "Confirmation du mot de passe obligatoire",
+              validate: (value) => value === watch("password") || "Les mots de passe ne correspondent pas",
+            })}
+          />
+          {errors.password_confirmation && (
+            <Form.Text className="text-danger">{errors.password_confirmation.message}</Form.Text>
+          )}
+        </Form.Group>
+
         <Button type="submit" variant="success">
           Se connecter
         </Button>
@@ -101,3 +122,4 @@ function LoginForm() {
 }
 
 export default LoginForm;
+

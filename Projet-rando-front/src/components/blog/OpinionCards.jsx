@@ -7,7 +7,7 @@ const OpinionCards = ({ opinions }) => {
   return (
     <div className="container mt-4">
       <h3 className="pb-2 border-bottom">LES AVIS</h3>
-      <Link to={`/opinion/add/`}>
+      <Link to={`/opinion/add`}>
       <Button variant="dark">Créer ton avis</Button>
     </Link>      
 
@@ -20,12 +20,12 @@ const OpinionCards = ({ opinions }) => {
                   {opinion.title_opinion || "Titre non disponible"}
                 </Card.Title>
                 <Card.Text>
-                  <strong>Lieux : </strong>
+                  <strong>Lieux: </strong>
                   {(opinion.place && opinion.place.name_place) ||
                     "Lieu inconnu"}
                 </Card.Text>
                 <Card.Text>
-                  <strong> <justifyL>Contenu : </justifyL></strong>
+                  <strong> <justifyL>Contenu: </justifyL></strong>
                   {opinion.content_opinion || "Contenu non disponible"}
                 </Card.Text>
                 <Link to={`/opinion/show/${opinion.id}`}>
