@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams, Link } from "react-router-dom";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import Menu from "../../components/Menu";
-import Footer from "../../components/Footer";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import Sidebar from "../../components/admin/Sidebar";
 
 // Déclaration correcte de l'icône personnalisée
 const customIcon = new L.Icon({
@@ -16,73 +15,78 @@ const customIcon = new L.Icon({
   popupAnchor: [0, -32],
 });
 
-const ShowOpinion = () => {
-  const { id } = useParams();
-  const [opinion, setOpinion] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Utilisation de useCallback pour stabiliser la fonction fetchOpinion
-  const fetchOpinion = useCallback(async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/opinion/${id}`);
-      setOpinion(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des détails :", error);
-      setLoading(false);
-    }
-  }, [id]); // Dépendance sur 'id'
+const ShowPlace = () => {
+  const { id } = useParams(); // Récupération de l'ID du lieu via l'URL
+  const [place, setPlace] = useState(null); // Stocker les détails du lieu
+  const [loading, setLoading] = useState(true); // Gestion du chargement
 
   useEffect(() => {
-    fetchOpinion();
-  }, [fetchOpinion]); // Ajout de fetchOpinion comme dépendance
+    const fetchPlaceDetails = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/place/${id}`);
+        setPlace(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des détails du lieu :", error);
+      }
+    };
+
+    fetchPlaceDetails();
+  }, [id]);
 
   if (loading) {
-    return <p>Chargement des informations...</p>;
+    return <p className="text-center mt-5">Chargement des informations...</p>;
   }
 
-  if (!opinion) {
-    return <p>Le lieu demandé est introuvable.</p>;
+  if (!place) {
+    return <p className="text-center mt-5">Aucun lieu trouvé.</p>;
   }
 
   return (
     <div>
-      <Menu />
+      <Sidebar />
       <div className="container mt-5">
-        <h1>{opinion.title_opinion}</h1>
-        <p><strong>Titre de l'opinion :</strong> {opinion.title_opinion}</p>
-        <p><strong>Contenu :</strong> {opinion.content_opinion}</p>
-        <p><strong>Note :</strong> {opinion.note_opinion}</p>
-        <p><strong>Auteur :</strong> {opinion.user && opinion.user.name}</p>
-        <p><strong>Lieux :</strong> {opinion.place && opinion.place.name_place}</p>
-        
-        {/* Affichage de la carte avec les coordonnées du lieu */}
-        {opinion.place && opinion.place.latitude_place && opinion.place.longitude_place && (
-          <div className="mt-4">
-            <h3>Localisation</h3>
-            <MapContainer
-              style={{ height: "300px", width: "100%" }}
-              center={[opinion.place.latitude_place, opinion.place.longitude_place]}
-              zoom={13}
-              scrollWheelZoom={false}
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              />
-              <Marker
-                position={[opinion.place.latitude_place, opinion.place.longitude_place]}
-                icon={customIcon}
-              >
-                <Popup>{opinion.place.name_place}</Popup>
-              </Marker>
-            </MapContainer>
-          </div>
-        )}
+        <h2 className="pb-2 border-bottom">Détails du lieu : {place.name_place}</h2>
+
+        <div className="text-center">
+          <img
+            src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${place.image_place}`}
+            alt={place.name_place}
+            width="300px"
+            className="mb-3"
+          />
+        </div>
+
+        <ul className="list-group">
+          <li className="list-group-item"><strong>Nom :</strong> {place.name_place}</li>
+          <li className="list-group-item"><strong>Description :</strong> {place.description_place}</li>
+          <li className="list-group-item"><strong>Distance :</strong> {place.distance_place} km</li>
+          <li className="list-group-item"><strong>Difficulté :</strong> {place.difficulty_place}</li>
+          <li className="list-group-item"><strong>Temps estimé :</strong> {place.estimated_time_place}</li>
+        </ul>
+
+        <h3 className="mt-4">Localisation</h3>
+        <MapContainer
+          style={{ height: "300px", width: "100%" }}
+          center={[place.latitude_place, place.longitude_place]}
+          zoom={13}
+          scrollWheelZoom={false}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker position={[place.latitude_place, place.longitude_place]} icon={customIcon}>
+            <Popup>{place.name_place}</Popup>
+          </Marker>
+        </MapContainer>
+
+        <div className="mt-4">
+          <Link to="/place" className="btn btn-dark">Retour à la liste</Link>
+        </div>
       </div>
-      <Footer />
     </div>
   );
 };
 
-export default ShowOpinion;
+export default ShowPlace;
