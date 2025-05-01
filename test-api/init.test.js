@@ -106,8 +106,7 @@ describe("Place API Tests", () => {
   });
   
 
-
-dtest("Update Place as not user owner", async () => {
+test("Update Place as not user owner", async () => {
   const data = { name: "Updated Name", pv: 60 };
 
   try {
