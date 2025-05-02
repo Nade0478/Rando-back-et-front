@@ -1,10 +1,11 @@
 FROM node:lts-alpine as build-stage
+ARG MODE=test
 
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-COPY .env.test .env
+COPY .env.${MODE} .env
 RUN npm run build
 
 # production stage

@@ -1,5 +1,6 @@
 # charge une image de base; Ici un linux avec apache et PHP 8.3
 FROM php:8.3-apache
+ARG MODE=test
 
 # Installation des d�pendances PHP
 RUN apt-get update && apt-get install -y \
@@ -20,7 +21,7 @@ COPY . /var/www/app
 WORKDIR /var/www/app
 
 # Copie de l'environnement
-COPY .env.test /var/www/app/.env
+COPY .env.${MODE} .env
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 
 RUN a2enmod rewrite
