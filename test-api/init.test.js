@@ -936,26 +936,3 @@ describe("Admin Role DELETE", () => {
     expect(curNumRole).toBe(oldNumRole - 1);
   });
 });
-
-// ------------------------------------------------------------------------------
-// TEST CONNEXION
-// ------------------------------------------------------------------------------
-async function testConnection() {
-  try {
-    const res = await axios.get("http://localhost:3000/admin", {
-      headers: {
-        Authorization: "Bearer 2c633cd2-e00b-4d99-8905-baf203ca9224", // Remplace par un vrai token
-      },
-    });
-    console.log(res.data); // Affichez la réponse
-  } catch (error) {
-    console.error("Connexion refusée :", error.message);
-    if (error.response) {
-      console.error("Statut de l'erreur :", error.response.status);
-      console.error("Détails :", error.response.data);
-    } else {
-      console.error("Erreur sans réponse du serveur :", error);
-    }
-  }}
-  
-testConnection();
