@@ -3,14 +3,14 @@ name: RANDO-FRONT-BACK-app
 on: # specify the build to trigger the automated ci/cd
   push:
     branches:
-      - "Nouvelle-branche-main"
+      - "NOUVELLE-BRANCHE-MAIN"
 jobs:
   tests:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Tests-api
+        working-directory: test-api
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -31,7 +31,8 @@ jobs:
       run: npm install
     - name: Install Jest
       run: npm install -g jest
-
+    - name: Run tests
+      run: npm run test
   build-and-push-image-api-prod:
     needs:
       - tests
@@ -44,18 +45,18 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
-          username: jay19240-teaching
+          username:  Nade0478
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./rando-ouest-api
+          context: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
           build-args: |
             "MODE=prod"
           push: true
           tags: |
-            ghcr.io/jay19240-teaching/cda-api-prod:latest
-            ghcr.io/jay19240-teaching/cda-api-prod:${{ github.sha }}
+            ghcr.io/Nade0478/cda-api-prod:latest
+            ghcr.io/Nade0478/cda-api-prod:${{ github.sha }}
 
   build-and-push-image-spa-prod:
     needs:
@@ -69,15 +70,15 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
-          username: jay19240-teaching
+          username: Nade0478
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN-api
+          context: ./Projet-rando-front
           build-args: |
             "MODE=prod"
           push: true
           tags: |
-            ghcr.io/jay19240-teaching/cda-spa-prod:latest
-            ghcr.io/jay19240-teaching/cda-spa-prod:${{ github.sha }}
+            ghcr.io/Nade0478/cda-spa-prod:latest
+            ghcr.io/Nade0478/cda-spa-prod:${{ github.sha }}
