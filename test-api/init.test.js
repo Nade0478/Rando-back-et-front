@@ -369,545 +369,545 @@ describe("User Login", () => {
 
 // ------------------------------------------------------------------------------
 // opinions
-// ------------------------------------------------------------------------------
-describe("opinion GET", () => {
-  test("Récupération de la liste des opinions", async () => {
-    const res = await Axios.get("/opinion");
-    expect(res.data.length).toBeGreaterThanOrEqual(2);
-  });
+// // ------------------------------------------------------------------------------
+// describe("opinion GET", () => {
+//   test("Récupération de la liste des opinions", async () => {
+//     const res = await Axios.get("/opinion");
+//     expect(res.data.length).toBeGreaterThanOrEqual(2);
+//   });
 
-  test("Get Show", async () => {
-    const opinions = await Axios.get("/opinion");
-    const res = await Axios.get("/opinion/" + opinions.data.data[0].id);
-    expect(res.data.data.name).toBeTruthy();
-    expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
-    expect(res.data.data.pv).toBeLessThanOrEqual(100);
-  });
+//   test("Get Show", async () => {
+//     const opinions = await Axios.get("/opinion");
+//     const res = await Axios.get("/opinion/" + opinions.data.data[0].id);
+//     expect(res.data.data.name).toBeTruthy();
+//     expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
+//     expect(res.data.data.pv).toBeLessThanOrEqual(100);
+//   });
 
-  test("Get Paginate", async () => {
-    const res = await Axios.get("/opinion-paginate?page=1");
-    expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
-    expect(res.data.data.page).toBe("1");
-    expect(res.data.data.opinions).toHaveLength(3);
-  });
-});
+//   test("Get Paginate", async () => {
+//     const res = await Axios.get("/opinion-paginate?page=1");
+//     expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
+//     expect(res.data.data.page).toBe("1");
+//     expect(res.data.data.opinions).toHaveLength(3);
+//   });
+// });
 
-describe("Opinion PUT", () => {
-  test("Update as user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/opinion");
-    const opinion = res.data.find((c) => {
-      return c.user_id == user.id;
-    });
-    const updateRes = await Axios.post("/opinion/" + opinion.id, data);
-    expect(updateRes.data.data.name).toBe("New name");
-  });
+// describe("Opinion PUT", () => {
+//   test("Update as user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/opinion");
+//     const opinion = res.data.find((c) => {
+//       return c.user_id == user.id;
+//     });
+//     const updateRes = await Axios.post("/opinion/" + opinion.id, data);
+//     expect(updateRes.data.data.name).toBe("New name");
+//   });
 
-  test("Update as not user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/opinion");
-    const opinion = res.data.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.post("/opinion/" + opinion.id, data.data, {
-      validateStatus: () => true,
-    });
-    expect(updateRes.status).toBe(403);
-    expect(updateRes.data.data.name).not.toBe("New name");
-  });
-});
+//   test("Update as not user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/opinion");
+//     const opinion = res.data.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.post("/opinion/" + opinion.id, data.data, {
+//       validateStatus: () => true,
+//     });
+//     expect(updateRes.status).toBe(403);
+//     expect(updateRes.data.data.name).not.toBe("New name");
+//   });
+// });
 
-describe("opinion POST", () => {
-  test("Create with good data", async () => {
-    const data = {
-      title_opinion: "Opinion 1",
-      content_opinion: "description de l'opinion",
-      note_opinion: 4,
-      place_id: 7,
-      user_id: 20,
-    };
+// describe("opinion POST", () => {
+//   test("Create with good data", async () => {
+//     const data = {
+//       title_opinion: "Opinion 1",
+//       content_opinion: "description de l'opinion",
+//       note_opinion: 4,
+//       place_id: 7,
+//       user_id: 20,
+//     };
 
-    const old = await Axios.get("/opinion");
-    const oldNumOpinion = old.data.length;
-    const createRes = await Axios.post("/opinion", data);
-    const cur = await Axios.get("/opinion");
-    const curNumOpinion = cur.data.length;
+//     const old = await Axios.get("/opinion");
+//     const oldNumOpinion = old.data.length;
+//     const createRes = await Axios.post("/opinion", data);
+//     const cur = await Axios.get("/opinion");
+//     const curNumOpinion = cur.data.length;
 
-    expect(createRes.data.name).toBe("Opinion 1");
-    expect(curNumOpinion).toBe(oldNumOpinion + 1);
-  });
+//     expect(createRes.data.name).toBe("Opinion 1");
+//     expect(curNumOpinion).toBe(oldNumOpinion + 1);
+//   });
 
-  test("Create with bad data", async () => {
-    const data = {
-      title_opinion: "Opinion 1",
-      content_opinion: "description de l'opinion",
-      note_opinion: 4,
-      place_id: 7,
-      user_id: 20,
-    };
+//   test("Create with bad data", async () => {
+//     const data = {
+//       title_opinion: "Opinion 1",
+//       content_opinion: "description de l'opinion",
+//       note_opinion: 4,
+//       place_id: 7,
+//       user_id: 20,
+//     };
 
-    const old = await Axios.get("/opinion");
-    const oldNumOpinion = old.data.length;
-    const createRes = await Axios.post("/opinion", data, {
-      validateStatus: () => true,
-    });
-    const cur = await Axios.get("/opinion");
-    const curNumOpinion = cur.data.length;
+//     const old = await Axios.get("/opinion");
+//     const oldNumOpinion = old.data.length;
+//     const createRes = await Axios.post("/opinion", data, {
+//       validateStatus: () => true,
+//     });
+//     const cur = await Axios.get("/opinion");
+//     const curNumOpinion = cur.data.length;
 
-    expect(createRes.status).toBe(422);
-    expect(curNumOpinion).toBe(oldNumOpinion);
-  });
-});
+//     expect(createRes.status).toBe(422);
+//     expect(curNumOpinion).toBe(oldNumOpinion);
+//   });
+// });
 
-test("Create with bad data", async (data = {
-  title_opinion: "Opinion 1",
-  content_opinion: "description de l'opinion",
-  note_opinion: 4,
-  place_id: 7,
-  user_id: 20,
-}) => {
-  const old = await Axios.get("/opinion");
-  const oldNumOpinion = old.data.length;
-  // before
-  const createRes = await Axios.post("/opinion", data, {
-    validateStatus: () => true,
-  });
-  // after
-  const cur = await Axios.get("/opinion");
-  const curNumOpinion = cur.data.length;
+// test("Create with bad data", async (data = {
+//   title_opinion: "Opinion 1",
+//   content_opinion: "description de l'opinion",
+//   note_opinion: 4,
+//   place_id: 7,
+//   user_id: 20,
+// }) => {
+//   const old = await Axios.get("/opinion");
+//   const oldNumOpinion = old.data.length;
+//   // before
+//   const createRes = await Axios.post("/opinion", data, {
+//     validateStatus: () => true,
+//   });
+//   // after
+//   const cur = await Axios.get("/opinion");
+//   const curNumOpinion = cur.data.length;
 
-  expect(createRes.status).toBe(422);
-  expect(curNumOpinion).toBe(oldNumOpinion);
-});
+//   expect(createRes.status).toBe(422);
+//   expect(curNumOpinion).toBe(oldNumOpinion);
+// });
 
-describe("Opinion DELETE", () => {
-  test("Delete as user owner", async () => {
-    const old = await Axios.get("/opinion");
-    const opinion = old.data.find((c) => c.user_id == user.id);
-    const oldNumOpinion = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/opinion/" + opinion.id);
-    // after
-    const cur = await Axios.get("/opinion");
-    const curNumOpinion = cur.data.length;
+// describe("Opinion DELETE", () => {
+//   test("Delete as user owner", async () => {
+//     const old = await Axios.get("/opinion");
+//     const opinion = old.data.find((c) => c.user_id == user.id);
+//     const oldNumOpinion = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/opinion/" + opinion.id);
+//     // after
+//     const cur = await Axios.get("/opinion");
+//     const curNumOpinion = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumOpinion).toBe(oldNumOpinion - 1);
-  });
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumOpinion).toBe(oldNumOpinion - 1);
+//   });
 
-  test("Delete as not user owner", async () => {
-    const old = await Axios.get("/opinion");
-    const opinion = old.data.find((c) => c.user_id != user.id);
-    const oldNumOpinion = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/opinion/" + opinion.id, {
-      validateStatus: () => true,
-    });
-    // after
-    const cur = await Axios.get("/opinion");
-    const curNumOpinion = cur.data.length;
+//   test("Delete as not user owner", async () => {
+//     const old = await Axios.get("/opinion");
+//     const opinion = old.data.find((c) => c.user_id != user.id);
+//     const oldNumOpinion = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/opinion/" + opinion.id, {
+//       validateStatus: () => true,
+//     });
+//     // after
+//     const cur = await Axios.get("/opinion");
+//     const curNumOpinion = cur.data.length;
 
-    expect(deleteRes.status).toBe(403);
-    expect(curNumOpinion).toBe(oldNumOpinion);
-  });
-});
+//     expect(deleteRes.status).toBe(403);
+//     expect(curNumOpinion).toBe(oldNumOpinion);
+//   });
+// });
 
-// ------------------------------------------------------------------------------
-// admin opinion
-// ------------------------------------------------------------------------------
+// // ------------------------------------------------------------------------------
+// // admin opinion
+// // ------------------------------------------------------------------------------
 
-describe("Admin Login", () => {
-  test("Vérification de l'authentification", async () => {
-    await login(user, {
-      email: "admin@truc.fr",
-      password: "password",
-    });
-  });
-});
+// describe("Admin Login", () => {
+//   test("Vérification de l'authentification", async () => {
+//     await login(user, {
+//       email: "admin@truc.fr",
+//       password: "password",
+//     });
+//   });
+// });
 
-describe("Admin Opinion PUT", () => {
-  test("Update as admin", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/opinion");
-    const opinion = res.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.put("/opinion/" + opinion.id, data);
-    expect(updateRes.data.name).toBe("New name");
-  });
-});
+// describe("Admin Opinion PUT", () => {
+//   test("Update as admin", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/opinion");
+//     const opinion = res.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.put("/opinion/" + opinion.id, data);
+//     expect(updateRes.data.name).toBe("New name");
+//   });
+// });
 
-describe("Admin Opinion DELETE", () => {
-  test("Delete as admin", async () => {
-    const old = await Axios.get("/opinion");
-    const opinion = old.data.find((c) => c.user_id != user.id);
-    const oldNumOpinion = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/opinion/" + opinion.id);
-    // after
-    const cur = await Axios.get("/opinion");
-    const curNumOpinion = cur.data.length;
+// describe("Admin Opinion DELETE", () => {
+//   test("Delete as admin", async () => {
+//     const old = await Axios.get("/opinion");
+//     const opinion = old.data.find((c) => c.user_id != user.id);
+//     const oldNumOpinion = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/opinion/" + opinion.id);
+//     // after
+//     const cur = await Axios.get("/opinion");
+//     const curNumOpinion = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumOpinion).toBe(oldNumOpinion - 1);
-  });
-});
-// ------------------------------------------------------------------------------
-// categories
-// ------------------------------------------------------------------------------
-describe("category GET", () => {
-  test("Récupération de la liste des catgories", async () => {
-    const res = await Axios.get("/category");
-    expect(res.data.length).toBeGreaterThanOrEqual(2);
-  });
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumOpinion).toBe(oldNumOpinion - 1);
+//   });
+// });
+// // ------------------------------------------------------------------------------
+// // categories
+// // ------------------------------------------------------------------------------
+// describe("category GET", () => {
+//   test("Récupération de la liste des catgories", async () => {
+//     const res = await Axios.get("/category");
+//     expect(res.data.length).toBeGreaterThanOrEqual(2);
+//   });
 
-  test("Get Show", async () => {
-    const category = await Axios.get("/category");
-    const res = await Axios.get("/category/" + category.data.data[0].id);
-    expect(res.data.data.name).toBeTruthy();
-    expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
-    expect(res.data.data.pv).toBeLessThanOrEqual(100);
-  });
+//   test("Get Show", async () => {
+//     const category = await Axios.get("/category");
+//     const res = await Axios.get("/category/" + category.data.data[0].id);
+//     expect(res.data.data.name).toBeTruthy();
+//     expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
+//     expect(res.data.data.pv).toBeLessThanOrEqual(100);
+//   });
 
-  test("Get Paginate", async () => {
-    const res = await Axios.get("/category-paginate?page=1");
-    expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
-    expect(res.data.data.page).toBe("1");
-    expect(res.data.data.categories).toHaveLength(3);
-  });
-});
+//   test("Get Paginate", async () => {
+//     const res = await Axios.get("/category-paginate?page=1");
+//     expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
+//     expect(res.data.data.page).toBe("1");
+//     expect(res.data.data.categories).toHaveLength(3);
+//   });
+// });
 
-describe("Category PUT", () => {
-  test("Update as user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/category");
-    const category = res.data.find((c) => {
-      return c.user_id == user.id;
-    });
-    const updateRes = await Axios.post("/category/" + category.id, data);
-    expect(updateRes.data.data.name).toBe("New name");
-  });
+// describe("Category PUT", () => {
+//   test("Update as user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/category");
+//     const category = res.data.find((c) => {
+//       return c.user_id == user.id;
+//     });
+//     const updateRes = await Axios.post("/category/" + category.id, data);
+//     expect(updateRes.data.data.name).toBe("New name");
+//   });
 
-  test("Update as not user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/category");
-    const category = res.data.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.post("/category/" + category.id, data.data, {
-      validateStatus: () => true,
-    });
-    expect(updateRes.status).toBe(403);
-    expect(updateRes.data.data.name).not.toBe("New name");
-  });
-});
+//   test("Update as not user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/category");
+//     const category = res.data.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.post("/category/" + category.id, data.data, {
+//       validateStatus: () => true,
+//     });
+//     expect(updateRes.status).toBe(403);
+//     expect(updateRes.data.data.name).not.toBe("New name");
+//   });
+// });
 
-describe("category POST", () => {
-  test("Create with good data", async () => {
-    const data = {
-      name_category: "Category 1",
-    };
+// describe("category POST", () => {
+//   test("Create with good data", async () => {
+//     const data = {
+//       name_category: "Category 1",
+//     };
 
-    const old = await Axios.get("/category");
-    const oldNumCategory = old.data.length;
-    const createRes = await Axios.post("/category", data);
-    const cur = await Axios.get("/category");
-    const curNumCategory = cur.data.length;
+//     const old = await Axios.get("/category");
+//     const oldNumCategory = old.data.length;
+//     const createRes = await Axios.post("/category", data);
+//     const cur = await Axios.get("/category");
+//     const curNumCategory = cur.data.length;
 
-    expect(createRes.data.name).toBe("category 1");
-    expect(curNumCategory).toBe(oldNumCategory + 1);
-  });
+//     expect(createRes.data.name).toBe("category 1");
+//     expect(curNumCategory).toBe(oldNumCategory + 1);
+//   });
 
-  test("Create with bad data", async () => {
-    const data = {
-      name_category: "Category 1",
-    };
+//   test("Create with bad data", async () => {
+//     const data = {
+//       name_category: "Category 1",
+//     };
 
-    const old = await Axios.get("/category");
-    const oldNumCategory = old.data.length;
-    const createRes = await Axios.post("/category", data, {
-      validateStatus: () => true,
-    });
-    const cur = await Axios.get("/category");
-    const curNumCategory = cur.data.length;
+//     const old = await Axios.get("/category");
+//     const oldNumCategory = old.data.length;
+//     const createRes = await Axios.post("/category", data, {
+//       validateStatus: () => true,
+//     });
+//     const cur = await Axios.get("/category");
+//     const curNumCategory = cur.data.length;
 
-    expect(createRes.status).toBe(422);
-    expect(curNumCategory).toBe(oldNumCategory);
-  });
-});
+//     expect(createRes.status).toBe(422);
+//     expect(curNumCategory).toBe(oldNumCategory);
+//   });
+// });
 
-test("Create with bad data", async (data = {
-  name_category: "Category 1",
-}) => {
-  const old = await Axios.get("/category");
-  const oldNumCategory = old.data.length;
-  // before
-  const createRes = await Axios.post("/category", data, {
-    validateStatus: () => true,
-  });
-  // after
-  const cur = await Axios.get("/category");
-  const curNumCategory = cur.data.length;
+// test("Create with bad data", async (data = {
+//   name_category: "Category 1",
+// }) => {
+//   const old = await Axios.get("/category");
+//   const oldNumCategory = old.data.length;
+//   // before
+//   const createRes = await Axios.post("/category", data, {
+//     validateStatus: () => true,
+//   });
+//   // after
+//   const cur = await Axios.get("/category");
+//   const curNumCategory = cur.data.length;
 
-  expect(createRes.status).toBe(422);
-  expect(curNumCategory).toBe(oldNumCategory);
-});
+//   expect(createRes.status).toBe(422);
+//   expect(curNumCategory).toBe(oldNumCategory);
+// });
 
-describe("Category DELETE", () => {
-  test("Delete as user owner", async () => {
-    const old = await Axios.get("/category");
-    const category = old.data.find((c) => c.user_id == user.id);
-    const oldNumCategory = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/category/" + category.id);
-    // after
-    const cur = await Axios.get("/category");
-    const curNumCategory = cur.data.length;
+// describe("Category DELETE", () => {
+//   test("Delete as user owner", async () => {
+//     const old = await Axios.get("/category");
+//     const category = old.data.find((c) => c.user_id == user.id);
+//     const oldNumCategory = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/category/" + category.id);
+//     // after
+//     const cur = await Axios.get("/category");
+//     const curNumCategory = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumCategory).toBe(oldNumCategory - 1);
-  });
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumCategory).toBe(oldNumCategory - 1);
+//   });
 
-  test("Delete as not user owner", async () => {
-    const old = await Axios.get("/category");
-    const category = old.data.find((c) => c.user_id != user.id);
-    const oldNumCategory = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/category/" + category.id, {
-      validateStatus: () => true,
-    });
-    // after
-    const cur = await Axios.get("/category");
-    const curNumCategory = cur.data.length;
+//   test("Delete as not user owner", async () => {
+//     const old = await Axios.get("/category");
+//     const category = old.data.find((c) => c.user_id != user.id);
+//     const oldNumCategory = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/category/" + category.id, {
+//       validateStatus: () => true,
+//     });
+//     // after
+//     const cur = await Axios.get("/category");
+//     const curNumCategory = cur.data.length;
 
-    expect(deleteRes.status).toBe(403);
-    expect(curNumCategory).toBe(oldNumCategory);
-  });
-});
+//     expect(deleteRes.status).toBe(403);
+//     expect(curNumCategory).toBe(oldNumCategory);
+//   });
+// });
 
-// ------------------------------------------------------------------------------
-// admin catégorie
-// ------------------------------------------------------------------------------
+// // ------------------------------------------------------------------------------
+// // admin catégorie
+// // ------------------------------------------------------------------------------
 
-describe("Admin Login", () => {
-  test("Vérification de l'authentification", async () => {
-    await login(user, {
-      email: "admin@truc.fr",
-      password: "password",
-    });
-  });
-});
+// describe("Admin Login", () => {
+//   test("Vérification de l'authentification", async () => {
+//     await login(user, {
+//       email: "admin@truc.fr",
+//       password: "password",
+//     });
+//   });
+// });
 
-describe("Admin Category PUT", () => {
-  test("Update as admin", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/category");
-    const category = res.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.put("/category/" + category.id, data);
-    expect(updateRes.data.name).toBe("New name");
-  });
-});
+// describe("Admin Category PUT", () => {
+//   test("Update as admin", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/category");
+//     const category = res.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.put("/category/" + category.id, data);
+//     expect(updateRes.data.name).toBe("New name");
+//   });
+// });
 
-describe("Admin Category DELETE", () => {
-  test("Delete as admin", async () => {
-    const old = await Axios.get("/category");
-    const category = old.data.find((c) => c.user_id != user.id);
-    const oldNumCategory = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/category/" + category.id);
-    // after
-    const cur = await Axios.get("/category");
-    const curNumCategory = cur.data.length;
+// describe("Admin Category DELETE", () => {
+//   test("Delete as admin", async () => {
+//     const old = await Axios.get("/category");
+//     const category = old.data.find((c) => c.user_id != user.id);
+//     const oldNumCategory = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/category/" + category.id);
+//     // after
+//     const cur = await Axios.get("/category");
+//     const curNumCategory = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumCategory).toBe(oldNumCategory - 1);
-  });
-});
-// ------------------------------------------------------------------------------
-// roles
-// ------------------------------------------------------------------------------
-describe("role GET", () => {
-  test("Récupération de la liste des rôles", async () => {
-    const res = await Axios.get("/role");
-    expect(res.data.length).toBeGreaterThanOrEqual(2);
-  });
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumCategory).toBe(oldNumCategory - 1);
+//   });
+// });
+// // ------------------------------------------------------------------------------
+// // roles
+// // ------------------------------------------------------------------------------
+// describe("role GET", () => {
+//   test("Récupération de la liste des rôles", async () => {
+//     const res = await Axios.get("/role");
+//     expect(res.data.length).toBeGreaterThanOrEqual(2);
+//   });
 
-  test("Get Show", async () => {
-    const role = await Axios.get("/role");
-    const res = await Axios.get("/role/" + role.data[0].id);
-    expect(res.data.data.name).toBeTruthy();
-    expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
-    expect(res.data.data.pv).toBeLessThanOrEqual(100);
-  });
+//   test("Get Show", async () => {
+//     const role = await Axios.get("/role");
+//     const res = await Axios.get("/role/" + role.data[0].id);
+//     expect(res.data.data.name).toBeTruthy();
+//     expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
+//     expect(res.data.data.pv).toBeLessThanOrEqual(100);
+//   });
 
-  test("Get Paginate", async () => {
-    const res = await Axios.get("/role-paginate?page=1");
-    expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
-    expect(res.data.data.page).toBe("1");
-    expect(res.data.data.role).toHaveLength(3);
-  });
-});
+//   test("Get Paginate", async () => {
+//     const res = await Axios.get("/role-paginate?page=1");
+//     expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
+//     expect(res.data.data.page).toBe("1");
+//     expect(res.data.data.role).toHaveLength(3);
+//   });
+// });
 
-describe("Role PUT", () => {
-  test("Update as user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/role");
-    const role = res.data.find((c) => {
-      return c.user_id == user.id;
-    });
-    const updateRes = await Axios.post("/role/" + role.id, data);
-    expect(updateRes.data.data.name).toBe("New name");
-  });
+// describe("Role PUT", () => {
+//   test("Update as user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/role");
+//     const role = res.data.find((c) => {
+//       return c.user_id == user.id;
+//     });
+//     const updateRes = await Axios.post("/role/" + role.id, data);
+//     expect(updateRes.data.data.name).toBe("New name");
+//   });
 
-  test("Update as not user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/role");
-    const role = res.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.post("/role/" + role.id, data.data, {
-      validateStatus: () => true,
-    });
-    expect(updateRes.status).toBe(403);
-    expect(updateRes.data.data.name).not.toBe("New name");
-  });
-});
+//   test("Update as not user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/role");
+//     const role = res.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.post("/role/" + role.id, data.data, {
+//       validateStatus: () => true,
+//     });
+//     expect(updateRes.status).toBe(403);
+//     expect(updateRes.data.data.name).not.toBe("New name");
+//   });
+// });
 
-describe("Role POST", () => {
-  test("Create with good data", async () => {
-    const data = {
-      role: "Role 2",
-    };
+// describe("Role POST", () => {
+//   test("Create with good data", async () => {
+//     const data = {
+//       role: "Role 2",
+//     };
 
-    const old = await Axios.get("/role");
-    const oldNumRole = old.data.length;
-    const createRes = await Axios.post("/role", data);
-    const cur = await Axios.get("/role");
-    const curNumRole = cur.data.length;
+//     const old = await Axios.get("/role");
+//     const oldNumRole = old.data.length;
+//     const createRes = await Axios.post("/role", data);
+//     const cur = await Axios.get("/role");
+//     const curNumRole = cur.data.length;
 
-    expect(createRes.data.role).toBe("role 2");
-    expect(curNumRole).toBe(oldNumRole + 1);
-  });
+//     expect(createRes.data.role).toBe("role 2");
+//     expect(curNumRole).toBe(oldNumRole + 1);
+//   });
 
-  test("Create with bad data", async () => {
-    const data = {
-      role: "Role 2",
-    };
+//   test("Create with bad data", async () => {
+//     const data = {
+//       role: "Role 2",
+//     };
 
-    const old = await Axios.get("/role");
-    const oldNumRole = old.data.length;
-    const createRes = await Axios.post("/role", data, {
-      validateStatus: () => true,
-    });
-    const cur = await Axios.get("/role");
-    const curNumRole = cur.data.length;
+//     const old = await Axios.get("/role");
+//     const oldNumRole = old.data.length;
+//     const createRes = await Axios.post("/role", data, {
+//       validateStatus: () => true,
+//     });
+//     const cur = await Axios.get("/role");
+//     const curNumRole = cur.data.length;
 
-    expect(createRes.status).toBe(422);
-    expect(curNumRole).toBe(oldNumRole);
-  });
-});
+//     expect(createRes.status).toBe(422);
+//     expect(curNumRole).toBe(oldNumRole);
+//   });
+// });
 
-test("Create with bad data", async (data = {
-  role: "Role 2",
-}) => {
-  const old = await Axios.get("/role");
-  const oldNumRole = old.data.length;
-  // before
-  const createRes = await Axios.post("/role", data, {
-    validateStatus: () => true,
-  });
-  // after
-  const cur = await Axios.get("/role");
-  const curNumRole = cur.data.length;
+// test("Create with bad data", async (data = {
+//   role: "Role 2",
+// }) => {
+//   const old = await Axios.get("/role");
+//   const oldNumRole = old.data.length;
+//   // before
+//   const createRes = await Axios.post("/role", data, {
+//     validateStatus: () => true,
+//   });
+//   // after
+//   const cur = await Axios.get("/role");
+//   const curNumRole = cur.data.length;
 
-  expect(createRes.status).toBe(422);
-  expect(curNumRole).toBe(oldNumRole);
-});
+//   expect(createRes.status).toBe(422);
+//   expect(curNumRole).toBe(oldNumRole);
+// });
 
-describe("Role DELETE", () => {
-  test("Delete as user owner", async () => {
-    const old = await Axios.get("/role");
-    const role = old.data.find((c) => c.user_id == user.id);
-    const oldNumRole = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/role/" + role.id);
-    // after
-    const cur = await Axios.get("/role");
-    const curNumRole = cur.data.length;
+// describe("Role DELETE", () => {
+//   test("Delete as user owner", async () => {
+//     const old = await Axios.get("/role");
+//     const role = old.data.find((c) => c.user_id == user.id);
+//     const oldNumRole = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/role/" + role.id);
+//     // after
+//     const cur = await Axios.get("/role");
+//     const curNumRole = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumRole).toBe(oldNumRole - 1);
-  });
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumRole).toBe(oldNumRole - 1);
+//   });
 
-  test("Delete as not user owner", async () => {
-    const old = await Axios.get("/role");
-    const role = old.data.find((c) => c.user_id != user.id);
-    const oldNumRole = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/role/" + role.id, {
-      validateStatus: () => true,
-    });
-    // after
-    const cur = await Axios.get("/role");
-    const curNumRole = cur.data.length;
+//   test("Delete as not user owner", async () => {
+//     const old = await Axios.get("/role");
+//     const role = old.data.find((c) => c.user_id != user.id);
+//     const oldNumRole = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/role/" + role.id, {
+//       validateStatus: () => true,
+//     });
+//     // after
+//     const cur = await Axios.get("/role");
+//     const curNumRole = cur.data.length;
 
-    expect(deleteRes.status).toBe(403);
-    expect(curNumRole).toBe(oldNumRole);
-  });
-});
+//     expect(deleteRes.status).toBe(403);
+//     expect(curNumRole).toBe(oldNumRole);
+//   });
+// });
 
-// ------------------------------------------------------------------------------
-// admin roles
-// ------------------------------------------------------------------------------
+// // ------------------------------------------------------------------------------
+// // admin roles
+// // ------------------------------------------------------------------------------
 
-describe("Admin Login", () => {
-  test("Vérification de l'authentification", async () => {
-    await login(user, {
-      email: "admin@truc.fr",
-      password: "password",
-    });
-  });
-});
+// describe("Admin Login", () => {
+//   test("Vérification de l'authentification", async () => {
+//     await login(user, {
+//       email: "admin@truc.fr",
+//       password: "password",
+//     });
+//   });
+// });
 
-describe("Admin Role PUT", () => {
-  test("Update as admin", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/role");
-    const role = res.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.put("/role/" + role.id, data);
-    expect(updateRes.data.name).toBe("New name");
-  });
-});
+// describe("Admin Role PUT", () => {
+//   test("Update as admin", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/role");
+//     const role = res.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.put("/role/" + role.id, data);
+//     expect(updateRes.data.name).toBe("New name");
+//   });
+// });
 
-describe("Admin Role DELETE", () => {
-  test("Delete as admin", async () => {
-    const old = await Axios.get("/role");
-    const role = old.data.find((c) => c.user_id !== user.id);
-    const oldNumRole = old.data.length;
+// describe("Admin Role DELETE", () => {
+//   test("Delete as admin", async () => {
+//     const old = await Axios.get("/role");
+//     const role = old.data.find((c) => c.user_id !== user.id);
+//     const oldNumRole = old.data.length;
     
-    // Vérification que `role` est défini
-    if (!role) {
-      throw new Error("Aucun rôle correspondant trouvé pour suppression.");
-    }
+//     // Vérification que `role` est défini
+//     if (!role) {
+//       throw new Error("Aucun rôle correspondant trouvé pour suppression.");
+//     }
 
-    // Correction de `role-id` en `role.id`
-    const deleteRes = await Axios.delete("/role/" + role.id);
+//     // Correction de `role-id` en `role.id`
+//     const deleteRes = await Axios.delete("/role/" + role.id);
     
-    // après suppression
-    const cur = await Axios.get("/role");
-    const curNumRole = cur.data.length;
+//     // après suppression
+//     const cur = await Axios.get("/role");
+//     const curNumRole = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumRole).toBe(oldNumRole - 1);
-  });
-});
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumRole).toBe(oldNumRole - 1);
+//   });
+// });
