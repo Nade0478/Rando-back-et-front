@@ -20,9 +20,9 @@ jobs:
       run: sleep 10s
       shell: bash
     - name: Database migrate
-      run: docker exec laravel-docker bash -c "php artisan migrate"
+      run: docker exec laravel-api-docker bash -c "php artisan migrate"
     - name: Database seeding
-      run: docker exec laravel-docker bash -c "php artisan db:seed"
+      run: docker exec laravel-api-docker bash -c "php artisan db:seed"
     - name: Install node
       uses: actions/setup-node@v3
       with:
