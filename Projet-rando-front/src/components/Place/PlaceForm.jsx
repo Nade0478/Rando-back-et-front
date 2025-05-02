@@ -12,7 +12,7 @@ const PlaceForm = () => {
           id: 1,
           title: "Alpes Mancelles",
           description: "Découvrez les paysages époustouflants des Alpes Mancelles.",
-          image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/alpes-mancelle72_1742481051.jpg`,
+          image: `${process.env.REACT_APP_API_URL}/storage/app/public/public/alpes-mancelle72_1742481051.jpg`,
           alt: "Alpes Mancelles",
     
         },
