@@ -5,7 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../../components/admin/Sidebar";
+import Menu from "../../components/Menu";
+import Footer from "../../components/Footer";
 
 const OpinionAdd = () => {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ const OpinionAdd = () => {
 
   return (
     <div>
-      <Sidebar />
+      <Menu />
       <div className="container mt-5 card-wrapper">
         <div className="card">
           <div className="card-body">
@@ -170,6 +171,7 @@ const OpinionAdd = () => {
             </Form>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );

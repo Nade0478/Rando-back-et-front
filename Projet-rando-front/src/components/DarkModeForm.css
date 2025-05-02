@@ -21,7 +21,7 @@ body {
 
 /* Variables CSS pour mode sombre */
 .dark {
-    --background-color: #000000;
+    --background-color: #194800;
     --text-color: #ffffff;
 }
 
@@ -63,5 +63,6 @@ img, p {
 
 .dark-mode-btn:hover {
     background-color: #053016;
+    color: beige;
     transform: scale(1.1);
 }

@@ -4,7 +4,8 @@ import { useParams, Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import Sidebar from "../../components/admin/Sidebar";
+import Menu from "../../components/Menu";
+import Footer from "../../components/Footer";
 
 // Déclaration correcte de l'icône personnalisée
 const customIcon = new L.Icon({
@@ -44,7 +45,7 @@ const ShowPlace = () => {
 
   return (
     <div>
-      <Sidebar />
+      <Menu />
       <div className="container mt-5">
         <h2 className="pb-2 border-bottom">Détails du lieu : {place.name_place}</h2>
 
@@ -84,6 +85,7 @@ const ShowPlace = () => {
         <div className="mt-4">
           <Link to="/place" className="btn btn-dark">Retour à la liste</Link>
         </div>
+        <Footer />
       </div>
     </div>
   );
