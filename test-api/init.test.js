@@ -45,9 +45,6 @@ describe("User Login", () => {
 // ------------------------------------------------------------------------------
 // Places
 // ------------------------------------------------------------------------------
-
-const Axios = require("axios"); // Déclaration unique au début
-
 describe("Place API Tests", () => {
   test("Get Show", async () => {
     try {
