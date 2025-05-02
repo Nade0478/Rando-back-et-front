@@ -19,9 +19,9 @@ const customIcon = new L.Icon({
 });
 
 const Place = () => {
-  const [place, setPlace] = useState([]); // Liste des lieux
-  const [name_place, setName_place] = useState([]); // Liste des noms de lieux
-  const [selectedName_place, setSelectedName_place] = useState(null); // Nom sélectionné pour le filtre
+  const [place, setPlace] = useState([]); 
+  const [name_place, setName_place] = useState([]); 
+  const [selectedName_place, setSelectedName_place] = useState(null); 
 
   // Charger les lieux au montage du composant
   useEffect(() => {
@@ -32,8 +32,8 @@ const Place = () => {
   const displayPlace = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/place`);
-      setPlace(response.data); // Met à jour les lieux
-      setName_place(response.data.map((place) => place.name_place)); // Met à jour la liste des noms
+      setPlace(response.data); 
+      setName_place(response.data.map((place) => place.name_place));
     } catch (error) {
       console.error("Erreur lors de la récupération des lieux :", error);
     }

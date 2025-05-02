@@ -66,3 +66,17 @@ code {
     height: auto;
   }
 }
+
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}

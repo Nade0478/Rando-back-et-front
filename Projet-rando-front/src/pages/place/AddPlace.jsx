@@ -43,7 +43,7 @@ const AddPlace = () => {
     }
 
     await axios
-      .post(`${process.env.REACT_APP_API_URL}/place/`, formData,
+      .post(`${process.env.REACT_APP_API_URL}/place`, formData,
         { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
       )
       .then(() => navigate("/place"))

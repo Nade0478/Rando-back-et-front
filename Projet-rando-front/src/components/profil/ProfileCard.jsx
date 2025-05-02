@@ -9,12 +9,13 @@ const ProfileCard = ({ id_user }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log(id_user);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/user/${id_user}`
+          `${process.env.REACT_APP_API_URL}/${id_user}`,
+          { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
         );
         setUser(response.data);
       } catch (err) {
@@ -44,22 +45,17 @@ const ProfileCard = ({ id_user }) => {
 
   return (
     <section className="profileCard">
-      <div>
-        <div className="container mt-10 d-flex justify-content-center">
-          <Card className="shadow-lg p-12" style={{ width: "140rem" }}>
-            <Card.Body>
-              <Card.Title className="text-center larger">
-                <strong>{user.name}</strong>
-              </Card.Title>
-              <Card.Text>
-                <strong>Email :</strong> {user.email}
-                <br />
-                <strong>Mot de passe :</strong>{" "}
-                {user.password ? user.password : "Non disponible"}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </div>
+      <div className="container mt-10 d-flex justify-content-center">
+        <Card className="shadow-lg p-12" style={{ width: "40rem" }}>
+          <Card.Body>
+            <Card.Title className="text-center larger">
+              <strong>{user.name}</strong>
+            </Card.Title>
+            <Card.Text>
+              <strong>Email :</strong> {user.email}
+            </Card.Text>
+          </Card.Body>
+        </Card>
       </div>
     </section>
   );

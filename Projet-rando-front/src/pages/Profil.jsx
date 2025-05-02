@@ -36,8 +36,7 @@ if (storedUserId) {
     }
    
   };
-
-
+  // Vérification si l'utilisateur est connecté
   return (
     <div>
       <SidebarProfil />

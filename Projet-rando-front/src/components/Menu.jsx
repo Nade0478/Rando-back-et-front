@@ -9,7 +9,7 @@ import "./Menu.css";
 const Menu = () => { 
   return ( 
     <div>
-      <Navbar className="navbar-custom navbar-dark" expand="xl">
+      <Navbar className="navbar-custom navbar-dark w-100" expand="xl">
         <Logo />
         <Container fluid> 
           <Navbar.Toggle aria-controls="navbarScroll" /> 

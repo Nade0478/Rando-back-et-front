@@ -8,7 +8,7 @@ const NbrUserForm = () => {
 
   useEffect(() => {
     // Récupération des utilisateurs depuis une API
-    fetch(`${process.env.REACT_APP_API_URL}/user/`)
+    fetch(`${process.env.REACT_APP_API_URL}/user`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Erreur réseau : ' + response.statusText);

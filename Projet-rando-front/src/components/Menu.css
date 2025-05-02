@@ -15,30 +15,35 @@
 
 .navbar-dark .navbar-brand {
   color: white !important;
-  font-size: x-large; /* Agrandir la taille de la marque */
+  font-size: xx-large;
 }
 
 .container-fluid {
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-left: 50px;
-  margin-right: 50px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .font-style {
-  font-size: 60px; /* Encore plus grand */
-  font-weight: 600; /* Texte plus épais */
-  letter-spacing: 0.5px; /* Espacement plus visible */
+  font-size: 60px; 
+  font-weight: 600; 
+  letter-spacing: 0.5px; 
 }
 
 .navbar-custom {
-  height: 180px; /* Ajustez la hauteur selon vos besoins */
-  line-height: 180px; /* Alignement vertical des éléments */
-  padding-top: 20px;
-  padding-bottom: 20px;
+  width: 100%; 
+  min-height: 70px; 
+  padding: 0px 0px; 
+}
+@media (max-width: 768px) {
+  .navbar-custom {
+    flex-direction: column; /* Ajustement pour petits écrans */
+    align-items: center;
+  }
 }
 
 .nav-link {
-  line-height: 80px; /* Alignement vertical */
-  font-size: xx-large; /* Texte plus grand */
+  line-height: 80px; 
+  font-size: xx-large; 
 }

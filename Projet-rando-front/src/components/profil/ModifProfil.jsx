@@ -28,7 +28,7 @@ const ModifProfil = ({ id_user, name_user, email_user }) => {
 
     try {
       await axios.patch(
-        `http://127.0.0.1:8000/api/user/${id_user}`,
+        `${process.env.REACT_APP_API_URL}/user/${id_user}`,
         userData
       );
 

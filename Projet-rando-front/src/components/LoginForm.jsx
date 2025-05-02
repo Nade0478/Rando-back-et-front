@@ -26,7 +26,7 @@ function LoginForm() {
       }
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/login/`,
+        `${process.env.REACT_APP_API_URL}/login`,
         data,
         {
           headers: {
@@ -37,7 +37,7 @@ function LoginForm() {
       );
 
       if (response.status === 200) {
-        const token = response.data.data.access_token;
+        const token = response.data.data.access_token.token;
         const role_id = parseInt(response.data.data.user.role_id, 10);
         localStorage.setItem("access_token", token);
 
@@ -97,7 +97,7 @@ function LoginForm() {
           {errors.password && <Form.Text className="text-danger">{errors.password.message}</Form.Text>}
         </Form.Group>
 
-        {/* ✅ Champ confirmation de mot de passe ajouté */}
+        {/* Champ confirmation de mot de passe ajouté */}
         <Form.Group controlId="formBasicPasswordConfirmation" className="mb-3">
           <Form.Label>Confirmer le mot de passe</Form.Label>
           <Form.Control

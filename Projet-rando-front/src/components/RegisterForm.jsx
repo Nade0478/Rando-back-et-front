@@ -26,12 +26,12 @@ function RegisterForm() {
     try {
       // Appel à l'API pour l'inscription
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/register/`,
+        `${process.env.REACT_APP_API_URL}/register`,
         data,
         {
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json", // Ajout de cet en-tête
+            "Accept": "application/json", 
           },
         }
       );

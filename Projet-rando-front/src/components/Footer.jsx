@@ -6,7 +6,7 @@ import "../styles/style-footer.scss";
 const Footer = () => {
   return (
     <footer className="footer">
-      <Container>
+      <Container className="fluid">
         <Row className="text-center py-2">
           <Col md={12}>
             <h4>Rando-Ouest</h4>

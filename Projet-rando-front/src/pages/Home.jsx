@@ -7,7 +7,6 @@ import HomeNewPlace from '../components/home/HomeNewPlace';
 import '../styles/style-home.css';
 import DarkModeForm from '../components/DarkModeForm';
 
-
 const Home = () => { 
     return ( 
         <div> 
