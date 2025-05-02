@@ -7,11 +7,13 @@ import AboutForm2 from '../components/AboutForm2';
 import AboutForm3 from '../components/AboutForm3';
 import AboutForm4 from '../components/AboutForm4';
 import AboutForm from '../components/AboutForm';
+import DarkModeForm from '../components/DarkModeForm';
 
 
 const About = () => { 
     return ( 
         <div> 
+            <DarkModeForm />
             <Menu />
             <h1>A PROPOS DE RANDO-OUEST</h1>
             <AboutForm />

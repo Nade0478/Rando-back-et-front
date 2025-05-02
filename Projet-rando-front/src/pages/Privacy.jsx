@@ -1,9 +1,11 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import DarkModeForm from "../components/DarkModeForm";
 
 const PrivacyPage = () => {
   return (
     <div>
+      <DarkModeForm />
       <Container className="mt-5">
         <h1 className="text-center">Politique de Confidentialité</h1>
         <p>

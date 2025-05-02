@@ -1,9 +1,11 @@
 import React from "react";
 import { Container } from "react-bootstrap";
+import DarkModeForm from "../components/DarkModeForm";
 
 const TermsPage = () => {
   return (
     <div>
+      <DarkModeForm />
       <Container className="mt-5">
         <h1 className="text-center">Conditions Générales d'Utilisation</h1>
         <p>
