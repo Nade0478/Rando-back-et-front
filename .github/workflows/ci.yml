@@ -55,8 +55,8 @@ jobs:
             "MODE=prod"
           push: true
           tags: |
-            ghcr.io/Nade0478/cda-api-prod:latest
-            ghcr.io/Nade0478/cda-api-prod:${{ github.sha }}
+            ghcr.io/nade0478/cda-api-prod:latest
+            ghcr.io/nade0478/cda-api-prod:${{ github.sha }}
 
   build-and-push-image-spa-prod:
     needs:
@@ -80,5 +80,5 @@ jobs:
             "MODE=prod"
           push: true
           tags: |
-            ghcr.io/Nade0478/cda-spa-prod:latest
-            ghcr.io/Nade0478/cda-spa-prod:${{ github.sha }}
+            ghcr.io/nade0478/cda-spa-prod:latest
+            ghcr.io/nade0478/cda-spa-prod:${{ github.sha }}
