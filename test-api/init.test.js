@@ -47,7 +47,6 @@ describe("User Login", () => {
 // ------------------------------------------------------------------------------
 describe("Place API Tests", () => {
   test("Get Show", async () => {
-    try {
       const placesRes = await Axios.get("/place");
       const places = placesRes.data;
 
@@ -60,27 +59,19 @@ describe("Place API Tests", () => {
       expect(res.data.name).toBeTruthy();
       expect(res.data.pv).toBeGreaterThanOrEqual(1);
       expect(res.data.pv).toBeLessThanOrEqual(100);
-    } catch (error) {
-      console.error("Erreur lors du GET Show :", error.response?.status, error.response?.data);
-    }
   });
 });
 
   test("Get Paginate", async () => {
-    try {
       const res = await Axios.get("/place-paginate?page=1");
       const data = res.data;
 
       expect(data.maxPages).toBeGreaterThanOrEqual(0);
       expect(data.page).toBe("1");
       expect(data.places).toHaveLength(3);
-    } catch (error) {
-      console.error("Erreur de pagination :", error.response?.status, error.response?.data);
-    }
   });
 
   test("Create Place with good data", async () => {
-    try {
       const data = { name: "New Place", pv: 50 };
       const oldRes = await Axios.get("/place");
       const oldNumPlace = oldRes.data.length;
@@ -91,13 +82,9 @@ describe("Place API Tests", () => {
       const curRes = await Axios.get("/place");
       const curNumPlace = curRes.data.length;
       expect(curNumPlace).toBe(oldNumPlace + 1);
-    } catch (error) {
-      console.error("Erreur lors de la création :", error.response?.status, error.response?.data);
-    }
   });
 
   test("Create Place with bad data", async () => {
-    try {
       const data = { name: "", pv: -10 };
       const oldRes = await Axios.get("/place");
       const oldNumPlace = oldRes.data.length;
@@ -111,13 +98,9 @@ describe("Place API Tests", () => {
 
       expect(createRes.status).toBe(422);
       expect(curNumPlace).toBe(oldNumPlace);
-    } catch (error) {
-      console.error("Erreur lors de la création avec mauvaises données :", error.response?.status, error.response?.data);
-    }
   });
 
   test("Update Place as not user owner", async () => {
-    try {
       const data = { name: "Updated Name", pv: 60 };
       const res = await Axios.get("/place");
       const place = res.data.find((c) => c.user_id !== user.id);
@@ -130,13 +113,9 @@ describe("Place API Tests", () => {
       } else {
         console.error("Aucune place trouvée pour mise à jour.");
       }
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour :", error.response?.status, error.response?.data);
-    }
   });
 
   test("Delete Place as user owner", async () => {
-    try {
       const oldRes = await Axios.get("/place");
       const places = oldRes.data;
 
@@ -155,9 +134,6 @@ describe("Place API Tests", () => {
       } else {
         console.error("Aucune place disponible pour suppression.");
       }
-    } catch (error) {
-      console.error("Erreur lors de la suppression :", error.response?.status, error.response?.data);
-    }
   });
 
 // ------------------------------------------------------------------------------
