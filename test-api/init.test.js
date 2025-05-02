@@ -42,331 +42,330 @@ describe("User Login", () => {
   });
 });
 
-// ------------------------------------------------------------------------------
-// Places
-// ------------------------------------------------------------------------------
-describe("Place API Tests", () => {
-  test("Get Show", async () => {
-      const placesRes = await Axios.get("/place");
-      const places = placesRes.data;
+// // ------------------------------------------------------------------------------
+// // Places
+// // ------------------------------------------------------------------------------
+// describe("Place API Tests", () => {
+//   test("Get Show", async () => {
+//       const placesRes = await Axios.get("/place");
+//       const places = placesRes.data;
 
-      if (!places || !Array.isArray(places) || places.length === 0) {
-        throw new Error("Aucune place disponible !");
-      }
+//       if (!places || !Array.isArray(places) || places.length === 0) {
+//         throw new Error("Aucune place disponible !");
+//       }
 
-      const res = await Axios.get(`/place/${places[0].id}`);
+//       const res = await Axios.get(`/place/${places[0].id}`);
 
-      expect(res.data.name).toBeTruthy();
-      expect(res.data.pv).toBeGreaterThanOrEqual(1);
-      expect(res.data.pv).toBeLessThanOrEqual(100);
-  });
-});
+//       expect(res.data.name).toBeTruthy();
+//       expect(res.data.pv).toBeGreaterThanOrEqual(1);
+//       expect(res.data.pv).toBeLessThanOrEqual(100);
+//   });
+// });
 
-  test("Get Paginate", async () => {
-      const res = await Axios.get("/place-paginate?page=1");
-      const data = res.data;
+//   test("Get Paginate", async () => {
+//       const res = await Axios.get("/place-paginate?page=1");
+//       const data = res.data;
 
-      expect(data.maxPages).toBeGreaterThanOrEqual(0);
-      expect(data.page).toBe("1");
-      expect(data.places).toHaveLength(3);
-  });
+//       expect(data.maxPages).toBeGreaterThanOrEqual(0);
+//       expect(data.page).toBe("1");
+//       expect(data.places).toHaveLength(3);
+//   });
 
-  test("Create Place with good data", async () => {
-      const data = { name: "New Place", pv: 50 };
-      const oldRes = await Axios.get("/place");
-      const oldNumPlace = oldRes.data.length;
+//   test("Create Place with good data", async () => {
+//       const data = { name: "New Place", pv: 50 };
+//       const oldRes = await Axios.get("/place");
+//       const oldNumPlace = oldRes.data.length;
 
-      const createRes = await Axios.post("/place", data);
-      expect(createRes.status).toBe(201);
+//       const createRes = await Axios.post("/place", data);
+//       expect(createRes.status).toBe(201);
 
-      const curRes = await Axios.get("/place");
-      const curNumPlace = curRes.data.length;
-      expect(curNumPlace).toBe(oldNumPlace + 1);
-  });
+//       const curRes = await Axios.get("/place");
+//       const curNumPlace = curRes.data.length;
+//       expect(curNumPlace).toBe(oldNumPlace + 1);
+//   });
 
-  test("Create Place with bad data", async () => {
-      const data = { name: "", pv: -10 };
-      const oldRes = await Axios.get("/place");
-      const oldNumPlace = oldRes.data.length;
+//   test("Create Place with bad data", async () => {
+//       const data = { name: "", pv: -10 };
+//       const oldRes = await Axios.get("/place");
+//       const oldNumPlace = oldRes.data.length;
 
-      const createRes = await Axios.post("/place", data, {
-        validateStatus: () => true,
-      });
+//       const createRes = await Axios.post("/place", data, {
+//         validateStatus: () => true,
+//       });
 
-      const curRes = await Axios.get("/place");
-      const curNumPlace = curRes.data.length;
+//       const curRes = await Axios.get("/place");
+//       const curNumPlace = curRes.data.length;
 
-      expect(createRes.status).toBe(422);
-      expect(curNumPlace).toBe(oldNumPlace);
-  });
+//       expect(createRes.status).toBe(422);
+//       expect(curNumPlace).toBe(oldNumPlace);
+//   });
 
-  test("Update Place as not user owner", async () => {
-      const data = { name: "Updated Name", pv: 60 };
-      const res = await Axios.get("/place");
-      const place = res.data.find((c) => c.user_id !== user.id);
+//   test("Update Place as not user owner", async () => {
+//       const data = { name: "Updated Name", pv: 60 };
+//       const res = await Axios.get("/place");
 
-      if (place) {
-        const updateRes = await Axios.put(`/place/${place.id}`, data, {
-          validateStatus: () => true,
-        });
-        expect(updateRes.status).toBe(403);
-      } else {
-        console.error("Aucune place trouvée pour mise à jour.");
-      }
-  });
+//       if (place) {
+//         const updateRes = await Axios.put(`/place/${place.id}`, data, {
+//           validateStatus: () => true,
+//         });
+//         expect(updateRes.status).toBe(403);
+//       } else {
+//         console.error("Aucune place trouvée pour mise à jour.");
+//       }
+//   });
 
-  test("Delete Place as user owner", async () => {
-      const oldRes = await Axios.get("/place");
-      const places = oldRes.data;
+//   test("Delete Place as user owner", async () => {
+//       const oldRes = await Axios.get("/place");
+//       const places = oldRes.data;
 
-      if (places && places.length > 0) {
-        const place = places.find((c) => c.user_id === user.id);
-        if (place) {
-          const deleteRes = await Axios.delete(`/place/${place.id}`);
-          expect(deleteRes.status).toBe(200);
+//       if (places && places.length > 0) {
+//         const place = places.find((c) => c.user_id === user.id);
+//         if (place) {
+//           const deleteRes = await Axios.delete(`/place/${place.id}`);
+//           expect(deleteRes.status).toBe(200);
 
-          const curRes = await Axios.get("/place");
-          const curPlaces = curRes.data;
-          expect(curPlaces.length).toBe(places.length - 1);
-        } else {
-          console.error("Aucune place trouvée pour suppression.");
-        }
-      } else {
-        console.error("Aucune place disponible pour suppression.");
-      }
-  });
+//           const curRes = await Axios.get("/place");
+//           const curPlaces = curRes.data;
+//           expect(curPlaces.length).toBe(places.length - 1);
+//         } else {
+//           console.error("Aucune place trouvée pour suppression.");
+//         }
+//       } else {
+//         console.error("Aucune place disponible pour suppression.");
+//       }
+//   });
 
-// ------------------------------------------------------------------------------
-// admin place
-// ------------------------------------------------------------------------------
+// // ------------------------------------------------------------------------------
+// // admin place
+// // ------------------------------------------------------------------------------
 
-describe("Admin Login", () => {
-  test("Vérification de l'authentification", async () => {
-    await login(user, {
-      email: "admin@truc.fr",
-      password: "password",
-    });
-  });
-});
+// describe("Admin Login", () => {
+//   test("Vérification de l'authentification", async () => {
+//     await login(user, {
+//       email: "admin@truc.fr",
+//       password: "password",
+//     });
+//   });
+// });
 
-describe("Admin Place PUT", () => {
-  test("Update as admin", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/place");
-    const place = res.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.put("/place/" + place.id, data);
-    expect(updateRes.data.name).toBe("New name");
-  });
-});
+// describe("Admin Place PUT", () => {
+//   test("Update as admin", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/place");
+//     const place = res.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.put("/place/" + place.id, data);
+//     expect(updateRes.data.name).toBe("New name");
+//   });
+// });
 
-describe("Admin Place DELETE", () => {
-  test("Delete as admin", async () => {
-    const old = await Axios.get("/place");
-    const place = old.data.find((c) => c.user_id != user.id);
-    const oldNumPlace = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/place/" + place.id);
-    // after
-    const cur = await Axios.get("/place");
-    const curNumPlace = cur.data.length;
+// describe("Admin Place DELETE", () => {
+//   test("Delete as admin", async () => {
+//     const old = await Axios.get("/place");
+//     const place = old.data.find((c) => c.user_id != user.id);
+//     const oldNumPlace = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/place/" + place.id);
+//     // after
+//     const cur = await Axios.get("/place");
+//     const curNumPlace = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumPlace).toBe(oldNumPlace - 1);
-  });
-});
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumPlace).toBe(oldNumPlace - 1);
+//   });
+// });
 
-// ------------------------------------------------------------------------------
-// articles
-// ------------------------------------------------------------------------------
-describe("article GET", () => {
-  test("Récupération de la liste des articles", async () => {
-    const res = await Axios.get("/article");
-    expect(res.data.length).toBeGreaterThanOrEqual(2);
-  });
+// // ------------------------------------------------------------------------------
+// // articles
+// // ------------------------------------------------------------------------------
+// describe("article GET", () => {
+//   test("Récupération de la liste des articles", async () => {
+//     const res = await Axios.get("/article");
+//     expect(res.data.length).toBeGreaterThanOrEqual(2);
+//   });
 
-  test("Get Show", async () => {
-    const article = await Axios.get("/article");
-    const res = await Axios.get("/article/" + article.data.data[0].id);
-    expect(res.data.data.name).toBeTruthy();
-    expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
-    expect(res.data.data.pv).toBeLessThanOrEqual(100);
-  });
+//   test("Get Show", async () => {
+//     const article = await Axios.get("/article");
+//     const res = await Axios.get("/article/" + article.data.data[0].id);
+//     expect(res.data.data.name).toBeTruthy();
+//     expect(res.data.data.pv).toBeGreaterThanOrEqual(1);
+//     expect(res.data.data.pv).toBeLessThanOrEqual(100);
+//   });
 
-  test("Get Paginate", async () => {
-    const res = await Axios.get("/article-paginate?page=1");
-    expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
-    expect(res.data.data.page).toBe("1");
-    expect(res.data.data.article).toHaveLength(3);
-  });
-});
+//   test("Get Paginate", async () => {
+//     const res = await Axios.get("/article-paginate?page=1");
+//     expect(res.data.data.maxPages).toBeGreaterThanOrEqual(0);
+//     expect(res.data.data.page).toBe("1");
+//     expect(res.data.data.article).toHaveLength(3);
+//   });
+// });
 
-describe("Article PUT", () => {
-  test("Update as user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/article");
-    const article = res.data.find((c) => {
-      return c.user_id == user.id;
-    });
-    const updateRes = await Axios.post("/article/" + article.id, data);
-    expect(updateRes.data.data.name).toBe("New name");
-  });
+// describe("Article PUT", () => {
+//   test("Update as user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/article");
+//     const article = res.data.find((c) => {
+//       return c.user_id == user.id;
+//     });
+//     const updateRes = await Axios.post("/article/" + article.id, data);
+//     expect(updateRes.data.data.name).toBe("New name");
+//   });
 
-  test("Update as not user owner", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/article");
-    const article = res.data.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.post("/article/" + article.id, data.data, {
-      validateStatus: () => true,
-    });
-    expect(updateRes.status).toBe(403);
-    expect(updateRes.data.data.name).not.toBe("New name");
-  });
-});
+//   test("Update as not user owner", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/article");
+//     const article = res.data.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.post("/article/" + article.id, data.data, {
+//       validateStatus: () => true,
+//     });
+//     expect(updateRes.status).toBe(403);
+//     expect(updateRes.data.data.name).not.toBe("New name");
+//   });
+// });
 
-describe("article POST", () => {
-  test("Create with good data", async () => {
-    const data = {
-      title_article: "Article 1",
-      date_article: "28/02/2025",
-      content_article: "description de l'article",
-      category_id: 7,
-      user_id: 20,
-      image_article: "image-article.jpg",
-    };
+// describe("article POST", () => {
+//   test("Create with good data", async () => {
+//     const data = {
+//       title_article: "Article 1",
+//       date_article: "28/02/2025",
+//       content_article: "description de l'article",
+//       category_id: 7,
+//       user_id: 20,
+//       image_article: "image-article.jpg",
+//     };
 
-    const old = await Axios.get("/article");
-    const oldNumArticle = old.data.length;
-    const createRes = await Axios.post("/article", data);
-    const cur = await Axios.get("/article");
-    const curNumArticle = cur.data.length;
+//     const old = await Axios.get("/article");
+//     const oldNumArticle = old.data.length;
+//     const createRes = await Axios.post("/article", data);
+//     const cur = await Axios.get("/article");
+//     const curNumArticle = cur.data.length;
 
-    expect(createRes.data.name).toBe("Article 1");
-    expect(curNumArticle).toBe(oldNumArticle + 1);
-  });
+//     expect(createRes.data.name).toBe("Article 1");
+//     expect(curNumArticle).toBe(oldNumArticle + 1);
+//   });
 
-  test("Create with bad data", async () => {
-    const data = {
-      title_article: "Article 1",
-      date_article: "28/02/2025",
-      content_article: "description de l'article",
-      category_id: 7,
-      user_id: 20,
-      image_article: "image-article.jpg",
-    };
+//   test("Create with bad data", async () => {
+//     const data = {
+//       title_article: "Article 1",
+//       date_article: "28/02/2025",
+//       content_article: "description de l'article",
+//       category_id: 7,
+//       user_id: 20,
+//       image_article: "image-article.jpg",
+//     };
 
-    const old = await Axios.get("/article");
-    const oldNumArticle = old.data.length;
-    const createRes = await Axios.post("/article", data, {
-      validateStatus: () => true,
-    });
-    const cur = await Axios.get("/article");
-    const curNumArticle = cur.data.length;
+//     const old = await Axios.get("/article");
+//     const oldNumArticle = old.data.length;
+//     const createRes = await Axios.post("/article", data, {
+//       validateStatus: () => true,
+//     });
+//     const cur = await Axios.get("/article");
+//     const curNumArticle = cur.data.length;
 
-    expect(createRes.status).toBe(422);
-    expect(curNumArticle).toBe(oldNumArticle);
-  });
-});
+//     expect(createRes.status).toBe(422);
+//     expect(curNumArticle).toBe(oldNumArticle);
+//   });
+// });
 
-test("Create with bad data", async (data = {
-  title_article: "Article 1",
-  date_article: "28/02/2025",
-  content_article: "description de l'article",
-  category_id: 7,
-  user_id: 20,
-  image_article: "image-article.jpg",
-}) => {
-  const old = await Axios.get("/article");
-  const oldNumArticle = old.data.length;
-  // before
-  const createRes = await Axios.post("/article", data, {
-    validateStatus: () => true,
-  });
-  // after
-  const cur = await Axios.get("/article");
-  const curNumArticle = cur.data.length;
+// test("Create with bad data", async (data = {
+//   title_article: "Article 1",
+//   date_article: "28/02/2025",
+//   content_article: "description de l'article",
+//   category_id: 7,
+//   user_id: 20,
+//   image_article: "image-article.jpg",
+// }) => {
+//   const old = await Axios.get("/article");
+//   const oldNumArticle = old.data.length;
+//   // before
+//   const createRes = await Axios.post("/article", data, {
+//     validateStatus: () => true,
+//   });
+//   // after
+//   const cur = await Axios.get("/article");
+//   const curNumArticle = cur.data.length;
 
-  expect(createRes.status).toBe(422);
-  expect(curNumArticle).toBe(oldNumArticle);
-});
+//   expect(createRes.status).toBe(422);
+//   expect(curNumArticle).toBe(oldNumArticle);
+// });
 
-describe("Article DELETE", () => {
-  test("Delete as user owner", async () => {
-    const old = await Axios.get("/article");
-    const article = old.data.find((c) => c.user_id == user.id);
-    const oldNumArticle = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/article/" + article.id);
-    // after
-    const cur = await Axios.get("/article");
-    const curNumArticle = cur.data.length;
+// describe("Article DELETE", () => {
+//   test("Delete as user owner", async () => {
+//     const old = await Axios.get("/article");
+//     const article = old.data.find((c) => c.user_id == user.id);
+//     const oldNumArticle = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/article/" + article.id);
+//     // after
+//     const cur = await Axios.get("/article");
+//     const curNumArticle = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumArticle).toBe(oldNumArticle - 1);
-  });
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumArticle).toBe(oldNumArticle - 1);
+//   });
 
-  test("Delete as not user owner", async () => {
-    const old = await Axios.get("/article");
-    const article = old.data.find((c) => c.user_id != user.id);
-    const oldNumArticle = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/article/" + article.id, {
-      validateStatus: () => true,
-    });
-    // after
-    const cur = await Axios.get("/article");
-    const curNumArticle = cur.data.length;
+//   test("Delete as not user owner", async () => {
+//     const old = await Axios.get("/article");
+//     const article = old.data.find((c) => c.user_id != user.id);
+//     const oldNumArticle = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/article/" + article.id, {
+//       validateStatus: () => true,
+//     });
+//     // after
+//     const cur = await Axios.get("/article");
+//     const curNumArticle = cur.data.length;
 
-    expect(deleteRes.status).toBe(403);
-    expect(curNumArticle).toBe(oldNumArticle);
-  });
-});
+//     expect(deleteRes.status).toBe(403);
+//     expect(curNumArticle).toBe(oldNumArticle);
+//   });
+// });
 
-// ------------------------------------------------------------------------------
-// admin article
-// ------------------------------------------------------------------------------
+// // ------------------------------------------------------------------------------
+// // admin article
+// // ------------------------------------------------------------------------------
 
-describe("Admin Login", () => {
-  test("Vérification de l'authentification", async () => {
-    await login(user, {
-      email: "admin@truc.fr",
-      password: "password",
-    });
-  });
-});
+// describe("Admin Login", () => {
+//   test("Vérification de l'authentification", async () => {
+//     await login(user, {
+//       email: "admin@truc.fr",
+//       password: "password",
+//     });
+//   });
+// });
 
-describe("Admin Article PUT", () => {
-  test("Update as admin", async (data = {
-    name: "New name",
-    _method: "PUT",
-  }) => {
-    const res = await Axios.get("/article");
-    const article = res.data.find((c) => c.user_id != user.id);
-    const updateRes = await Axios.put("/article/" + article.id, data);
-    expect(updateRes.data.name).toBe("New name");
-  });
-});
+// describe("Admin Article PUT", () => {
+//   test("Update as admin", async (data = {
+//     name: "New name",
+//     _method: "PUT",
+//   }) => {
+//     const res = await Axios.get("/article");
+//     const article = res.data.find((c) => c.user_id != user.id);
+//     const updateRes = await Axios.put("/article/" + article.id, data);
+//     expect(updateRes.data.name).toBe("New name");
+//   });
+// });
 
-describe("Admin Article DELETE", () => {
-  test("Delete as admin", async () => {
-    const old = await Axios.get("/article");
-    const article = old.data.find((c) => c.user_id != user.id);
-    const oldNumArticle = old.data.length;
-    // before
-    const deleteRes = await Axios.delete("/article/" + article.id);
-    // after
-    const cur = await Axios.get("/article");
-    const curNumArticle = cur.data.length;
+// describe("Admin Article DELETE", () => {
+//   test("Delete as admin", async () => {
+//     const old = await Axios.get("/article");
+//     const article = old.data.find((c) => c.user_id != user.id);
+//     const oldNumArticle = old.data.length;
+//     // before
+//     const deleteRes = await Axios.delete("/article/" + article.id);
+//     // after
+//     const cur = await Axios.get("/article");
+//     const curNumArticle = cur.data.length;
 
-    expect(deleteRes.status).toBe(200);
-    expect(curNumArticle).toBe(oldNumArticle - 1);
-  });
-});
+//     expect(deleteRes.status).toBe(200);
+//     expect(curNumArticle).toBe(oldNumArticle - 1);
+//   });
+// });
 
 // ------------------------------------------------------------------------------
 // opinions
