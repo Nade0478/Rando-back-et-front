@@ -4,7 +4,7 @@ import { Card, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
 import "../profil/CardProfil.css";
 
-const ProfileCard = ({ id_user }) => {
+const ProfileCard = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const ProfileCard = ({ id_user }) => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/${id_user}`,
+          `${process.env.REACT_APP_API_URL}/${id}`,
           { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
         );
         setUser(response.data);
@@ -25,8 +25,10 @@ const ProfileCard = ({ id_user }) => {
       }
     };
 
-    fetchUser();
-  }, [id_user]);
+    if (id) {
+      fetchUser();
+    }
+  }, [id]); // Ajout de `id` comme dépendance
 
   if (loading) {
     return (

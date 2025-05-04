@@ -44,3 +44,8 @@
     width: 100%;
   }
 }
+
+.custom-btn {
+  background-color: #a89e92 !important;
+  color: white !important; /* Pour un texte visible */
+}

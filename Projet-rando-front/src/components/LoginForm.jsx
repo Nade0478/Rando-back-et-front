@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
@@ -6,20 +6,22 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function LoginForm() {
-  document.title = "Connexion au site";
+  useEffect(() => {
+    document.title = "Connexion au site";
+  }, []);
 
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch, // Pour surveiller la valeur du champ password
+    getValues,
     formState: { errors },
   } = useForm({ mode: "onChange" });
+
   const [serverError, setServerError] = useState("");
 
   const onSubmit = async (data) => {
     try {
-      // Vérification côté frontend
       if (data.password !== data.password_confirmation) {
         setServerError("Les mots de passe ne correspondent pas.");
         return;
@@ -29,10 +31,7 @@ function LoginForm() {
         `${process.env.REACT_APP_API_URL}/login`,
         data,
         {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
+          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
         }
       );
 
@@ -97,7 +96,6 @@ function LoginForm() {
           {errors.password && <Form.Text className="text-danger">{errors.password.message}</Form.Text>}
         </Form.Group>
 
-        {/* Champ confirmation de mot de passe ajouté */}
         <Form.Group controlId="formBasicPasswordConfirmation" className="mb-3">
           <Form.Label>Confirmer le mot de passe</Form.Label>
           <Form.Control
@@ -105,7 +103,7 @@ function LoginForm() {
             placeholder="Confirmez votre mot de passe"
             {...register("password_confirmation", {
               required: "Confirmation du mot de passe obligatoire",
-              validate: (value) => value === watch("password") || "Les mots de passe ne correspondent pas",
+              validate: (value) => value === getValues("password") || "Les mots de passe ne correspondent pas",
             })}
           />
           {errors.password_confirmation && (
@@ -122,4 +120,5 @@ function LoginForm() {
 }
 
 export default LoginForm;
+
 

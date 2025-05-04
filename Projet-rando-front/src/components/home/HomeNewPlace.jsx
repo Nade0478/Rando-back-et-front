@@ -36,7 +36,7 @@ const HomeNewPlace = () => {
               <img src={item.image} alt={item.alt} />
             </div>
             <h3 className="item-title">{item.title}</h3>
-            <Link to={`/place/show/${item.id}`} className="btn btn-light">
+            <Link to={`/place/show/${item.id}`} className="btn custom-btn">
               Découvrir
             </Link>
           </div>
