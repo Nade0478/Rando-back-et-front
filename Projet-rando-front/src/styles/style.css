@@ -80,3 +80,11 @@ code {
   align-items: center;
   margin-top: 5px;
 }
+
+.content-article {
+  text-align: justify; /* Justifier le texte */
+  margin-left: 0; /* Aligné sur la gauche */
+  margin-right: 0;
+  line-height: 1.8; /* Espacement entre les lignes */
+  white-space: pre-line; /* Respecter les sauts de ligne */
+}

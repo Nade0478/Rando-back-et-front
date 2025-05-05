@@ -5,6 +5,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import FilterDropdown from "../../components/FilterDropdown";
 import Sidebar from "../../components/admin/Sidebar";
+import "../../styles/style.css";
 
 const Article = () => {
   const [articles, setArticles] = useState([]); // Correction du nom pour plus de clarté
@@ -95,7 +96,7 @@ const Article = () => {
                   )}
                 </td>
                 <td>{new Date(article.date_article).toLocaleDateString()}</td>
-                <td>{article.content_article}</td>
+                <td className="content-article">{article.content_article}</td>
                 <td>{article.category?.name_category || "Aucune catégorie"}</td>
                 <td>{article.user?.name || "Auteur inconnu"}</td>
                 <td>
