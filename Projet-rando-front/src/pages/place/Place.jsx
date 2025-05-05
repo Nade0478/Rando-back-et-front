@@ -53,7 +53,7 @@ const Place = () => {
   const filteredPlaces = place.filter((place) => {
     return !selectedName_place || place.name_place === selectedName_place;
   });
-
+console.log(process.env);
   return (
     <div>
       <Sidebar />
@@ -91,7 +91,7 @@ const Place = () => {
                 <td>{place.name_place}</td>
                 <td>
                   <img
-                    src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${place.image_place}`}
+                    src={`${process.env.REACT_APP_API_URL_IMG}/storage/uploads/${place.image_place}`}
                     alt={place.name_place}
                     width="75px"
                   />

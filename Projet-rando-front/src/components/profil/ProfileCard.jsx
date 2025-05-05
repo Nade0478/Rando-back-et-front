@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Card, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
 import "../profil/CardProfil.css";
 
-const ProfileCard = () => {
-  const { id } = useParams();
+const ProfileCard = ({id_user}) => {
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/${id}`,
-          { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
-        );
-        setUser(response.data);
-      } catch (err) {
-        setError("Erreur lors de la récupération du profil.");
-      } finally {
-        setLoading(false);
-      }
-    };
+   
 
-    if (id) {
+    if (id_user) {
       fetchUser();
     }
-  }, [id]); // Ajout de `id` comme dépendance
+  }, [id_user]); // Ajout de `id` comme dépendance
+console.log(id_user);
+  const fetchUser = async () => {
+    try {
+      
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/user/${id_user}`,
+        { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
+      );
+      setUser(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError("Erreur lors de la récupération du profil.");
+    } 
+  };
 
   if (loading) {
     return (

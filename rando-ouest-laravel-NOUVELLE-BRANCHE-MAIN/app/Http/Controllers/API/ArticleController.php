@@ -17,6 +17,15 @@ class ArticleController extends Controller
         return response()->json($articles, 200);
     }
 
+     /**
+     * Display a listing of the resource.
+     */
+    public function indexHome()
+    {
+        $articles = Article::with(['category', 'user'])->limit(3)->orderBy('created_at', 'desc')->get();
+        return response()->json($articles, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
