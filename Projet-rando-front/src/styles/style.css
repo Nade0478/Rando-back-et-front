@@ -82,9 +82,9 @@ code {
 }
 
 .content-article {
-  text-align: justify; /* Justifier le texte */
-  margin-left: 0; /* Aligné sur la gauche */
+  text-align: justify; 
+  margin-left: 0; 
   margin-right: 0;
-  line-height: 1.8; /* Espacement entre les lignes */
+  line-height: 1.8; 
   white-space: pre-line; /* Respecter les sauts de ligne */
 }

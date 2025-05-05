@@ -50,9 +50,10 @@ const ShowArticle = () => {
         <p>
           <strong>Auteur :</strong> {article.user?.name || "Auteur inconnu"}
         </p>
-        <p>
+        <p className="content-article">
           <strong>Contenu :</strong> {article.content_article}
         </p>
+
         <p>
           <strong>Image :</strong> {article.image_article}
         </p>

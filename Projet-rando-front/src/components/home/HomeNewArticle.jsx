@@ -3,14 +3,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./HomeNew.css";
 import { Link } from "react-router-dom";
+import "../../styles/style.css";
 
 const HomeNewArticle = () => {
   const items = [
     {
-      id: 52,
+      id: 1,
       title: "Expertise locale",
       description: "Nos itinéraires sont conçus pour vous faire découvrir les trésors cachés.",
-      image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/cartes-trésor.png`,
+      image: `${process.env.REACT_APP_API_URL}/storage/app/public/public/uploads/alpes-mancelle72_1742481007.jpg`,
     },
     {
       id: 54,
