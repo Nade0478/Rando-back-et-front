@@ -8,7 +8,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.laravel-docker.rule=Host(`api.rando-ouest.blog`)"
+      - "traefik.http.routers.laravel-docker.rule=Host(`api.rando-ouest.com`)"
       - "traefik.http.routers.laravel-docker.entrypoints=websecure"
       - "traefik.http.routers.laravel-docker.tls.certresolver=myresolver"
 
@@ -17,11 +17,11 @@ services:
     ports:
       - 8001:80
     depends_on:
-      - laravel-docker-api
+      - laravel-docker
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.vue-docker.rule=Host(`pokedex.blog`)"
+      - "traefik.http.routers.vue-docker.rule=Host(`rando-ouest.com`)"
       - "traefik.http.routers.vue-docker.entrypoints=websecure"
       - "traefik.http.routers.vue-docker.tls.certresolver=myresolver"
 
@@ -38,10 +38,10 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.exposedbydefault=false" 
       - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=postmaster@example.com"
+      - "--certificatesresolvers.myresolver.acme.email=postmaster@rando-ouest.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "443:443"

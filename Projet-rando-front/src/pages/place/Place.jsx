@@ -11,7 +11,7 @@ import Sidebar from "../../components/admin/Sidebar";
 
 // Déclaration correcte de l'icône personnalisée
 const customIcon = new L.Icon({
-  iconUrl: `${process.env.REACT_APP_API_URL}/storage/public/uploads/icon-randonneur.png`,
+  iconUrl: `${process.env.REACT_APP_API_URL_IMG}/storage/uploads/icon-randonneur.png`,
   alt: "Icons",
   iconSize: [25, 25],
   iconAnchor: [16, 32],

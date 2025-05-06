@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./HomeNew.css";
 import { Link } from "react-router-dom";
-// import "../../styles/style.css";
 import axios from "axios";
 import { useEffect } from "react";
 
