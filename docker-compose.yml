@@ -18,7 +18,7 @@ services:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: OPL2025
-      MYSQL_DATABASE: rando-ouest
+      MYSQL_DATABASE: rando_ouest
     ports:
       - 3306:3306
 
