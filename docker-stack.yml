@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   laravel-docker:
     image: ghcr.io/nade0478/cda-api-prod:latest
@@ -8,9 +10,12 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.laravel-docker.rule=Host(`api.rando-ouest.com`)"
+      - "traefik.http.routers.laravel-docker.rule=Host(`api.srv807224.hstgr.cloud`)"
       - "traefik.http.routers.laravel-docker.entrypoints=websecure"
       - "traefik.http.routers.laravel-docker.tls.certresolver=myresolver"
+
+    volumes:
+      - ~/storage:/var/www/app/storage 
 
   vue-docker:
     image: ghcr.io/nade0478/cda-spa-prod:latest
@@ -41,10 +46,11 @@ services:
       - "--providers.docker.exposedbydefault=false" 
       - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=postmaster@rando-ouest.com"
+      - "--certificatesresolvers.myresolver.acme.email=nade.projet.rando@gmail.com"
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "443:443"
+      - "80:80"
       - "8080:8080"
     volumes:
       - "/letsencrypt:/letsencrypt"

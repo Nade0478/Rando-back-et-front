@@ -44,3 +44,18 @@
     width: 100%;
   }
 }
+.content-article {
+  text-align: justify; 
+  margin-left: 0; 
+  margin-right: 0;
+  line-height: 1.8; 
+  white-space: pre-line; /* Respecter les sauts de ligne */
+}
+
+.description-place {
+  text-align: justify; 
+  margin-left: 0; 
+  margin-right: 0;
+  line-height: 1.8; 
+  white-space: pre-line;
+}

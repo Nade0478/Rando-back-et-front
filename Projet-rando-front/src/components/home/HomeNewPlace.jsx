@@ -48,11 +48,11 @@ const HomeNewPlace = () => {
           <div key={item.id} className="item">
             <div className="image-container">
               <Link to={`/place/show/${item.id}`}>
-                <img src={item.image} alt={item.title_place} />
+                <img src={item.image} alt={item.name_place} />
               </Link>
             </div>
-            <h3 className="item-title">{item.title_place}</h3>
-            <p>{item.content_place}</p>
+            <h3 className="item-title">{item.name_place}</h3>
+              <p className="description-place">{item.description_place.replace}</p>
             <Link to={`/place/show/${item.id}`} className="btn custom-btn">
               Découvrir
             </Link>
