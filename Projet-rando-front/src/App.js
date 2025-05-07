@@ -46,6 +46,9 @@ import ShowUser from "./pages/user/ShowUser";
 
 import ShowArticle from "./pages/article/ShowArticle";
 import ShowOpinion from "./pages/opinion/ShowOpinion";
+import FaqPage from "./pages/divers/FaqPage";
+
+
 
 const App = () => { 
   return ( 
@@ -107,6 +110,8 @@ const App = () => {
           <Route path="/user/edit/:id" element={<EditUser />} />
           <Route path="/user/show/:id" element={<ShowUser />} />
           <Route path="/user/add" element={<AddUser />} />
+
+          <Route path="divers/FaqPage" element={<FaqPage />} />
 
 
 

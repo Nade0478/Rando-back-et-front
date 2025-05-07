@@ -40,7 +40,8 @@ const Footer = () => {
           <Col>
             <p>
               <a href="/terms" target="_blank" rel="noopener noreferrer">Conditions Générales d'Utilisation</a> | 
-              <a href="/privacy" target="_blank" rel="noopener noreferrer">Politique de Confidentialité</a>
+              <a href="/privacy" target="_blank" rel="noopener noreferrer">Politique de Confidentialité</a> |
+              <a href="/divers/FaqPage" target="_blank" rel="noopener noreferrer">Foire Aux Questions</a>
             </p>
             <p className="mt-2 copyright">&copy; 2025 Rando-Ouest. Tous droits réservés.</p>
           </Col>
