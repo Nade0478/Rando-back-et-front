@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 
 // Déclaration correcte de l'icône personnalisée
 const customIcon = new L.Icon({
-  iconUrl: `${process.env.REACT_APP_API_URL}/storage/public/uploads/icon-randonneur.png`,
+  iconUrl: `${process.env.REACT_APP_API_URL}/storage/app/public/uploads/icon-randonneur.png`,
   alt: "Icons",
   iconSize: [25, 25],
   iconAnchor: [16, 32],
@@ -51,7 +51,7 @@ const ShowPlace = () => {
 
         <div className="text-center">
           <img
-            src={`${process.env.REACT_APP_API_URL_IMG}/storage/uploads/${place.image_place}`}
+            src={`${process.env.REACT_APP_API_URL_IMG}/storage/app/public/uploads/${place.image_place}`}
             alt={place.name_place}
             width="300px"
             className="mb-3"
@@ -85,8 +85,8 @@ const ShowPlace = () => {
         <div className="mt-4">
           <Link to="/place" className="btn btn-dark">Retour à la liste</Link>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };

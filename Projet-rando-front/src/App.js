@@ -113,12 +113,9 @@ const App = () => {
 
           <Route path="divers/FaqPage" element={<FaqPage />} />
 
-
-
           {/* <Route path="/user/add" element={<AddUser />} />  */}
           {/* <Route path="/user/edit/:article" element={<EditUser />} /> 
           <Route path="/user/show/:id" element={<ShowUser />} />  */}
-
 
         </Routes> 
     </BrowserRouter> 

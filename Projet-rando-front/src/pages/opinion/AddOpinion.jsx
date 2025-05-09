@@ -171,8 +171,8 @@ const OpinionAdd = () => {
             </Form>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };

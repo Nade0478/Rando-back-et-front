@@ -16,7 +16,7 @@ const Contact = () => {
             <h1>BIENVENU SUR LA PAGE CONTACT</h1> 
             <p>Pour toute question ou suggestion, n'hésitez pas à me contacter en remplissant le formaulaire de contact</p> 
             <ContactForm /> 
-            <p>Sinon vous pouvez écrire à mon adresse email : info@example.com</p>
+            <p>Sinon vous pouvez écrire à mon adresse email : contact.rando.ouest@gmail.com </p>
             <Footer/>
         </div> 
     ); 

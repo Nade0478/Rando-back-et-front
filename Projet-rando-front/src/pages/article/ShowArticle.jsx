@@ -63,7 +63,7 @@ const ShowArticle = () => {
             {article.image_article && (
               <div className="image-component">
                 <img
-                  src={`${process.env.REACT_APP_API_URL_IMG}/storage/uploads/${article.image_article}`}
+                  src={`${process.env.REACT_APP_API_URL_IMG}/storage/app/public/uploads/${article.image_article}`}
                   alt={article.title_article}
                 />
               </div>

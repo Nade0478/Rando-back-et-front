@@ -65,8 +65,8 @@ const Role = () => {
             ))}
           </tbody>
         </Table>
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };

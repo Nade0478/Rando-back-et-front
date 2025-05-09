@@ -58,7 +58,7 @@ const PlaceList = () => {
                 <td>{place.name_place}</td>
                 <td>
                   <img
-                    src={`${process.env.REACT_APP_API_URL_IMG}/storage/uploads/${place.image_place}`}
+                    src={`${process.env.REACT_APP_API_URL_IMG}/storage/app/public/uploads/${place.image_place}`}
                     alt={place.name_place}
                     width="75px"
                   />

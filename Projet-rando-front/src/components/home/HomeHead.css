@@ -8,7 +8,7 @@
 .homeHead .image-container {
   width: 100vw;
   height: 100vh;
-  background-image: url('http://127.0.0.1:8000/storage/public/public/uploads/arbre-centenaire.jpg');
+  background-image: url('http://127.0.0.1:8000/storage/uploads/arbre-centenaire.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

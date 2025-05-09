@@ -1,4 +1,5 @@
 .sidebarProfil {
+    font-style: "Inknut Antiqua", serif; /* Police de caractères */
     position: fixed; /* Reste fixe pendant le défilement */
     overflow-y: auto; /* Active le défilement vertical si nécessaire */
     border-right: 1px solid #ccc; /* Bordure légère */  
@@ -6,7 +7,7 @@
     left: 0;
     width: 155px; /* Largeur constante */
     height: 100vh; /* Hauteur égale à celle de la fenêtre */
-    background-color: #144004; /* Couleur de fond sombre */
+    background-color: #0c4205; /* Couleur de fond sombre */
     color: rgb(1, 20, 2);
     display: flex;
     flex-direction: column;

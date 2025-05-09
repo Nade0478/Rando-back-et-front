@@ -6,13 +6,14 @@ import "../styles/style-footer.scss";
 const Footer = () => {
   return (
     <footer className="footer">
-      <Container className="fluid">
+      <Container fluid>
         <Row className="text-center py-2">
           <Col md={12}>
             <h4>Rando-Ouest</h4>
             <p>Préparez-vous pour l'aventure !</p>
             <h5>Nos coordonnées</h5>
             <p>Email : <a href="mailto:contact.rando.ouest@gmail.com">contact.rando.ouest@gmail.com</a></p>
+            <p><a href="/contact">Accéder à la page Contact</a></p>
             <p>Téléphone : +33 6 01 02 03 04</p>
             <p>Adresse : 123 Rue de la Randonnée, 72000 Le Mans, France</p>
           </Col>
@@ -35,7 +36,6 @@ const Footer = () => {
             </div>
           </Col>
         </Row>
-
         <Row className="text-center mt-3">
           <Col>
             <p>

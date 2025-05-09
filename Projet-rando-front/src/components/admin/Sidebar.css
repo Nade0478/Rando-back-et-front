@@ -1,5 +1,6 @@
 .sidebar {
   position:fixed;
+  font-style:"Inknut Antiqua", serif;
   max-height: 100vh;
   overflow-y: auto; /* Active le défilement vertical si nécessaire */
   border-right: 1px solid #ccc; /* Bordure légère */

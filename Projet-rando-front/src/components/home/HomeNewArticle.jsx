@@ -37,6 +37,7 @@ useEffect(() => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/article-home`);
       setItems(response.data);
+      console.log(items);
     } catch (error) {
       console.error("Erreur lors de la récupération des lieux :", error);
     }
