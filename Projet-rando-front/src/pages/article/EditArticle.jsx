@@ -26,7 +26,11 @@ const EditArticle = () => {
     try {
       const res = await axios.get(
         `${process.env.REACT_APP_API_URL}/article/${article}`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
       );
       setTitle_article(res.data.title_article || "");
       setDate_article(res.data.date_article || "");
@@ -51,7 +55,9 @@ const EditArticle = () => {
   // Récupérer les catégories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/category`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/category`
+      );
       setCategories(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des catégories :", error);
@@ -72,7 +78,13 @@ const EditArticle = () => {
   const updateArticle = async (e) => {
     e.preventDefault();
 
-    if (!title_article || !date_article || !content_article || !userId || !categoryId) {
+    if (
+      !title_article ||
+      !date_article ||
+      !content_article ||
+      !userId ||
+      !categoryId
+    ) {
       setValidationError({
         title_article: !title_article ? "Le titre est requis." : "",
         date_article: !date_article ? "La date est requise." : "",
@@ -96,7 +108,7 @@ const EditArticle = () => {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_URL}/article/${article}`, 
+        `${process.env.REACT_APP_API_URL}/article/${article}`,
         formData
       );
       navigate("/article"); // Redirection après la mise à jour
@@ -112,118 +124,114 @@ const EditArticle = () => {
   return (
     <div>
       <Sidebar />
-      <div className="container mt-5">
-        <div className="row justify-content-center">
-          <div className="col-12 col-sm-12 col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Modifier un article</h4>
-                <hr />
-                <div className="form-wrapper">
-                  {Object.keys(validationError).length > 0 && (
-                    <div className="alert alert-danger">
-                      <ul>
-                        {Object.entries(validationError).map(([key, value]) => (
-                          <li key={key}>{value}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  <Form onSubmit={updateArticle}>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="title_article">
-                          <Form.Label>Titre de l'article</Form.Label>
-                          <Form.Control
-                            type="text"
-                            value={title_article}
-                            onChange={(e) => setTitle_article(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="date_article">
-                          <Form.Label>Date</Form.Label>
-                          <Form.Control
-                            type="datetime-local"
-                            value={date_article}
-                            onChange={(e) => setDate_article(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="content_article">
-                          <Form.Label>Contenu</Form.Label>
-                          <Form.Control
-                            as="textarea"
-                            rows={5}
-                            value={content_article}
-                            onChange={(e) => setContent_article(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="user_id">
-                          <Form.Label>Auteur</Form.Label>
-                          <Form.Control
-                            as="select"
-                            value={userId}
-                            onChange={(e) => setUserId(e.target.value)}
-                          >
-                            <option value="">Sélectionnez un auteur</option>
-                            {users.map((user) => (
-                              <option key={user.id} value={user.id}>
-                                {user.name}
-                              </option>
-                            ))}
-                          </Form.Control>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="category_id">
-                          <Form.Label>Catégorie</Form.Label>
-                          <Form.Control
-                            as="select"
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                          >
-                            <option value="">Sélectionnez une catégorie</option>
-                            {categories.map((category) => (
-                              <option key={category.id} value={category.id}>
-                                {category.name_category}
-                              </option>
-                            ))}
-                          </Form.Control>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="image_article">
-                          <Form.Label>Image</Form.Label>
-                          <Form.Control type="file" onChange={changeHandler} />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Button
-                      variant="success"
-                      type="submit"
-                      className="mt-3"
-                      block="block"
-                    >
-                      Mettre à jour
-                    </Button>
-                  </Form>
+      <div className="container mt-5 card-wrapper">
+        <div className="card">
+          <div className="card-body">
+            <h4 className="card-title text-center">Modifier un article</h4>
+            <hr />
+            <div className="form-wrapper">
+              {Object.keys(validationError).length > 0 && (
+                <div className="alert alert-danger">
+                  <ul>
+                    {Object.entries(validationError).map(([key, value]) => (
+                      <li key={key}>{value}</li>
+                    ))}
+                  </ul>
                 </div>
-              </div>
+              )}
+              <Form onSubmit={updateArticle}>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="title_article">
+                      <Form.Label>Titre de l'article</Form.Label>
+                      <Form.Control
+                        type="text"
+                        value={title_article}
+                        onChange={(e) => setTitle_article(e.target.value)}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="date_article">
+                      <Form.Label>Date</Form.Label>
+                      <Form.Control
+                        type="datetime-local"
+                        value={date_article}
+                        onChange={(e) => setDate_article(e.target.value)}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="content_article">
+                      <Form.Label>Contenu</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={5}
+                        value={content_article}
+                        onChange={(e) => setContent_article(e.target.value)}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="user_id">
+                      <Form.Label>Auteur</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={userId}
+                        onChange={(e) => setUserId(e.target.value)}
+                      >
+                        <option value="">Sélectionnez un auteur</option>
+                        {users.map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="category_id">
+                      <Form.Label>Catégorie</Form.Label>
+                      <Form.Control
+                        as="select"
+                        value={categoryId}
+                        onChange={(e) => setCategoryId(e.target.value)}
+                      >
+                        <option value="">Sélectionnez une catégorie</option>
+                        {categories.map((category) => (
+                          <option key={category.id} value={category.id}>
+                            {category.name_category}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Group controlId="image_article">
+                      <Form.Label>Image</Form.Label>
+                      <Form.Control type="file" onChange={changeHandler} />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Button
+                  variant="success"
+                  type="submit"
+                  className="mt-3"
+                  block="block"
+                >
+                  Mettre à jour
+                </Button>
+              </Form>
             </div>
           </div>
         </div>

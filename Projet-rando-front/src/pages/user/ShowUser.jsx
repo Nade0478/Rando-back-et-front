@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import Menu from "../../components/Menu";
 import Footer from "../../components/Footer";
+import Sidebar from "../../components/admin/Sidebar";
 
 const ShowUser = () => {
   const { id } = useParams();
@@ -48,7 +48,7 @@ const ShowUser = () => {
 
   return (
     <div>
-      <Menu />
+      <Sidebar />
       <div className="container mt-5">
         <h1>{user.name}</h1>
         <p><strong>Nom :</strong> {user.name}</p>
