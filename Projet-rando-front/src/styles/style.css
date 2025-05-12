@@ -96,3 +96,22 @@ code {
   line-height: 1.8; 
   white-space: pre-line;
 }
+.input-group {
+  display: flex;
+  align-items: stretch; /* Assure que tous les éléments aient la même hauteur */
+}
+
+.input-group .input-group-text,
+.input-group .form-control {
+  height: 100%; /* Permet d'uniformiser les éléments */
+  display: flex;
+  align-items: center;
+}
+.svg-icon {
+  align-items: center;
+  display: flex;
+  color: #0000ff;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px; /* Espace entre l'icône et le texte */
+}

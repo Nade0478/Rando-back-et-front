@@ -80,7 +80,9 @@ function RegisterForm() {
           placeholder="Votre pseudo"
           {...register("name", { required: "Pseudo obligatoire" })}
         />
-        {errors.name && <Form.Text className="text-danger">{errors.name.message}</Form.Text>}
+        {errors.name && (
+          <Form.Text className="text-danger">{errors.name.message}</Form.Text>
+        )}
       </Form.Group>
 
       <Form.Group controlId="formBasicEmail" className="mb-3">
@@ -96,13 +98,19 @@ function RegisterForm() {
             },
           })}
         />
-        {errors.email && <Form.Text className="text-danger">{errors.email.message}</Form.Text>}
+        {errors.email && (
+          <Form.Text className="text-danger">{errors.email.message}</Form.Text>
+        )}
       </Form.Group>
 
       <Form.Group controlId="formBasicPassword" className="mb-3">
         <Form.Label>Mot de passe</Form.Label>
-        <InputGroup>
-          <InputGroup.Text onClick={handleShowPasswordToggle} style={{ cursor: "pointer" }}>
+        <InputGroup className="input-group">
+          <InputGroup.Text
+            className="input-group-text"
+            onClick={handleShowPasswordToggle}
+            style={{ cursor: "pointer" }}
+          >
             {showPassword ? <AiOutlineEye /> : <AiTwotoneEyeInvisible />}
           </InputGroup.Text>
           <Form.Control
@@ -110,15 +118,23 @@ function RegisterForm() {
             placeholder="Mot de passe"
             {...register("password", {
               required: "Mot de passe obligatoire",
-              minLength: { value: 8, message: "Longueur minimale de 8 caractères" },
+              minLength: {
+                value: 8,
+                message: "Longueur minimale de 8 caractères",
+              },
               pattern: {
                 value: /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*.?,])/,
-                message: "Incluez une minuscule, majuscule, chiffre et caractère spécial",
+                message:
+                  "Incluez une minuscule, majuscule, chiffre et caractère spécial",
               },
             })}
           />
         </InputGroup>
-        {errors.password && <Form.Text className="text-danger">{errors.password.message}</Form.Text>}
+        {errors.password && (
+          <Form.Text className="text-danger">
+            {errors.password.message}
+          </Form.Text>
+        )}
       </Form.Group>
 
       <Button type="submit" variant="success">
