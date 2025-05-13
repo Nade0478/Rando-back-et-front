@@ -17,6 +17,12 @@ class PlaceController extends Controller
         return response()->json($places, 200);
     }
 
+    public function indexHome()
+    {
+        $places = Place::limit(3)->orderBy('created_at', 'desc')->get();
+        return response()->json($places, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */

@@ -87,7 +87,7 @@ const Article = () => {
                 <td>
                   {article.image_article ? (
                     <img
-                    src={`${process.env.REACT_APP_API_URL_IMG}/storage/uploads/${article.image_article}`}
+                    src={`${process.env.REACT_APP_API_URL_IMG}/${article.image_article}`}
                       alt={article.title_article}
                       width="75px"
                     />

@@ -26,6 +26,7 @@ Route::apiResource('article', ArticleController::class)->only(['index', 'show'])
 Route::apiResource('place', PlaceController::class)->only(['index', 'show']);
 Route::apiResource('opinion', OpinionController::class)->only(['index', 'show']);
 Route::get('/article-home', [ArticleController::class, 'indexHome']);
+Route::get('/place-home', [PlaceController::class, 'indexHome']);
 
 //  Routes protégées par JWT
 Route::middleware('auth:api')->group(function () {
