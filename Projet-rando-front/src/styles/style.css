@@ -3,6 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: auto; 
 }
 
 code {
@@ -115,3 +116,4 @@ code {
   height: 25px;
   margin-right: 5px; /* Espace entre l'icône et le texte */
 }
+
