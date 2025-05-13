@@ -19,7 +19,9 @@ const Article = () => {
 
   const displayArticles = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/article`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/article`
+      );
       const fetchedArticles = response.data.data || []; // Vérification de la structure des données
       setArticles(fetchedArticles);
       setTitles(fetchedArticles.map((article) => article.title_article));
@@ -87,7 +89,7 @@ const Article = () => {
                 <td>
                   {article.image_article ? (
                     <img
-                    src={`${process.env.REACT_APP_API_URL_IMG}/${article.image_article}`}
+                      src={`${process.env.REACT_APP_API_URL_IMG}/${article.image_article}`}
                       alt={article.title_article}
                       width="75px"
                     />

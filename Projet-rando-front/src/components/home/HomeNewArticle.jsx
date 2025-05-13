@@ -34,7 +34,10 @@ const HomeNewArticle = () => {
             <div key={item.id} className="item">
               <div className="image-container">
                 <Link to={`/article/show/${item.id}`}>
-                  <img src={`${process.env.REACT_APP_API_URL_IMG}/${item.image_article}`} alt={item.title_article} />
+                  <img
+                    src={`${process.env.REACT_APP_API_URL_IMG}/${item.image_article}`}
+                    alt={item.title_article}
+                  />
                 </Link>
               </div>
               <h3 className="item-title">{item.title_article}</h3>
