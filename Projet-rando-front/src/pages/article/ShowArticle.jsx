@@ -50,23 +50,26 @@ const ShowArticle = () => {
         <p>
           <strong>Auteur :</strong> {article.user?.name || "Auteur inconnu"}
         </p>
-        <p>
+        <p className="content-article">
           <strong>Contenu :</strong> {article.content_article}
         </p>
 
-        {article.image_article && (
-          <div className="row">
-            <div className="col-md-6 text-center">
+        <p>
+          <strong>Image :</strong> {article.image_article}
+        </p>
+
+        <div className="row">
+          <div className="col-md-6-center">
+            {article.image_article && (
               <div className="image-component">
                 <img
-                  src={`${process.env.REACT_APP_API_URL_IMG}/storage/uploads/${article.image_article}`}
+                  src={`${process.env.REACT_APP_API_URL_IMG}/storage/app/public/uploads/${article.image_article}`}
                   alt={article.title_article}
-                  className="img-fluid"
                 />
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
       <Footer />
     </div>

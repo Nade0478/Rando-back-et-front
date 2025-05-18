@@ -15,9 +15,10 @@ const AboutForm = () => {
             // }}
         >
             <div className="content">
-                <h2>
+                <h3>
                     Le site dédié aux amateurs de randonnée et d’activités en plein air.
-                </h2>
+                </h3>
+                
                 <block>
                 <p>
                     RandoOuest est votre guide ultime pour découvrir les sentiers
@@ -28,7 +29,7 @@ const AboutForm = () => {
                 </p>
                 </block>
                 <p>
-                    Commencez votre exploration dès aujourd'hui avec Rando-Ouest. Que vous
+                    Commencez votre exploration dès aujourd'hui avec RandoOuest. Que vous
                     soyez en quête de randonnées en famille, de défis sportifs ou de moments
                     de détente en pleine nature, notre site a tout ce qu'il vous faut
                     pour organiser votre prochaine sortie.

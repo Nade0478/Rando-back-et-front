@@ -2,9 +2,6 @@
   background-color: #5b3e23;
   color: black;
   font-family: "Inknut Antiqua", serif;
-  width: 100vw; /* Assure que le footer prend toute la largeur */
-  padding: 20px;
-  text-align: center;
 }
 
 .social-icons a {

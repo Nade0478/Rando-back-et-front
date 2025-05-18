@@ -5,46 +5,44 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const AboutForm3 = () => {
     return (
-      <section
-      // className="presentation"
-      // style={{
-      //     backgroundImage: `url(`${process.env.REACT_APP_API_URL}/storage/public/uploads/cheminForet_1742477581.png`)`, // Assurez-vous que ce chemin est correct
-      //     backgroundSize: 'cover',
-      //     backgroundPosition: 'center'
-      // }}
-      >
-        <div className="content">
-          <p>
-            "Chez Rando-Ouest, nous ne sommes pas juste des randonneurs. Nous
-            sommes des explorateurs, des amoureux de la nature et des partageurs
-            d’expériences. Si vous cherchez un groupe engagé, bienveillant et
-            dynamique, vous êtes au bon endroit !"
-          </p>
-
-          <block>
-            <p>
-              "Explorer, c’est bien. Protéger, c’est mieux !" Nous sensibilisons
-              nos membres à des pratiques écoresponsables, en privilégiant le
-              respect des sentiers, la faune et la flore.
-            </p>
-          </block>
-          <p>
-            Grâce à nos recherches et notre expertise locale, nous vous
-            proposons des sentiers uniques, loin des circuits trop touristiques.
-            Vous découvrirez des paysages que peu connaissent !
-          </p>
-          <form>
-            <article>
-              <p>
-                "Parce que nous allions découverte, convivialité et respect de
-                l’environnement. Notre mission : transformer chaque randonnée en
-                une expérience mémorable !"
-              </p>
-              {/* Ajoutez des champs de formulaire ici si nécessaire */}
-            </article>
-          </form>
-        </div>
-      </section>
+        <section
+            // className="presentation"
+            // style={{
+            //     backgroundImage: `url(`${process.env.REACT_APP_API_URL}/storage/public/uploads/cheminForet_1742477581.png`)`, // Assurez-vous que ce chemin est correct
+            //     backgroundSize: 'cover',
+            //     backgroundPosition: 'center'
+            // }}
+        >
+            <div className="content">
+                <p>
+                    Le site dédié aux amateurs de randonnée et d’activités en plein air.
+                </p>
+                
+                <block>
+                <p>
+                    RandoOuest est votre guide ultime pour découvrir les sentiers
+                    de randonnée pédestre les plus beaux et variés du Grand Ouest
+                    de la France. Que vous soyez novice ou expérimenté, notre site
+                    vous propose des itinéraires adaptés, des conseils pratiques
+                    et une communauté de passionnés.
+                </p>
+                </block>
+                <p>
+                    Commencez votre exploration dès aujourd'hui avec RandoOuest. Que vous
+                    soyez en quête de randonnées en famille, de défis sportifs ou de moments
+                    de détente en pleine nature, notre site a tout ce qu'il vous faut
+                    pour organiser votre prochaine sortie.
+                </p>
+                <form>
+                    <article>
+                        <p>
+                            Inscrivez-vous pour recevoir nos itinéraires et conseils exclusifs.
+                        </p>
+                        {/* Ajoutez des champs de formulaire ici si nécessaire */}
+                    </article>
+                </form>
+            </div>
+        </section>
     );
 };
 

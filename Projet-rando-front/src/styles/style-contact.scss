@@ -1,46 +1,38 @@
-/* Correction du body */
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centrage du contenu */
-    width: 100%;
-    margin: 0;
-    padding: 0;
+    align-items: center;
     font-family: 'Lato', sans-serif;
 }
 
-/* Ajustement de la navbar */
-.navbar-custom {
-    width: 100vw; /* Assurer une pleine largeur */
-    position: fixed; /* Fixer la navbar en haut */
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000; /* Priorité visuelle */
+h1 {
+    margin-bottom: 60px;
 }
 
-/* Correction des boutons */
+label {
+    color: #000000;
+}
+
 .btn-send {
     font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 0.2em;
     width: 80%;
     margin-left: 3px;
-}
+    }
 
-.btn-select {
-    background-color: #198754;
-    color: white;
-}
+    .btn-select {
+        background-color: #198754;
+        color: white;
+    }
 
-/* Correction de la structure `.form-group` */
+   .form-group {
 .help-block.with-errors {
     color: #19440c;
     margin-top: 5px;
+
 }
 
-/* Ajustement des cartes */
-.card {
-    margin-left: 10px;
-    margin-right: 10px;
+.card{
+	margin-left: 10px;
+	margin-right: 10px;
 }
+   }

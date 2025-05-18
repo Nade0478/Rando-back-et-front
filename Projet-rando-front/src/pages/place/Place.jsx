@@ -19,9 +19,9 @@ const customIcon = new L.Icon({
 });
 
 const Place = () => {
-  const [place, setPlace] = useState([]);
-  const [name_place, setName_place] = useState([]);
-  const [selectedName_place, setSelectedName_place] = useState(null);
+  const [place, setPlace] = useState([]); 
+  const [name_place, setName_place] = useState([]); 
+  const [selectedName_place, setSelectedName_place] = useState(null); 
 
   // Charger les lieux au montage du composant
   useEffect(() => {
@@ -31,10 +31,8 @@ const Place = () => {
   // Fonction pour récupérer les lieux depuis l'API
   const displayPlace = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/place`
-      );
-      setPlace(response.data);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/place`);
+      setPlace(response.data); 
       setName_place(response.data.map((place) => place.name_place));
     } catch (error) {
       console.error("Erreur lors de la récupération des lieux :", error);
@@ -55,7 +53,7 @@ const Place = () => {
   const filteredPlaces = place.filter((place) => {
     return !selectedName_place || place.name_place === selectedName_place;
   });
-  console.log(process.env);
+console.log(process.env);
   return (
     <div>
       <Sidebar />

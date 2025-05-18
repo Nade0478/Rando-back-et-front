@@ -1,9 +1,8 @@
 .homeHead {
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh; /* Assure une hauteur suffisante */
-  position: relative;
-  overflow: hidden;
+  width: 100vw; /* Pleine largeur */
+  height: 100vh; /* Pleine hauteur */
+  position: relative; /* Empêche le chevauchement */
+  overflow: hidden; /* Évite le débordement */
 }
 
 .homeHead .image-container {
@@ -26,7 +25,6 @@
   justify-content: center;
   align-items: center;
 }
-
 
 .homeHead .text-container {
   text-align: center;

@@ -62,5 +62,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user/{id}/role', [UserController::class, 'getRolesByUser']);
     Route::get('/user/{id}/category', [UserController::class, 'getCategoriesByUser']);
 
+
 //  Mise à jour du profil utilisateur via Sanctum
 Route::middleware('auth:sanctum')->put('/user/profil', [UserController::class, 'update']);
