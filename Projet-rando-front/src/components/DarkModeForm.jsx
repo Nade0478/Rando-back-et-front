@@ -2,18 +2,26 @@ import React, { useState, useEffect } from "react";
 import "./DarkModeForm.css";
 
 function DarkModeForm() {
-    const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true" // Sauvegarde l'état du dark mode
+  );
 
-    // Appliquer la classe au body quand le darkMode change
-    useEffect(() => {
-        document.body.className = darkMode ? "dark" : "light";
-    }, [darkMode]);
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add("dark");
+      document.body.classList.remove("light");
+    } else {
+      document.body.classList.add("light");
+      document.body.classList.remove("dark");
+    }
+    localStorage.setItem("darkMode", darkMode); // Sauvegarde la préférence utilisateur
+  }, [darkMode]);
 
-    return (
-        <button className="dark-mode-btn" onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? "Mode clair ☀️" : "Mode sombre 🌙"}
-        </button>
-    );
+  return (
+    <button className="dark-mode-btn" onClick={() => setDarkMode(!darkMode)}>
+      {darkMode ? "Mode clair ☀️" : "Mode sombre 🌙"}
+    </button>
+  );
 }
 
 export default DarkModeForm;
