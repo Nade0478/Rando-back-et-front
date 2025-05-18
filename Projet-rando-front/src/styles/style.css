@@ -6,6 +6,54 @@ body {
   overflow-y: auto; 
 }
 
+h1 {
+  font-family: "Inknut Antiqua", serif;
+  color: #215105;
+  text-align: center;
+  font-size: 2.5rem; /* Titre principal */
+}
+
+h2 {
+  font-family: "Inknut Antiqua", serif;
+  color: #000000;
+  text-align: center;
+  font-size: 2rem; /* Sous-titre */
+}
+
+h3 {
+  font-family: "Inknut Antiqua", serif;
+  color: #000000;
+  text-align: center;font-size: 1.75rem; /* Niveau 3 */
+}
+
+h4 {
+  font-family: "Inknut Antiqua", serif;
+  color: #000000;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-family: "Inknut Antiqua", serif;
+  color: #000000;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+h6 {
+  color: #000000;
+  text-align: center;
+  font-family: "Inknut Antiqua", serif;
+  font-size: 1rem;
+}
+p {
+  font-family: "Inknut Antiqua", serif;
+  color: #000000;
+  text-align: justify; /* Justifie le texte */
+  font-size: 1rem; /* Taille de police par défaut */
+  line-height: 1.5; /* Hauteur de ligne pour une meilleure lisibilité */
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
@@ -117,3 +165,8 @@ code {
   margin-right: 5px; /* Espace entre l'icône et le texte */
 }
 
+.logo{
+  width: 100px;
+  height: auto;
+  margin-right: 10px; /* Espace entre le logo et le texte */
+}

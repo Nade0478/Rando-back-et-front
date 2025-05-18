@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Menu from "../../components/Menu";
+import DarkModeForm from "../../components/DarkModeForm"; // Ajout de l'import manquant
 
 const AddArticle = () => {
   const navigate = useNavigate();
@@ -22,13 +23,11 @@ const AddArticle = () => {
   const [users, setUsers] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // Récupère la liste des utilisateurs et des catégories
   useEffect(() => {
     fetchUsers();
     fetchCategories();
   }, []);
 
-  // Fonction pour récupérer les utilisateurs
   const fetchUsers = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
@@ -38,26 +37,24 @@ const AddArticle = () => {
     }
   };
 
-  // Fonction pour récupérer les catégories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/category`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/category`
+      );
       setCategories(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des catégories :", error);
     }
   };
 
-  // Fonction pour gérer le changement de fichier (image)
   const changeHandler = (e) => {
     setImage_article(e.target.files[0]);
   };
 
-  // Fonction pour ajouter un article
   const addArticle = async (e) => {
     e.preventDefault();
 
-    // Créer et remplir le formulaire de données
     const formData = new FormData();
     formData.append("title_article", title_article);
     formData.append("date_article", date_article);
@@ -68,141 +65,94 @@ const AddArticle = () => {
       formData.append("image_article", image_article);
     }
 
-    // Envoi des données à l'API
     try {
       await axios.post(`${process.env.REACT_APP_API_URL}/article`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      navigate("/article"); // Redirection après succès
+      navigate("/article");
     } catch (error) {
       if (error.response && error.response.status === 422) {
-        setValidationError(error.response.data.errors); // Gestion des erreurs de validation
+        setValidationError(error.response.data.errors);
       } else {
-        console.error("Erreur inattendue :", error.response || "Pas de réponse reçue");
+        console.error(
+          "Erreur inattendue :",
+          error.response || "Pas de réponse reçue"
+        );
       }
     }
   };
 
   return (
-    <div>
+    <div className="page-wrapper">
+      <DarkModeForm />
       <Menu />
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-12 col-sm-12 col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Création d'un nouvel article</h4>
-                <hr />
-                <div className="form-wrapper">
-                  {Object.keys(validationError).length > 0 && (
-                    <div className="row">
-                      <div className="col-12">
-                        <div className="alert alert-danger">
-                          <ul className="mb-0">
-                            {Object.entries(validationError).map(([key, value]) => (
+      <div className="root">
+        <div className="container-fluid">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-12 col-sm-12 col-md-6">
+                <div className="card">
+                  <div className="card-body">
+                    <h4 className="card-title">Création d'un nouvel article</h4>
+                    <hr />
+                    {Object.keys(validationError).length > 0 && (
+                      <div className="alert alert-danger">
+                        <ul>
+                          {Object.entries(validationError).map(
+                            ([key, value]) => (
                               <li key={key}>{value}</li>
-                            ))}
-                          </ul>
-                        </div>
+                            )
+                          )}
+                        </ul>
                       </div>
-                    </div>
-                  )}
-                  <Form onSubmit={addArticle}>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="title_article">
-                          <Form.Label>Nom de l'article</Form.Label>
-                          <Form.Control
-                            type="text"
-                            value={title_article}
-                            onChange={(e) => setTitle_article(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="date_article">
-                          <Form.Label>Date et heure</Form.Label>
-                          <Form.Control
-                            type="datetime-local"
-                            value={date_article}
-                            onChange={(e) => setDate_article(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="content_article">
-                          <Form.Label>Description</Form.Label>
-                          <Form.Control
-                            as="textarea"
-                            rows={5}
-                            value={content_article}
-                            onChange={(e) => setContent_article(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="user_id">
-                          <Form.Label>Auteur</Form.Label>
-                          <Form.Control
-                            as="select"
-                            value={userId}
-                            onChange={(e) => setUserId(e.target.value)}
-                          >
-                            <option value="">Sélectionnez un utilisateur</option>
-                            {users.map((user) => (
-                              <option key={user.id} value={user.id}>
-                                {user.name}
-                              </option>
-                            ))}
-                          </Form.Control>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="category_id">
-                          <Form.Label>Catégorie</Form.Label>
-                          <Form.Control
-                            as="select"
-                            value={categoryId}
-                            onChange={(e) => setCategoryId(e.target.value)}
-                          >
-                            <option value="">Sélectionnez une catégorie</option>
-                            {categories.map((category) => (
-                              <option key={category.id} value={category.id}>
-                                {category.name_category}
-                              </option>
-                            ))}
-                          </Form.Control>
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group controlId="image_article" className="mb-3">
-                          <Form.Label>Photo</Form.Label>
-                          <Form.Control type="file" onChange={changeHandler} />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Button
-                      variant="success"
-                      className="mt-2"
-                      size="lg"
-                      block="block"
-                      type="submit"
-                    >
-                      Créer
-                    </Button>
-                  </Form>
+                    )}
+                    <Form onSubmit={addArticle}>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="title_article">
+                            <Form.Label>Nom de l'article</Form.Label>
+                            <Form.Control
+                              type="text"
+                              value={title_article}
+                              onChange={(e) => setTitle_article(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="date_article">
+                            <Form.Label>Date et heure</Form.Label>
+                            <Form.Control
+                              type="datetime-local"
+                              value={date_article}
+                              onChange={(e) => setDate_article(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="content_article">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              rows={5}
+                              value={content_article}
+                              onChange={(e) =>
+                                setContent_article(e.target.value)
+                              }
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Button variant="success" className="mt-2" type="submit">
+                        Créer
+                      </Button>
+                    </Form>
+                  </div>
                 </div>
               </div>
             </div>
