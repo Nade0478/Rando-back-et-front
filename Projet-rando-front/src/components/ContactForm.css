@@ -1,25 +1,26 @@
-body {
+/* body {
     background-image: url(http://127.0.0.1:8000/storage/public/uploads/fond-ecran1.jpg);
     background-size: cover;
     height: 100vh;
     background-position: center;
-}
+} */
 
 form {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    margin: auto;
-    border-radius: 5%;
-    }
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+  border-radius: 5%;
+  margin-top: 20px; /* Ajustement pour qu'il soit bien positionné */
+}
 
-    h1 {
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        font-size: 50px;
-        font-style: bold;
-        color: #0c4205;
-        margin-bottom: 20px;
-    }
+h1 {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 50px;
+  font-style: bold;
+  color: #0c4205;
+  margin-bottom: 20px;
+}
 
 p{
     color: #000;

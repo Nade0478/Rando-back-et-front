@@ -3,13 +3,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./HomeHead.css";
 
-const HomeHead = () => {
+const HomeHead = ({ item }) => {
   return (
     <section className="homeHead">
-      <div 
+      <div
         className="image-container"
         style={{
-          backgroundImage: "url('http://127.0.0.1:8000/storage/uploads/arbre-centenaire.jpg')",
+          backgroundImage: `url('${process.env.REACT_APP_API_URL_IMG}/${
+            item?.image_article ?? "arbre-centenaire.jpg"
+          }')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -32,9 +34,8 @@ const HomeHead = () => {
 
                 <div className="text-box">
                   <p>
-                    Commencez votre exploration dès aujourd'hui avec
-                    Rando-Ouest et organisez votre prochaine sortie en toute
-                    sérénité.
+                    Commencez votre exploration dès aujourd'hui avec Rando-Ouest
+                    et organisez votre prochaine sortie en toute sérénité.
                   </p>
                 </div>
               </div>

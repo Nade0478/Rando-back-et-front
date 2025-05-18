@@ -1,13 +1,26 @@
+html,
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-y: auto; 
+  min-height: 100vh; /* Assure que la page prend toute la hauteur */
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
+  overflow-y: auto;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 /*# sourceMappingURL=style.css.map */
 
@@ -28,7 +41,8 @@ code {
   height: auto; /* Maintient le ratio de l'image */
 }
 
-.image-container, .map-container {
+.image-container,
+.map-container {
   width: 100%;
   height: 100%; /* Taille fixe pour éviter le débordement */
   display: flex;
@@ -39,7 +53,7 @@ code {
 .image-container img {
   width: 90%;
   height: 100%;
-  max-width:90%;
+  max-width: 90%;
   object-fit: cover; /* Évite la déformation */
   border-radius: 15px;
 }
@@ -62,13 +76,14 @@ code {
   .row {
     flex-direction: column;
   }
-  .image-container, .map-container {
+  .image-container,
+  .map-container {
     width: 100%;
     height: auto;
   }
 }
 
-.menu {
+/* .menu {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,21 +95,21 @@ code {
   justify-content: center;
   align-items: center;
   margin-top: 5px;
-}
+} */
 
 .content-article {
-  text-align: justify; 
-  margin-left: 0; 
+  text-align: justify;
+  margin-left: 0;
   margin-right: 0;
-  line-height: 1.8; 
+  line-height: 1.8;
   white-space: pre-line; /* Respecter les sauts de ligne */
 }
 
 .description-place {
-  text-align: justify; 
-  margin-left: 0; 
+  text-align: justify;
+  margin-left: 0;
   margin-right: 0;
-  line-height: 1.8; 
+  line-height: 1.8;
   white-space: pre-line;
 }
 .input-group {
@@ -117,3 +132,30 @@ code {
   margin-right: 5px; /* Espace entre l'icône et le texte */
 }
 
+.logo {
+  width: 100px; /* Ajustez la largeur selon vos besoins */
+  height: auto; /* Conserve le ratio de l'image */
+}
+
+.root {
+  margin-top: 100px; /* Ajuste la position du contenu sous le menu */
+  flex: 1; /* Permet d'occuper tout l'espace restant entre le menu et le footer */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centre verticalement si besoin */
+  align-items: center; /* Centre horizontalement si besoin */
+  padding: 20px;
+}
+
+.container-fluid {
+  width: 100%;
+}
+
+.content{
+   margin-top: 100px; /* Ajuste la position du contenu sous le menu */
+  text-align: center; justify-content: center;
+  margin-left: 0;
+  margin-right: 0;
+  line-height: 1.8;
+  white-space: pre-line; /* Respecter les sauts de ligne */
+}

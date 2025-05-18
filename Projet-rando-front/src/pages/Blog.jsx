@@ -1,23 +1,30 @@
-import React from 'react';
-import Menu from '../components/Menu';
-import Footer from '../components/Footer';
-import BlogForm from '../components/blog/BlogForm';
+import React from "react";
+import Menu from "../components/Menu";
+import Footer from "../components/Footer";
+import BlogForm from "../components/blog/BlogForm";
+import DarkModeForm from "../components/DarkModeForm";
 
-const Blog = () => { 
-    const exampleArticle = {
-        title: "Article exemple",
-        // Ajoutez d'autres propriétés si nécessaire
-    };
+const Blog = () => {
+  const exampleArticle = {
+    title: "Article exemple",
+    // Ajoutez d'autres propriétés si nécessaire
+  };
 
-    return (
-        <div>
-            <Menu />
-            <h1>Bienvenue sur mon blog</h1>
-            <p>Cette page contient des articles de blog.</p>
-            <BlogForm article={exampleArticle} /> {/* Transmission de données test */}
-            <Footer />
+  return (
+    <div className="page-wrapper">
+      <DarkModeForm />
+      <Menu />
+      <div className="root">
+        <div className="container-fluid">
+          <h1>Bienvenue sur mon blog</h1>
+          <p>Cette page contient des articles de blog.</p>
+          <BlogForm article={exampleArticle} />{" "}
+          {/* Transmission de données test */}
+          <Footer />
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Blog;

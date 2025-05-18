@@ -1,51 +1,86 @@
-h1{
-  background-color: #a89e92;
-  text-align: center;
-  font-family: 'Inknut Antiqua', sans-serif;
-  color: #025a31;
+/* Correction du body */
+html, body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
 }
 
-p{
-  color: #000;
-  text-align: center;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin-bottom: 20px;
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-form div{
-  margin-bottom: 10px;
-  }
-  form label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 700;
-  }
-  form input,form textarea{
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  padding: 9px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  outline: none;
-  }
-  form button{
-  display: block;
-  margin: auto;
-  background-color:#0c4205;
-  border:none;
-  padding: 10px 20px;
-  color:#fff;
-  border-radius:5px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 700;
-  }
-  form button:hover{
-  background-color:#163a13;
-  }
-  form label{
-    margin-bottom: 0;
-    display: flex;
-    align-items: right !important;
-  }
+  z-index: 1000;
+}
+
+.root {
+  flex: 1; /* Assure que le contenu occupe tout l’espace restant entre menu et footer */
+  margin-top: 70px; /* Ajuste la position du contenu sous le menu */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container-fluid {
+  width: 100%;
+}
+
+.footer {
+  width: 100vw; /* Assure que le footer prend toute la largeur */
+  background-color: #5b3e23;
+  color: black;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Ajustement de la navbar */
+.navbar-custom {
+    width: 100vw; /* Pleine largeur */
+    position: fixed; /* Fixé en haut */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050; /* Priorité visuelle pour rester au-dessus du formulaire */
+}
+
+/* Ajustement du container */
+.container {
+    margin-top: 100px; /* Assurez un espace sous la navbar */
+}
+
+/* Correction des boutons */
+.btn-send {
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    width: 80%;
+    margin-left: 3px;
+}
+
+.btn-select {
+    background-color: #198754;
+    color: white;
+}
+
+/* Ajustement de la structure `.form-container` */
+.form-container {
+    position: relative;
+    z-index: 1000; /* Le formulaire reste sous la navbar */
+    min-height: calc(100vh - 80px); /* Ajustement pour éviter l'empilement */
+}
+
+/* Ajustement des cartes */
+.card {
+    margin-left: 10px;
+    margin-right: 10px;
+}

@@ -1,4 +1,10 @@
 .menu {
+  width: 100vw; /* Pleine largeur */
+  position: fixed; /* Fixé en haut */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Assurez que le menu reste au-dessus */
   font-style: "Inknut Antiqua", serif;;
 }
 
