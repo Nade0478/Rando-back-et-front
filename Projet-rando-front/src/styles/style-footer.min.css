@@ -1,17 +1,2 @@
-.footer {
-    background-color: #5b3e23;
-    color: #000;
-    font-family: "Inknut Antiqua", serif;
-    width: 100%;
-    display: block;
-}
-
-.footer .social-icons a {
-    margin: 0 5px;
-    font-size: 1.5em;
-    color: white;
-    transition: transform 0.3s ease-in-out;
-}
-* {
-    box-sizing: border-box;
-}
+.footer{background-color:#5b3e23;color:#fff;font-family:"Inknut Antiqua",serif;padding:20px 0}.footer-container{display:flex;flex-direction:column;align-items:center}.footer h4,.footer h5,.footer p,.footer .social-icons{text-align:center}.social-icons{display:flex;justify-content:center;gap:15px}.copyright{font-size:.9em;color:#ddd;margin-top:10px}
+/*# sourceMappingURL=style-footer.min.css.map */
