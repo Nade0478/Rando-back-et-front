@@ -38,7 +38,7 @@ const HomeNewArticle = () => {
                 </Link>
               </div>
               <h3 className="item-title">{item.title_article}</h3>
-              <p>{item.content_article}</p>
+              {/* <p>{item.content_article}</p> */}
               <Link to={`/article/show/${item.id}`} className="btn custom-btn">
                 Découvrir
               </Link>
