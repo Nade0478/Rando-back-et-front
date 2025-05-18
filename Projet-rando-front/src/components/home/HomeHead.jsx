@@ -6,7 +6,15 @@ import "./HomeHead.css";
 const HomeHead = () => {
   return (
     <section className="homeHead">
-      <div className="image-container">
+      <div 
+        className="image-container"
+        style={{
+          backgroundImage: "url('http://127.0.0.1:8000/storage/uploads/arbre-centenaire.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="overlay">
           <div className="page-container">
             <div className="container text-container">
@@ -18,20 +26,15 @@ const HomeHead = () => {
                   <p>
                     Rando-Ouest est votre guide ultime pour découvrir les
                     sentiers de randonnée pédestre les plus beaux et variés du
-                    Grand Ouest de la France. Que vous soyez novice ou
-                    expérimenté, notre site vous propose des itinéraires
-                    adaptés, des conseils pratiques et une communauté de
-                    passionnés.
+                    Grand Ouest de la France.
                   </p>
                 </div>
 
                 <div className="text-box">
                   <p>
                     Commencez votre exploration dès aujourd'hui avec
-                    Rando-Ouest. Que vous soyez en quête de randonnées en
-                    famille, de défis sportifs ou de moments de détente en
-                    pleine nature, notre site a tout ce qu'il vous faut pour
-                    organiser votre prochaine sortie.
+                    Rando-Ouest et organisez votre prochaine sortie en toute
+                    sérénité.
                   </p>
                 </div>
               </div>
