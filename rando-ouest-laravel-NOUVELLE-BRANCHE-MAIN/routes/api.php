@@ -10,6 +10,7 @@ use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 //  Route pour récupérer l'utilisateur connecté avec Sanctum
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -65,3 +66,8 @@ Route::middleware('auth:api')->group(function () {
 
 //  Mise à jour du profil utilisateur via Sanctum
 Route::middleware('auth:sanctum')->put('/user/profil', [UserController::class, 'update']);
+
+
+Route::get('/images/{filename}', function ($filename) {
+    return response()->file(storage_path('app/public/uploads/' . $filename));
+});

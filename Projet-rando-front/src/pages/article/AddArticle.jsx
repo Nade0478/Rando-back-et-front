@@ -148,6 +148,42 @@ const AddArticle = () => {
                           </Form.Group>
                         </Col>
                       </Row>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="user_id">
+                            <Form.Label>Auteur</Form.Label>
+                            <Form.Select
+                              value={userId}
+                              onChange={(e) => setUserId(e.target.value)}
+                            >
+                              <option value="">Sélectionner un auteur</option>
+                              {users.map((user) => (
+                                <option key={user.id} value={user.id}>
+                                  {user.name}
+                                </option>
+                              ))}
+                            </Form.Select>
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Form.Group controlId="category_id">
+                            <Form.Label>Catégorie</Form.Label>
+                            <Form.Select
+                              value={categoryId}
+                              onChange={(e) => setCategoryId(e.target.value)}
+                            >
+                              <option value="">Sélectionner une catégorie</option>
+                              {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                  {category.name_category}
+                                </option>
+                              ))}
+                            </Form.Select>
+                          </Form.Group>
+                        </Col>
+                      </Row>
                       <Button variant="success" className="mt-2" type="submit">
                         Créer
                       </Button>
