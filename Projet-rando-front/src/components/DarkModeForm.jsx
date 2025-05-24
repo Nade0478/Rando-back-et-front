@@ -7,6 +7,8 @@ function DarkModeForm() {
   );
 
   useEffect(() => {
+    console.log("DarkMode activé :", darkMode);
+
     if (darkMode) {
       document.body.classList.add("dark");
       document.body.classList.remove("light");
@@ -14,7 +16,8 @@ function DarkModeForm() {
       document.body.classList.add("light");
       document.body.classList.remove("dark");
     }
-    localStorage.setItem("darkMode", darkMode); // Sauvegarde la préférence utilisateur
+
+    localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
   return (

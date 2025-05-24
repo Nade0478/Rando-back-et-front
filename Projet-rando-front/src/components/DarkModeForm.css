@@ -1,14 +1,13 @@
-/* Variables CSS pour mode clair */
-.light {
-    --background-color: #ffffff;
-    --text-color: #000000;
+body.dark {
+  background-color: #6d6452;
+  color: white;
 }
 
-/* Variables CSS pour mode sombre */
-.dark {
-    --background-color: #194800;
-    --text-color: #ffffff;
+body.light {
+  background-color: white;
+  color: black;
 }
+
 
 /* Appliquer les variables globales */
 body {
@@ -52,14 +51,21 @@ img, p {
 
 /* Bouton mode sombre amélioré */
 .dark-mode-btn {
-    padding: 2px 5px;
+    padding: 4px 8px; /* Ajustement pour une taille plus petite */
     font-size: 10px;
+    font-family: 'Inknut Antiqua', serif;
+    font-weight: bold;
     border: none;
     border-radius: 25px;
     cursor: pointer;
     background-color: #000000;
     color: white;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    
+    /* Positionnement en haut à droite */
+    position: fixed;
+    top: 10px;
+    right: 10px;
 }
 
 .dark-mode-btn:hover {

@@ -12,8 +12,8 @@ import "../../styles/style.css";
 const Page = () => {
   return (
     <div className="page-wrapper">
-      <DarkModeForm />
       <Menu />
+      <DarkModeForm />
       <div className="root">
         <div className="container-fluid">
           <PlaceForm />
