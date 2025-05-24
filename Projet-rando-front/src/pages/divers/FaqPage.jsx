@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import Menu from "../../components/Menu";
+import DarkModeForm from "../../components/DarkModeForm";
 
 const faqData = [
   { 
@@ -42,6 +44,8 @@ const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
+    <Menu />
+    <DarkModeForm />
     <div className="faq-item">
       <button onClick={() => setIsOpen(!isOpen)} className="faq-question">
         {question}

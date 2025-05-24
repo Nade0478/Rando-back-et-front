@@ -83,8 +83,8 @@ const OpinionAdd = () => {
 
   return (
     <div className="page-wrapper">
-      <DarkModeForm /> {/* Ajout du dark mode */}
       <Menu />
+      <DarkModeForm /> {/* Ajout du dark mode */}
       <div className="root">
         <div className="container-fluid">
           <div className="container mt-5 card-wrapper">

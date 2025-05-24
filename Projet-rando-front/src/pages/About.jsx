@@ -12,8 +12,8 @@ import DarkModeForm from "../components/DarkModeForm";
 const About = () => {
   return (
     <div className="page-wrapper">
-      <DarkModeForm />
       <Menu />
+      <DarkModeForm />
       <div className="root">
         <div className="container-fluid">
           <h1>A PROPOS DE RANDO-OUEST</h1>

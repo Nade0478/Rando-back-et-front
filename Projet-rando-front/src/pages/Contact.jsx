@@ -9,8 +9,8 @@ import DarkModeForm from "../components/DarkModeForm";
 const Contact = () => {
   return (
     <div className="page-wrapper">
-      <DarkModeForm />
       <Menu />
+      <DarkModeForm />
       <div className="root">
         <div className="container-fluid">
           <h1>BIENVENU SUR LA PAGE CONTACT</h1>

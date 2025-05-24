@@ -52,8 +52,8 @@ const ShowPlace = () => {
 
   return (
     <div className="page-wrapper">
-      <DarkModeForm />
       <Menu />
+      <DarkModeForm />
       <div className="root">
         <div className="container-fluid">
           <div className="container mt-5">

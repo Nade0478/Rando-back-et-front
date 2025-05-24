@@ -8,17 +8,17 @@ import '../styles/style-home.css';
 import DarkModeForm from '../components/DarkModeForm';
 
 const Home = () => { 
-    return ( 
-        <div> 
-            <DarkModeForm />
-            <Menu />
-            <HomeHead />
-            <hr /> 
-            <h2>Nouveautés</h2>
-            <HomeNewArticle />
-            <HomeNewPlace />
-            <Footer />
-        </div> 
+    return (
+      <div>
+        <Menu />
+        <DarkModeForm />
+        <HomeHead />
+        <hr />
+        <h2>Nouveautés</h2>
+        <HomeNewArticle />
+        <HomeNewPlace />
+        <Footer />
+      </div>
     );
 }; 
 

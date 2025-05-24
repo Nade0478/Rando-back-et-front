@@ -5,6 +5,7 @@ import ContactProfil from "../components/profil/ContactProfil";
 import axios from "axios";
 import ProfileCard from "../components/profil/ProfileCard";
 import SidebarProfil from "../components/profil/SidebarProfil";
+import DarkModeForm from "../components/DarkModeForm";
 
 function Profil() {
   const [id_user, setId_user] = useState("");
@@ -40,6 +41,7 @@ if (storedUserId) {
   return (
     <div>
       <SidebarProfil />
+      <DarkModeForm />
       {user ? (
         <>
           <h1>Bienvenue sur votre profil, {name_user}</h1>

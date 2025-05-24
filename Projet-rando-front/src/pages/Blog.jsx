@@ -12,8 +12,8 @@ const Blog = () => {
 
   return (
     <div className="page-wrapper">
-      <DarkModeForm />
       <Menu />
+      <DarkModeForm />
       <div className="root">
         <div className="container-fluid">
           <h1>Bienvenue sur mon blog</h1>
