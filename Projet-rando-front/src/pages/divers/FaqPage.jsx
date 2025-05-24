@@ -45,14 +45,14 @@ const FAQItem = ({ question, answer }) => {
 
   return (
     <Menu />
-    <DarkModeForm />
-    <div className="faq-item">
-      <button onClick={() => setIsOpen(!isOpen)} className="faq-question">
-        {question}
-      </button>
-      {isOpen && <div className="faq-answer">{answer}</div>}
-    </div>
-  );
+      <DarkModeForm />
+      <div className="faq-item">
+        <button onClick={() => setIsOpen(!isOpen)} className="faq-question">
+          {question}
+        </button>
+        {isOpen && <div className="faq-answer">{answer}</div>}
+      </div>
+    );
 };
 
 const FaqPage = () => {
