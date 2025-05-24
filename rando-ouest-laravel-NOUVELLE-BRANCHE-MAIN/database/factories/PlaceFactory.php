@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,8 +25,8 @@ class PlaceFactory extends Factory
             'image_place' => $this->faker->imageUrl(640, 480, 'articles', true),
             'map_place' => $this->faker->imageUrl(640, 480, 'articles', true),
             'distance_place' => $this->faker->randomFloat(2, 0, 100),
-            'difficulty_place' => $this->faker->randomElement(['Débutant', 'Intermédiaire', 'Expert']),
-            'estimated_time_place' => $this->faker->time('H:i'),
+            'difficulty_place' => $this->faker->randomElement(['Facile', 'Moyen', 'Difficile']),
+            'estimated_time_place' => Carbon::createFromFormat('H:i:s', $this->faker->time())->format('H:i'),
         ];
     }
 }
