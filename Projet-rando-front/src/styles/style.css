@@ -1,3 +1,12 @@
+html, body {
+  overflow-y: auto; /* Active le scroll vertical */
+  height: 100vh; /* Assure que la hauteur couvre tout l'écran */
+}
+
+.container-fluid {
+  min-height: 200vh; /* Simule du contenu long pour tester le scroll */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -169,4 +178,19 @@ code {
   width: 100px;
   height: auto;
   margin-right: 10px; /* Espace entre le logo et le texte */
+}
+
+.content-place {
+  text-align: justify; 
+  margin-left: 0; 
+  margin-right: 0;
+  line-height: 1.8; 
+  white-space: pre-line; /* Respecter les sauts de ligne */
+}
+.content-opinion {
+  text-align: justify; 
+  margin-left: 0; 
+  margin-right: 0;
+  line-height: 1.8; 
+  white-space: pre-line; /* Respecter les sauts de ligne */
 }

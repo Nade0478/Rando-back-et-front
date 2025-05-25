@@ -8,25 +8,6 @@ import axios from "axios";
 
 const HomeNewPlace = () => {
   const [items, setItems] = React.useState([]);
-    // {
-    //   id: 72,
-    //   title: "Parcours de randonnée ville",
-    //   image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/cite-plantagenet72.jpg`,
-    //   alt: "parcours cité Plantagenet 72 ville"
-    // },
-    // {
-    //   id: 64,
-    //   title: "Parcours de randonnée mer",
-    //   image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/GR34-Bretagne.jpg`,
-    //   alt: "Parcours GR34 Bretagne"
-    // },
-    // {
-    //   id: 66,
-    //   title: "Parcours de randonnée campagne",
-    //   image: `${process.env.REACT_APP_API_URL}/storage/public/uploads/Vallee-Blavet56.jpg`,
-    //   alt: "parcours vallée Blavet 56 campagne"
-    // },
-
     useEffect(() => {
       displayNewPlace(); // Appel de la fonction pour récupérer les lieux au montage du composant
     }, []);
@@ -52,7 +33,7 @@ const HomeNewPlace = () => {
               </Link>
             </div>
             <h3 className="item-title">{item.name_place}</h3>
-              <p className="description-place">{item.description_place.replace}</p>
+              <p className="content-place">{item.description_place.replace}</p>
             <Link to={`/place/show/${item.id}`} className="btn custom-btn">
               Découvrir
             </Link>

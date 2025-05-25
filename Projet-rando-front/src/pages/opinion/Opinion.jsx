@@ -79,7 +79,7 @@ const Opinion = () => {
             {filteredOpinions.map((opinion) => (
               <tr key={opinion.id}>
                 <td>{opinion.title_opinion || "Titre non disponible"}</td>
-                <td>{opinion.content_opinion || "Contenu non disponible"}</td>
+                <td className="content-opinion">{opinion.content_opinion || "Contenu non disponible"}</td>
                 <td>{opinion.note_opinion || "Note non disponible"}</td>
                 <td>
                   {(opinion.user && opinion.user.name) || "Auteur inconnu"}

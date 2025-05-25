@@ -98,7 +98,7 @@ console.log(process.env);
                 </td>
                 <td>{place.longitude_place}</td>
                 <td>{place.latitude_place}</td>
-                <td>{place.description_place}</td>
+                <td className="content-place">{place.description_place}</td>
                 <td>
                   <MapContainer
                     style={{ height: "100px", width: "75px" }}
