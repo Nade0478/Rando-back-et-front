@@ -1,51 +1,60 @@
-import React, { useState, useEffect } from "react"; 
-import Form from "react-bootstrap/Form"; 
-import Button from "react-bootstrap/Button"; 
-import Row from "react-bootstrap/Row"; 
-import Col from "react-bootstrap/Col"; 
-import axios from "axios"; 
-import { useNavigate, useParams } from "react-router-dom"; 
+import React, { useState, useEffect } from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 import Sidebar from "../../components/admin/Sidebar";
 
-const EditOpinion = () => { 
-  const { opinion } = useParams(); 
-  const navigate = useNavigate(); 
+const EditOpinion = () => {
+  const { opinion } = useParams();
+  const navigate = useNavigate();
 
-  const [title_opinion, setTitle_opinion] = useState(""); 
-  const [content_opinion, setContent_opinion] = useState(""); 
-  const [note_opinion, setNote_opinion] = useState(""); 
+  const [title_opinion, setTitle_opinion] = useState("");
+  const [content_opinion, setContent_opinion] = useState("");
+  const [note_opinion, setNote_opinion] = useState("");
   const [userId, setUserId] = useState("");
-  const [placeId, setPlaceId] = useState(""); 
-  const [validationError, setValidationError] = useState({}); 
-  const [users, setUsers] = useState([]); 
-  const [places, setPlaces] = useState([]); // Ajout pour les lieux
+  const [placeId, setPlaceId] = useState("");
+  const [validationError, setValidationError] = useState({});
+  const [users, setUsers] = useState([]);
+  const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     const getOpinion = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/opinion/${opinion}`
-
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/opinion/${opinion}`
         );
         setTitle_opinion(res.data.title_opinion);
         setContent_opinion(res.data.content_opinion);
         setNote_opinion(res.data.note_opinion);
+        setUserId(res.data.user_id);
+        setPlaceId(res.data.place_id);
       } catch (error) {
-        console.error(error);
+        console.error("Erreur lors de la récupération de l'opinion :", error);
       }
     };
 
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/user`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user`
+        );
         setUsers(response.data);
       } catch (error) {
-        console.error("Erreur lors de la récupération des utilisateurs :", error);
+        console.error(
+          "Erreur lors de la récupération des utilisateurs :",
+          error
+        );
       }
     };
 
     const fetchPlaces = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/place`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/place`
+        );
         setPlaces(response.data);
       } catch (error) {
         console.error("Erreur lors de la récupération des lieux :", error);
@@ -60,22 +69,29 @@ const EditOpinion = () => {
   const updateOpinion = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("_method", "PATCH");
-    formData.append("title_opinion", title_opinion);
-    formData.append("content_opinion", content_opinion);
-    formData.append("note_opinion", note_opinion);
-    formData.append("user_id", parseInt(userId, 10)); 
-    formData.append("place_id", parseInt(placeId, 10));
+    const formData = {
+      title_opinion,
+      content_opinion,
+      note_opinion,
+      user_id: parseInt(userId, 10),
+      place_id: parseInt(placeId, 10),
+    };
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/${opinion}`,formData,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
-    )
+      await axios.patch(
+        `${process.env.REACT_APP_API_URL}/opinion/${opinion}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+
       navigate("/opinion");
-    } catch ({ response }) {
-      if (response.status === 422) {
-        setValidationError(response.data.errors);
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        setValidationError(error.response.data.errors);
       }
     }
   };

@@ -1,12 +1,3 @@
-html, body {
-  overflow-y: auto; /* Active le scroll vertical */
-  height: 100vh; /* Assure que la hauteur couvre tout l'écran */
-}
-
-.container-fluid {
-  min-height: 200vh; /* Simule du contenu long pour tester le scroll */
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
