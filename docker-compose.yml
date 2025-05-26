@@ -1,26 +1,33 @@
+version: '3.8'
+
 services:
   laravel-api-docker:
     container_name: laravel-api-docker
     build: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
     ports:
       - 8000:80
-
     volumes:
-      - ~/storage:/var/www/app/storage 
+      - storage:/var/www/app/storage
+    restart: unless-stopped
 
   react-docker:
     container_name: react-docker
     build: ./Projet-rando-front
     ports:
-      - 80:80
+      - 3000:3000 
+    restart: unless-stopped
 
   mysql_db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: OPL2025
-      MYSQL_DATABASE: rando_ouest
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - 3306:3306
-
     volumes:
-      - ~/datadir:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  storage:
+  mysql_data:

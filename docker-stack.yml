@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   laravel-docker:
     image: ghcr.io/nade0478/cda-api-prod:latest
@@ -12,7 +14,8 @@ services:
       - "traefik.http.routers.laravel-docker.entrypoints=websecure"
       - "traefik.http.routers.laravel-docker.tls.certresolver=myresolver"
     volumes:
-      - /root/storage:/var/www/app/storage/app/public 
+      - storage:/var/www/app/storage/app/public
+    restart: unless-stopped
 
   vue-docker:
     image: ghcr.io/nade0478/cda-spa-prod:latest
@@ -26,23 +29,25 @@ services:
       - "traefik.http.routers.vue-docker.rule=Host(`rando-ouest.com`)"
       - "traefik.http.routers.vue-docker.entrypoints=websecure"
       - "traefik.http.routers.vue-docker.tls.certresolver=myresolver"
+    restart: unless-stopped
 
   mysql_db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: $$MYSQL_ROOT_PASSWORD
       MYSQL_DATABASE: laravel
     ports:
       - 3306:3306
     volumes:
-      - /root/datadir:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
 
   traefik:
     image: traefik:v3.2
     command:
-      - "--api.insecure=true"
+      - "--api.dashboard=true"
       - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false" 
+      - "--providers.docker.exposedbydefault=false"
       - "--entryPoints.websecure.address=:443"
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=support@rando-ouest.com"
@@ -51,5 +56,11 @@ services:
       - "443:443"
       - "8080:8080"
     volumes:
-      - "/letsencrypt:/letsencrypt"
+      - letsencrypt:/letsencrypt
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+
+volumes:
+  storage:
+  mysql_data:
+  letsencrypt:
