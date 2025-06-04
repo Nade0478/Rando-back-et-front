@@ -34,7 +34,7 @@ services:
   mysql_db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: $$MYSQL_ROOT_PASSWORD
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
       MYSQL_DATABASE: laravel
     ports:
       - 3306:3306
