@@ -15,9 +15,10 @@ publish:
 # Migration des bases de données avec vérification du conteneur
 publish-data:
     CONTAINER_ID=$(docker ps --filter "name=Rando-ouest-laravel-docker" -q)
-    if [ -n "$$CONTAINER_ID" ]; then
-        docker exec $$CONTAINER_ID sh -c "php artisan migrate:fresh --seed"
-    else
-        echo "Erreur : Le conteneur Laravel n'est pas trouvé."
-        exit 1
-    fi
+if [ -n "$CONTAINER_ID" ]; then
+    docker exec "$CONTAINER_ID" sh -c "php artisan migrate:fresh --seed"
+else
+    echo "Erreur : Le conteneur Laravel n'est pas trouvé."
+    exit 1
+fi
+
