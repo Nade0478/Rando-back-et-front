@@ -14,11 +14,16 @@ const HomeNewArticle = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_API_URL}/article-home`
         );
-        setItems(response.data);
+        if (Array.isArray(response.data)) {
+          setItems(response.data);
+        } else {
+          console.error("Données API inattendues :", response.data);
+        }
       } catch (error) {
         console.error("Erreur lors de la récupération des articles :", error);
       }
     };
+    
 
     fetchArticles(); // Appel de la fonction au montage du composant
   }, []);
