@@ -15,6 +15,10 @@ class Role extends Model
     {
         return $this->hasMany(User::class);
     }
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 
 }
 
