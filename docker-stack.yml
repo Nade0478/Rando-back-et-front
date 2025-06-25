@@ -1,49 +1,9 @@
 version: '3.8'
 
 services:
-  laravel-docker:
-    image: ghcr.io/nade0478/cda-api-prod:latest
-    ports:
-      - 8000:80
-    depends_on:
-      - mysql_db
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.laravel-docker.rule=Host(`api.rando-ouest.com`)"
-      - "traefik.http.routers.laravel-docker.entrypoints=websecure"
-      - "traefik.http.routers.laravel-docker.tls.certresolver=myresolver"
-    volumes:
-      - storage:/var/www/app/storage/app/public
-    restart: unless-stopped
-
-  vue-docker:
-    image: ghcr.io/nade0478/cda-spa-prod:latest
-    ports:
-      - 8001:80
-    depends_on:
-      - laravel-docker
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vue-docker.rule=Host(`rando-ouest.com`)"
-      - "traefik.http.routers.vue-docker.entrypoints=websecure"
-      - "traefik.http.routers.vue-docker.tls.certresolver=myresolver"
-    restart: unless-stopped
-
-  mysql_db:
-    image: mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_DATABASE: laravel
-    ports:
-      - 3306:3306
-    volumes:
-      - mysql_data:/var/lib/mysql
-    restart: unless-stopped
-
   traefik:
     image: traefik:v3.2
+    container_name: traefik
     command:
       - "--api.dashboard=true"
       - "--providers.docker=true"
@@ -54,10 +14,51 @@ services:
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - "443:443"
+      # Optionnel : expose le dashboard Traefik en local uniquement (ou protège-le)
       - "8080:8080"
     volumes:
       - letsencrypt:/letsencrypt
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+
+  laravel-docker:
+    image: ghcr.io/nade0478/cda-api-prod:latest
+    container_name: laravel-docker
+    depends_on:
+      - mysql_db
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel.rule=Host(`api.rando-ouest.com`)"
+      - "traefik.http.routers.laravel.entrypoints=websecure"
+      - "traefik.http.routers.laravel.tls=true"
+      - "traefik.http.routers.laravel.tls.certresolver=myresolver"
+    volumes:
+      - storage:/var/www/app/storage/app/public
+    restart: unless-stopped
+
+  vue-docker:
+    image: ghcr.io/nade0478/cda-spa-prod:latest
+    container_name: vue-docker
+    depends_on:
+      - laravel-docker
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`rando-ouest.com`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+    restart: unless-stopped
+
+  mysql_db:
+    image: mysql:latest
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: laravel
+    volumes:
+      - mysql_data:/var/lib/mysql
     restart: unless-stopped
 
 volumes:
