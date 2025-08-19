@@ -44,6 +44,14 @@ const HomeNewArticle = () => {
                       src={`${process.env.REACT_APP_API_URL_IMG}/${item.image_article}`}
                       alt={item.title_article}
                       width="75px"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = "none"; // cache l'image cassée
+
+                        const fallback = document.createElement("div");
+                        fallback.className = "fallback-image";
+                        e.target.parentNode.appendChild(fallback);
+                      }}
                     />
                   </Link>
                 </div>

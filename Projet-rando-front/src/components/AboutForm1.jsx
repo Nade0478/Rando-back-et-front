@@ -20,8 +20,8 @@ const AboutForm1 = () => {
           C’est ici que Rando-Ouest intervient !
         </p>
 
-        <h5>Ce que nous offrons :</h5>
-        <ul>
+        <h3>Ce que nous offrons :</h3>
+        <p>
           <li>
             Une sélection d’itinéraires authentiques avec des conseils
             détaillés.
@@ -37,7 +37,7 @@ const AboutForm1 = () => {
             Une approche responsable qui encourage le respect de la nature et la
             préservation des sentiers.
           </li>
-        </ul>
+        </p>
 
         <p>
           Notre mission est simple : vous aider à profiter pleinement de vos
