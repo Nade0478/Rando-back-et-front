@@ -51,3 +51,7 @@
   line-height: 80px; 
   font-size: xx-large; 
 }
+
+.navbar-dark .nav-link:hover {
+  color: #076116 !important; /* Couleur au survol */
+}
