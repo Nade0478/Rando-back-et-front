@@ -30,7 +30,10 @@ const PlaceForm = () => {
                         <div key={index} className="item">
                             <Link to={`/place/show/${item.id}`}>
                                 <div className="image-container">
-                                    <img src={item.image} alt={item.title} />
+                                <img
+                                    src={`${process.env.REACT_APP_API_URL_IMG}/${item.image}`}
+                                    alt={item.title}
+                                    />
                                 </div>
                             </Link>
                             <h3>{item.title}</h3>

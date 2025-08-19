@@ -6,6 +6,8 @@ import axios from "axios";
 import ProfileCard from "../components/profil/ProfileCard";
 import SidebarProfil from "../components/profil/SidebarProfil";
 import DarkModeForm from "../components/DarkModeForm";
+import AddArticleProfil from "../components/profil/AddArticleProfil";
+import AddAvisProfil from "../components/profil/AddAvisProfil";
 
 function Profil() {
   const [id_user, setId_user] = useState("");
@@ -47,6 +49,8 @@ if (storedUserId) {
           <h1>Bienvenue sur votre profil, {name_user}</h1>
           <ProfileCard id_user={id_user}/>
           <ModifProfil id_user={id_user} name_user={name_user} email_user={email_user} />
+          <AddArticleProfil id_user={id_user}/>
+          <AddAvisProfil id_user={id_user}/>
           <ContactProfil />
         </>
       ) : (

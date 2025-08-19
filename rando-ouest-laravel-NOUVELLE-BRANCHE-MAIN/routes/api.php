@@ -45,6 +45,7 @@ Route::middleware('auth:api')->group(function () {
 
     //  Gestion des articles
     Route::apiResource('article', ArticleController::class)->except(['index', 'show']);
+    Route::put('/articles/{id}/validate', [ArticleController::class, 'validateArticle']);
 
     //  Gestion des utilisateurs
     Route::apiResource('user', UserController::class);
