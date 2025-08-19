@@ -123,6 +123,18 @@ const AddArticle = () => {
                       </Row>
                       <Row>
                         <Col>
+                          <Form.Group controlId="image_article">
+                            <Form.Label>Image de l'article</Form.Label>
+                            <Form.Control
+                              type="file"
+                              accept="image/*"
+                              onChange={changeHandler}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
                           <Form.Group controlId="date_article">
                             <Form.Label>Date et heure</Form.Label>
                             <Form.Control

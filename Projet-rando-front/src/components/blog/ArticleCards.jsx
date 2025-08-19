@@ -17,9 +17,17 @@ const ArticleCards = ({ articles }) => {
             <Card>
               <Card.Img
                 variant="top"
-                src={`${process.env.REACT_APP_API_URL}/storage/public/uploads/${article.image_article}`}
+                src={`${process.env.REACT_APP_API_URL_IMG}/${article.image_article}`}
                 alt={article.title_article || "Image non disponible"}
-                onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
+                width="75px"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.style.display = "none"; // cache l'image cassée
+
+                  const fallback = document.createElement("div");
+                  fallback.className = "fallback-image";
+                  e.target.parentNode.appendChild(fallback);
+                }}
               />
               <Card.Body>
                 <Card.Title>
