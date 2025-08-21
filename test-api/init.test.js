@@ -23,7 +23,7 @@ describe("User Login", () => {
 // UTILS
 // ------------------------------------------------------------------------------
 async function login(user, credentials) {
-  const createRes = await Axios.post("/login", credentials);
+  const createRes = await Axios.post("http://127.0.0.1:8000/api/login", credentials);
   console.log("name", "email", "password");
 }
 

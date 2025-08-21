@@ -31,9 +31,12 @@ function LoginForm() {
         `${process.env.REACT_APP_API_URL}/login`,
         data,
         {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`
+          }
         }
       );
+            
 
       if (response.status === 200) {
         const token = response.data.data.access_token.token;

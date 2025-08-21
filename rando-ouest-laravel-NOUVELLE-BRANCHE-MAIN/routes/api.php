@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //  Authentification API
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/login', function () {
+    return response()->json(['error' => 'Utilisez POST pour cette route.'], 405);
+});
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
