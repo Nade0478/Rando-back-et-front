@@ -91,3 +91,8 @@ body.dark {
   background-color: #a89e92;
   color: #0c4205;
 }
+
+body.light {
+  background-color: #f0f0f0;
+  color: #000;
+}
