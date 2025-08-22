@@ -5,35 +5,49 @@ on:
     branches:
       - "NOUVELLE-BRANCHE-MAIN"
 
+env:
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: laravel
+
 jobs:
   tests:
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: test-api
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
       - name: Install Docker
         uses: hoverkraft-tech/compose-action@v2.0.1
+
+      - name: Start Docker Compose
+        run: docker-compose up -d
+
       - name: Sleep for 10 seconds
         run: sleep 10s
         shell: bash
-      - name: Database migrate
-        run: docker exec laravel-api-docker bash -c "php artisan migrate"
-      - name: Database seeding
-        run: docker exec laravel-api-docker bash -c "php artisan db:seed"
-      - name: Install node
+
+      - name: Run Laravel migrations
+        run: docker exec laravel-api-docker php artisan migrate
+
+      - name: Run Laravel seeders
+        run: docker exec laravel-api-docker php artisan db:seed
+
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
-      - name: Install dependencies
+
+      - name: Install dependencies (React)
         run: npm install
-      - name: Install Jest
+        working-directory: Projet-rando-front
+
+      - name: Install Jest globally
         run: npm install -g jest
-      - name: Run tests
+
+      - name: Run React tests
         run: npm run test
+        working-directory: Projet-rando-front
 
   build-and-push-image-api-prod:
     needs: [tests]
@@ -42,13 +56,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Log in to the Container registry
+
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
           username: Nade0478
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
+
+      - name: Build and push Laravel image
         uses: docker/build-push-action@v6
         with:
           context: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
@@ -66,13 +82,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Log in to the Container registry
+
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
           username: Nade0478
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
+
+      - name: Build and push React image
         uses: docker/build-push-action@v6
         with:
           context: ./Projet-rando-front
