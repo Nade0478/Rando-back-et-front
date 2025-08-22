@@ -1,9 +1,10 @@
 name: RANDO-FRONT-BACK-app
 
-on: # specify the build to trigger the automated ci/cd
+on:
   push:
     branches:
       - "NOUVELLE-BRANCHE-MAIN"
+
 jobs:
   tests:
     timeout-minutes: 10
@@ -12,30 +13,30 @@ jobs:
       run:
         working-directory: test-api
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Install Docker
-      uses: hoverkraft-tech/compose-action@v2.0.1
-    - name: Sleep for 10 seconds
-      run: sleep 10s
-      shell: bash
-    - name: Database migrate
-      run: docker exec laravel-api-docker bash -c "php artisan migrate"
-    - name: Database seeding
-      run: docker exec laravel-api-docker bash -c "php artisan db:seed"
-    - name: Install node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20.x
-    - name: Install dependencies
-      run: npm install
-    - name: Install Jest
-      run: npm install -g jest
-    - name: Run tests
-      run: npm run test
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install Docker
+        uses: hoverkraft-tech/compose-action@v2.0.1
+      - name: Sleep for 10 seconds
+        run: sleep 10s
+        shell: bash
+      - name: Database migrate
+        run: docker exec laravel-api-docker bash -c "php artisan migrate"
+      - name: Database seeding
+        run: docker exec laravel-api-docker bash -c "php artisan db:seed"
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+      - name: Install dependencies
+        run: npm install
+      - name: Install Jest
+        run: npm install -g jest
+      - name: Run tests
+        run: npm run test
+
   build-and-push-image-api-prod:
-    needs:
-      - tests
+    needs: [tests]
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -45,21 +46,21 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: https://ghcr.io
-          username:  Nade0478
+          username: Nade0478
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
           build-args: |
-            "MODE=prod"
+            MODE=prod
           push: true
           tags: |
             ghcr.io/nade0478/cda-api-prod:latest
             ghcr.io/nade0478/cda-api-prod:${{ github.sha }}
+
   build-and-push-image-spa-prod:
-    needs:
-      - tests
+    needs: [tests]
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -76,8 +77,28 @@ jobs:
         with:
           context: ./Projet-rando-front
           build-args: |
-            "MODE=prod"
+            MODE=prod
           push: true
           tags: |
             ghcr.io/nade0478/cda-spa-prod:latest
             ghcr.io/nade0478/cda-spa-prod:${{ github.sha }}
+
+  deploy-to-hostinger:
+    needs:
+      - build-and-push-image-api-prod
+      - build-and-push-image-spa-prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Hostinger VPS via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          script: |
+            docker pull ghcr.io/nade0478/cda-api-prod:latest
+            docker pull ghcr.io/nade0478/cda-spa-prod:latest
+            docker stop api || true && docker rm api || true
+            docker stop spa || true && docker rm spa || true
+            docker run -d --name api -p 8000:8000 ghcr.io/nade0478/cda-api-prod:latest
+            docker run -d --name spa -p 3000:3000 ghcr.io/nade0478/cda-spa-prod:latest
