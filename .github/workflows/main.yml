@@ -7,7 +7,7 @@ on:
 
 env:
   MYSQL_ROOT_PASSWORD: root
-  MYSQL_DATABASE: laravel
+  MYSQL_DATABASE: rando_ouest
 
 jobs:
   tests:

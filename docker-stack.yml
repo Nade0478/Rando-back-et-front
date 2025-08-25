@@ -56,7 +56,7 @@ services:
     container_name: mysql_db
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: laravel
+      MYSQL_DATABASE: rando_ouest
     volumes:
       - mysql_data:/var/lib/mysql
     restart: unless-stopped
