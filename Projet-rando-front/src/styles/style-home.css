@@ -26,3 +26,8 @@
     color: #224728;
     text-decoration: none;
   }
+
+  .title a:hover {
+    color: #000000;
+    text-decoration: underline;
+  }
