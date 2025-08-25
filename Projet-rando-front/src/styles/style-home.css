@@ -31,3 +31,8 @@
     color: #000000;
     text-decoration: underline;
   }
+
+.h2 a {
+    color: #224728;
+    text-decoration: none;
+  }
