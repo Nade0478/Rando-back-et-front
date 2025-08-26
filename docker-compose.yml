@@ -3,7 +3,7 @@ services:
     build: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
     container_name: laravel-api-docker
     ports:
-      - 8000:8000  # Laravel écoute sur 8000
+      - 8000:80 # Laravel écoute sur 8000
     volumes:
       - ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN:/var/www/html
       - storage:/var/www/html/storage
