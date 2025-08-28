@@ -14,26 +14,29 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Install Docker
+      - name: Install Docker Compose
         uses: hoverkraft-tech/compose-action@v2.0.1
 
       - name: Start Docker Compose
-        run: docker-compose up -d
+        run: docker-compose up -d --build
 
-      - name: Sleep for 10 seconds
-        run: sleep 10s
+      - name: Wait for services to be ready
+        run: sleep 15s
         shell: bash
 
       - name: Run Laravel migrations
-        run: docker exec laravel-api-docker php artisan migrate
+        run: docker exec laravel-api php artisan migrate --force
 
       - name: Run Laravel seeders
-        run: docker exec laravel-api-docker php artisan db:seed
+        run: docker exec laravel-api php artisan db:seed --force
 
-      - name: Install Node.js
+      - name: Run Laravel tests
+        run: docker exec laravel-api php artisan test
+
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20.x
@@ -42,12 +45,12 @@ jobs:
         run: npm install
         working-directory: Projet-rando-front
 
-      - name: Install Jest globally
-        run: npm install -g jest
-
       - name: Run React tests
         run: npm run test
         working-directory: Projet-rando-front
+
+      - name: Stop Docker Compose
+        run: docker-compose down
 
   build-and-push-image-api-prod:
     needs: [tests]
