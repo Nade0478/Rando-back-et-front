@@ -1,20 +1,14 @@
-# 🧱 Étape 1 : Build de l'app avec Node.js
-FROM node:20-alpine AS build-stage
+FROM node:lts-alpine as build-stage
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
-RUN npm run build
+COPY .env.test .envRUN npm run build
 
-# 🚀 Étape 2 : Serveur NGINX pour la prod
-FROM nginx:stable-alpine AS production-stage
-
-# Copie du build vers le dossier HTML de NGINX
+# production stage
+FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-# Configuration NGINX personnalisée (si nécessaire)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

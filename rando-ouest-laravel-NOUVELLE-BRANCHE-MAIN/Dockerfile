@@ -29,6 +29,8 @@ RUN chown -R www-data:www-data /var/www/app \
     && chmod -R 775 /var/www/app/storage
 
 # Installation de composer
+
+
 # Configurer la variable d'environnement
 ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
