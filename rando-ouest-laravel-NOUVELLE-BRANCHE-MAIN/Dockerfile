@@ -1,36 +1,38 @@
-# 📌 Étape 1 : Image PHP avec Apache
+# charge une image de base; Ici un linux avec apache et PHP 8.3
 FROM php:8.3-apache
 
-# 🧩 Étape 2 : Installation des dépendances système & extensions PHP
+# Installation des dépendances PHP
 RUN apt-get update && apt-get install -y \
-    libfreetype-dev libjpeg62-turbo-dev libpng-dev zlib1g-dev libzip-dev unzip \
-    libonig-dev libxml2-dev libcurl4-openssl-dev libssl-dev libicu-dev \
+    libfreetype-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    zlib1g-dev \
+    libzip-dev \
+    unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd zip mysqli pdo pdo_mysql mbstring intl \
-    && a2enmod rewrite \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install mysqli pdo pdo_mysql
 
-# 🎵 Étape 3 : Installation de Composer (via image officielle)
+# Copie des fichiers locaux vers le conteneur
+COPY . /var/www/app
+# Ce dossier devient notre repertoire courant
+WORKDIR /var/www/app
+
+# Copie de l'environnement
+COPY .env.test /var/www/app/.env
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+
+RUN a2enmod rewrite
+
+RUN chown -R www-data:www-data /var/www/app \
+    && chmod -R 775 /var/www/app/storage
+
+# Installation de composer
+# Configurer la variable d'environnement
 ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 
-# 🛠️ Étape 4 : Définir le répertoire de travail
-WORKDIR /var/www/app
-
-# 📦 Étape 5 : Préinstallation des dépendances Laravel sans scripts
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts \
-    && composer clear-cache
-
-# 📁 Étape 6 : Copie du reste de l’application
-COPY . .
-
-# 🧾 Étape 7 : Configuration Apache
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
-
-# 🔐 Étape 8 : Permissions sur les dossiers Laravel
-RUN chown -R www-data:www-data /var/www/app \
-    && chmod -R 775 storage bootstrap/cache
-
-# 🚀 Étape 9 : Commande de démarrage
-CMD ["apache2-foreground"]
+# Installation des dependences
+COPY composer.json ./
+RUN composer install
