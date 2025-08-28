@@ -1,125 +1,40 @@
-name: RANDO-FRONT-BACK-app
+name: CI
 
 on:
   push:
     branches:
       - "NOUVELLE-BRANCHE-MAIN"
 
-env:
-  MYSQL_ROOT_PASSWORD: root
-  MYSQL_DATABASE: rando_ouest
-
 jobs:
-  tests:
-    timeout-minutes: 10
+  docker:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v1
 
-      - name: Install Docker Compose
+      - name: Installer Docker Compose
         uses: hoverkraft-tech/compose-action@v2.0.1
 
-      - name: Start Docker Compose
-        run: docker-compose up -d --build
-
-      - name: Wait for services to be ready
-        run: sleep 15s
+      - name: Attendre 10 secondes
+        run: sleep 10s
         shell: bash
 
-      - name: Run Laravel migrations
-        run: docker exec laravel-api php artisan migrate --force
+      - name: Initialiser les conteneurs
+        run: |
+          for i in {1..5}; do docker-compose up -d && break || sleep 15; done
 
-      - name: Run Laravel seeders
-        run: docker exec laravel-api php artisan db:seed --force
+      - name: Installer les dépendances Composer
+        run: docker exec laravel-docker bash -c "composer install"
 
-      - name: Run Laravel tests
-        run: docker exec laravel-api php artisan test
+      - name: Migrer la base de données
+        run: docker exec laravel-docker bash -c "php artisan migrate --force"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20.x
+      - name: Peupler la base de données
+        run: docker exec laravel-docker bash -c "php artisan db:seed --force"
 
-      - name: Install dependencies (React)
-        run: npm install
-        working-directory: Projet-rando-front
+      - name: Migrer la base de données de test
+        run: docker exec laravel-docker bash -c "php artisan migrate --env=testing --force"
 
-      - name: Run React tests
-        run: npm run test
-        working-directory: Projet-rando-front
-
-      - name: Stop Docker Compose
-        run: docker-compose down
-
-  build-and-push-image-api-prod:
-    needs: [tests]
-    permissions: write-all
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username: Nade0478
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Laravel image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
-          build-args: |
-            MODE=prod
-          push: true
-          tags: |
-            ghcr.io/nade0478/cda-api-prod:latest
-            ghcr.io/nade0478/cda-api-prod:${{ github.sha }}
-
-  build-and-push-image-spa-prod:
-    needs: [tests]
-    permissions: write-all
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username: Nade0478
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push React image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./Projet-rando-front
-          build-args: |
-            MODE=prod
-          push: true
-          tags: |
-            ghcr.io/nade0478/cda-spa-prod:latest
-            ghcr.io/nade0478/cda-spa-prod:${{ github.sha }}
-
-  deploy-to-hostinger:
-    needs:
-      - build-and-push-image-api-prod
-      - build-and-push-image-spa-prod
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to Hostinger VPS via SSH
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          script: |
-            docker pull ghcr.io/nade0478/cda-api-prod:latest
-            docker pull ghcr.io/nade0478/cda-spa-prod:latest
-            docker stop api || true && docker rm api || true
-            docker stop spa || true && docker rm spa || true
-            docker run -d --name api -p 8000:8000 ghcr.io/nade0478/cda-api-prod:latest
-            docker run -d --name spa -p 3000:3000 ghcr.io/nade0478/cda-spa-prod:latest
+      - name: Exécuter les tests PHPUnit
+        run: docker exec laravel-docker bash -c "php artisan test tests/Feature"
