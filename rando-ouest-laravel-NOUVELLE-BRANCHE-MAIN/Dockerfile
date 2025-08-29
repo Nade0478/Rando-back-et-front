@@ -30,6 +30,6 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 COPY . .
 
 # Copie du bon fichier .env selon le MODE
-COPY .env.${MODE} .env
+COPY .env .env
 
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
