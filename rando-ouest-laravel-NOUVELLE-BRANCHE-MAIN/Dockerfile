@@ -1,44 +1,58 @@
-# charge une image de base; Ici un linux avec apache et PHP 8.3
+# 📦 Image de base avec Apache et PHP 8.3
 FROM php:8.3-apache
+
+# 🔧 Argument pour choisir l'environnement (.env.test, .env.prod, etc.)
 ARG MODE=test
 
-# Installation des d�pendances PHP
-RUN apt-get update && apt-get install -y \
+# 🔧 Installation des dépendances système et extensions PHP
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libfreetype-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
     zlib1g-dev \
     libzip-dev \
     unzip \
+    curl \
+    git \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install mysqli pdo pdo_mysql
+    && docker-php-ext-install -j$(nproc) gd zip mysqli pdo pdo_mysql \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copie des fichiers locaux vers le conteneur
-COPY . /var/www/app
-# Ce dossier devient notre repertoire courant
+# 🔁 Activation du module Apache rewrite
+RUN a2enmod rewrite
+
+# 📁 Définition du répertoire de travail
 WORKDIR /var/www/app
 
-# Copie de l'environnement
+# 📦 Installation de Composer
+COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# 📄 Copie des fichiers de dépendances Laravel
+COPY composer.json composer.lock ./
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# 📄 Copie du reste de l'application
+COPY . .
+
+# ⚙️ Copie du fichier d’environnement et du virtual host Apache
 COPY .env.${MODE} .env
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
 
-RUN a2enmod rewrite
-
+# 🔐 Permissions sur les dossiers Laravel
 RUN chown -R www-data:www-data /var/www/app \
-    && chmod -R 775 /var/www/app/storage
+    && chmod -R 775 storage bootstrap/cache
 
-# Installation de composer droit d'écrire dans le dossier storage
-    RUN chown -R www-data:www-data /var/www/app/storage
+# 👤 Création d’un utilisateur non privilégié
+RUN addgroup --system appgroup && adduser --system appuser --ingroup appgroup \
+    && chown -R appuser:appgroup /var/www/app
 
-# Installation de composer
-# Configurer la variable d'environnement
-ENV COMPOSER_ALLOW_SUPERUSER=1
-COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
+# 👤 Utilisation de l’utilisateur sécurisé
+USER appuser
 
-# Installation des dependences
-COPY composer.json ./
-RUN composer install
-
+# 🔗 Création du lien symbolique vers le dossier storage
 RUN php artisan storage:link || true
+
+# ❤️ Ajout d’un Healthcheck pour surveiller le conteneur
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost || exit 1
