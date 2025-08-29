@@ -1,11 +1,11 @@
 services:
   laravel-api:
-    build: ./rando-ouest-laravel
+    build: ./randolaravel
     container_name: laravel-api
     ports:
       - "8000:8000" # Laravel écoute sur le port 8000
     volumes:
-      - ./rando-ouest-laravel:/var/www/html
+      - ./randolaravel:/var/www/html
       - storage:/var/www/html/storage/app/public
     depends_on:
       - mysql
@@ -20,7 +20,7 @@ services:
       DB_PASSWORD: root
 
   react-app:
-    build: ./Projet-rando-front
+    build: ./randofront
     container_name: react-app
     ports:
       - "3000:3000"

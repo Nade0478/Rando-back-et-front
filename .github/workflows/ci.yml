@@ -1,4 +1,4 @@
-name: RANDO-FRONT-BACK-app
+name: rando-app
 
 on: # specify the build to trigger the automated ci/cd
   push:
@@ -50,7 +50,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
+          context: ./randolaravel
           build-args: |
             "MODE=prod"
           push: true
@@ -74,7 +74,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./Projet-rando-front
+          context: ./randofront
           build-args: |
             "MODE=prod"
           push: true

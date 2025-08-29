@@ -5,6 +5,7 @@ import Menu from "../../components/Menu";
 import Footer from "../../components/Footer";
 import DarkModeForm from "../../components/DarkModeForm"; // Ajout de l'import manquant
 import "../../styles/style.css";
+import { Link } from "react-router-dom";
 
 const ShowArticle = () => {
   const { id } = useParams();
@@ -70,6 +71,11 @@ const ShowArticle = () => {
               <strong>Contenu :</strong> {article.content_article}
             </p>
           </div>
+          <div className="mt-4">
+              <Link to="/article" className="btn btn-dark">
+                Retour à la liste
+              </Link>
+            </div>
         </div>
       </div>
       <Footer />

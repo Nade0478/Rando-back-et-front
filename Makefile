@@ -15,6 +15,6 @@ publish:
 	docker login https://ghcr.io
 	docker compose -f ./docker-stack.yml up -d
 publish-data:
-    docker exec $(docker ps --filter "name=Rando-ouest-laravel-docker" -q) sh -c "php artisan migrate:fresh --seed"
+    docker exec $(docker ps --filter "name=randolaravel-docker" -q) sh -c "php artisan migrate:fresh --seed"
 	
-	docker exec $(docker ps --filter "name=Rando-ouest-laravel-docker" -q) sh -c "php artisan migrate:fresh --seed"
+	docker exec $(docker ps --filter "name=randolaravel-docker" -q) sh -c "php artisan migrate:fresh --seed"

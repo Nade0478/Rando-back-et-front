@@ -4,6 +4,8 @@ import axios from "axios";
 import Menu from "../../components/Menu";
 import Footer from "../../components/Footer";
 import DarkModeForm from "../../components/DarkModeForm";
+import "../../styles/style.css";
+import { Link } from "react-router-dom";
 
 const ShowOpinion = () => {
   const { id } = useParams();
@@ -63,6 +65,11 @@ const ShowOpinion = () => {
               {opinion?.place?.name_place || "Lieu inconnu"}
             </p>
           </div>
+          <div className="mt-4">
+              <Link to="/place" className="btn btn-dark">
+                Retour à la liste
+              </Link>
+            </div>
         </div>
         <Footer />
       </div>

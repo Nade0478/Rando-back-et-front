@@ -2,6 +2,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import DarkModeForm from "../components/DarkModeForm";
 import Menu from "../components/Menu";
+import "../styles/terms.css";
 
 const TermsPage = () => {
   return (
@@ -57,10 +58,11 @@ const TermsPage = () => {
         <h2>6. Contact</h2>
         <p>
           Pour toute question ou préoccupation concernant ces termes, veuillez nous contacter 
-          à <a href="mailto:contact@randouest.fr">contact@randouest.fr</a>.
+          à 
+          <a href="mailto:contact@randouest.fr">contact@randouest.fr</a>.
         </p>
 
-        <p className="mt-4 text-center">
+        <p className="mt-4 text-left">
           Merci de faire partie de notre communauté ! Profitez de vos randonnées !
         </p>
       </Container>
