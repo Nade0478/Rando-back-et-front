@@ -37,7 +37,7 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 # 📂 Copie du code source Laravel
 COPY . .
 
-# ⚙️ Copie du fichier .env (assuré d’être présent dans le contexte de build)
+# ⚙️ Copie du fichier .env 
 COPY .env .env
 
 # 🌐 Configuration Apache personnalisée

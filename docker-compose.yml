@@ -1,11 +1,11 @@
 services:
   laravel-api:
-    build: ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN
+    build: ./rando-ouest-laravel
     container_name: laravel-api
     ports:
       - "8000:8000" # Laravel écoute sur le port 8000
     volumes:
-      - ./rando-ouest-laravel-NOUVELLE-BRANCHE-MAIN:/var/www/html
+      - ./rando-ouest-laravel:/var/www/html
       - storage:/var/www/html/storage/app/public
     depends_on:
       - mysql
