@@ -1,10 +1,11 @@
-# 📦 Image de base avec Apache et PHP 8.3
+# Choix de l'image PHP avec Apache
 FROM php:8.3-apache
 
-# 🔧 Argument pour choisir l'environnement (.env.test, .env.prod, etc.)
-ARG MODE=test
+# Déclaration de la variable MODE (par défaut : dev)
+ARG MODE=dev
+ENV MODE=${MODE}
 
-# 🔧 Installation des dépendances système et extensions PHP
+# Installation des dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libfreetype-dev \
     libjpeg62-turbo-dev \
@@ -18,41 +19,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-install -j$(nproc) gd zip mysqli pdo pdo_mysql \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 🔁 Activation du module Apache rewrite
+# Activation du module Apache rewrite
 RUN a2enmod rewrite
 
-# 📁 Définition du répertoire de travail
+# Définir le dossier de travail
 WORKDIR /var/www/app
 
-# 📦 Installation de Composer
+# Copier Composer depuis l'image officielle
 COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# 📄 Copie des fichiers de dépendances Laravel
+# Copier les fichiers nécessaires
 COPY composer.json composer.lock ./
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# 📄 Copie du reste de l'application
+# Copier tous les fichiers du projet
 COPY . .
 
-# ⚙️ Copie du fichier d’environnement et du virtual host Apache
+# Copier le bon fichier .env selon le MODE
+# Cette ligne va copier .env.dev, .env.test ou .env.prod vers .env
 COPY .env.${MODE} .env
+
+# Copier la configuration Apache
 COPY vhost.conf /etc/apache2/sites-available/000-default.conf
-
-# 🔐 Permissions sur les dossiers Laravel
-RUN chown -R www-data:www-data /var/www/app \
-    && chmod -R 775 storage bootstrap/cache
-
-# 👤 Création d’un utilisateur non privilégié
-RUN addgroup --system appgroup && adduser --system appuser --ingroup appgroup \
-    && chown -R appuser:appgroup /var/www/app
-
-# 👤 Utilisation de l’utilisateur sécurisé
-USER appuser
-
-# 🔗 Création du lien symbolique vers le dossier storage
-RUN php artisan storage:link || true
-
-# ❤️ Ajout d’un Healthcheck pour surveiller le conteneur
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost || exit 1
