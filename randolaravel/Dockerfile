@@ -1,7 +1,15 @@
-# charge une image de base; Ici un linux avec apache et PHP 8.3
+# Étape 1 : Build avec Composer
+FROM composer:2.6.5 AS build
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader
+
+# Étape 2 : Image finale avec Apache et PHP
 FROM php:8.3-apache
 
-# Installation des dépendances PHP
+# Installation des dépendances système et PHP
 RUN apt-get update && apt-get install -y \
     libfreetype-dev \
     libjpeg62-turbo-dev \
@@ -10,29 +18,31 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install mysqli pdo pdo_mysql
+    && docker-php-ext-install -j$(nproc) gd zip mysqli pdo pdo_mysql \
+    && apt-get clean
 
-# Copie des fichiers locaux vers le conteneur
-COPY . /var/www/app
-# Ce dossier devient notre repertoire courant
-WORKDIR /var/www/app
-
-# Copie de l'environnement
-COPY .env.test /var/www/app/.env
-COPY vhost.conf /etc/apache2/sites-available/000-default.conf
-
+# Activation du module Apache rewrite
 RUN a2enmod rewrite
 
+# Configuration du virtual host
+COPY vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# Copie du code source
+COPY . /var/www/app
+WORKDIR /var/www/app
+
+# Copie de l’environnement
+COPY .env.test .env
+
+# Copie des dépendances installées depuis l’étape build
+COPY --from=build /app/vendor /var/www/app/vendor
+
+# Droits et permissions
 RUN chown -R www-data:www-data /var/www/app \
-    && chmod -R 775 /var/www/app/storage
+    && chmod -R 775 storage bootstrap/cache
 
-# Installation de composer
-# Configurer la variable d'environnement
+# Variables d’environnement
 ENV COMPOSER_ALLOW_SUPERUSER=1
-COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 
-# Installation des dependences
-COPY composer.json ./
-RUN composer install
+# Exposition du port Apache
+EXPOSE 80
