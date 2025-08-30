@@ -5,6 +5,10 @@ services:
     container_name: laravel-docker
     build:
       context: ./randolaravel
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.laravel.rule=Host(`api.tondomaine.com`)"
+      - "traefik.http.services.laravel.loadbalancer.server.port=80"
     ports:
       - "8000:80"
     volumes:
@@ -33,6 +37,28 @@ services:
       PMA_PORT: 3306
     depends_on:
       - mysql_db
+
+  traefik:
+    container_name: traefik
+    image: traefik:v2.10
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=300
 
 volumes:
   dbdata:
