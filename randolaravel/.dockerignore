@@ -1,6 +1,5 @@
 node_modules
 vendor
-storage
 .git
 .gitignore
 tests
