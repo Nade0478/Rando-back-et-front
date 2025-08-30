@@ -21,8 +21,10 @@ WORKDIR /var/www/app
 # 📁 Copier le code source Laravel
 COPY . /var/www/app
 
-# ⚙️ Copier les fichiers de config Apache et Laravel
+# ⚙️ Copier les fichiers de config Apache
 COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# ✅ Copier le fichier .env depuis le bon emplacement
 COPY .env /var/www/app/.env
 
 # 🔐 Créer les dossiers critiques si absents
