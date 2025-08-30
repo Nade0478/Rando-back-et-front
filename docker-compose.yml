@@ -3,10 +3,10 @@ services:
     container_name: laravel-docker
     build:
       context: ./randolaravel
-    ports:  
+    ports:
       - "8000:80"
     volumes:
-      - ./:/var/www/app
+      - ./randolaravel:/var/www/app
     depends_on:
       - mysql_db
 
@@ -34,4 +34,3 @@ services:
 
 volumes:
   dbdata:
-
