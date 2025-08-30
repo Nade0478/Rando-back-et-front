@@ -1,7 +1,7 @@
 services:
   laravel-api:
+    container_name: laravel-docker
     build: ./randolaravel
-    container_name: laravel-api
     ports:
       - "8000:8000" # Laravel écoute sur le port 8000
     volumes:
