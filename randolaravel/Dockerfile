@@ -42,7 +42,8 @@ COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # 🧪 Copier le fichier .env
-COPY docker/.env /var/www/app/.env
+COPY ../docker/.env /var/www/app/.env
+COPY ../docker/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # 🌐 Exposer le port Apache
 EXPOSE 80
