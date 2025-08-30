@@ -1,22 +1,16 @@
+#Fichier Makefile
 setup:
-  @make build
-  @make up
-  @make composer-update
-dev:
-  make -j 2 artisan-serve vuejs
-artisan-serve:
-  cd Cursus-api && php artisan serve
-vuejs:
-  cd Cursus-spa && npm run dev
+	@make build
+	@make up
+	@make composer-update
 build:
-  docker-compose build --no-cache --force-rm
-  docker build -t tests-api ./Tests-api
+	docker-compose build --no-cache --force-rm
 stop:
-  docker-compose stop
+	docker-compose stop
 up:
-  docker-compose up -d
+	docker-compose up -d
 composer-update:
-  docker exec laravel-docker bash -c "composer update"
+	docker exec laravel-docker bash -c "composer update"
 data:
-  docker exec laravel-docker bash -c "php artisan migrate"
-  docker exec laravel-docker bash -c "php artisan db:seed"
+	docker exec laravel-docker bash -c "php artisan migrate"
+	docker exec laravel-docker bash -c "php artisan db:seed"

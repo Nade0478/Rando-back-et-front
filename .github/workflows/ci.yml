@@ -1,83 +1,43 @@
-name: rando-app
+name: CI
 
-on: # specify the build to trigger the automated ci/cd
+on:
   push:
     branches:
-      - "NOUVELLE-BRANCHE-MAIN"
+      - NOUVELLE-BRANCHE-MAIN
+
 jobs:
-  tests:
-    timeout-minutes: 10
+  docker:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: test-api
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: Install Docker
-      uses: hoverkraft-tech/compose-action@v2.0.1
-    - name: Sleep for 10 seconds
-      run: sleep 10s
-      shell: bash
-    - name: Database migrate
-      run: docker exec laravel-api-docker bash -c "php artisan migrate"
-    - name: Database seeding
-      run: docker exec laravel-api-docker bash -c "php artisan db:seed"
-    - name: Install node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20.x
-    - name: Install dependencies
-      run: npm install
-    - name: Install Jest
-      run: npm install -g jest
-    - name: Run tests
-      run: npm run test
-  build-and-push-image-api-prod:
-    needs:
-      - tests
-    permissions: write-all
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username:  Nade0478
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./randolaravel
-          build-args: |
-            "MODE=prod"
-          push: true
-          tags: |
-            ghcr.io/nade0478/cda-api-prod:latest
-            ghcr.io/nade0478/cda-api-prod:${{ github.sha }}
-  build-and-push-image-spa-prod:
-    needs:
-      - tests
-    permissions: write-all
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Log in to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: https://ghcr.io
-          username: Nade0478
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./randofront
-          build-args: |
-            "MODE=prod"
-          push: true
-          tags: |
-            ghcr.io/nade0478/cda-spa-prod:latest
-            ghcr.io/nade0478/cda-spa-prod:${{ github.sha }}
+      - name: Checkout du dépôt
+        uses: actions/checkout@v3
+
+      - name: Installer Docker Compose
+        uses: hoverkraft-tech/compose-action@v2.0.1
+
+      - name: Pause de 10 secondes
+        run: sleep 10s
+        shell: bash
+
+      - name: Initialiser les conteneurs Docker
+        run: |
+          for i in {1..5}; do
+            docker-compose up -d && break || sleep 15
+          done
+
+      - name: Installer les dépendances Composer
+        run: docker exec laravel-docker bash -c "composer install"
+
+      - name: Migrer la base de données
+        run: docker exec laravel-docker bash -c "php artisan migrate --force"
+
+      - name: Peupler la base de données
+        run: docker exec laravel-docker bash -c "php artisan db:seed --force"
+
+      - name: Migrer la base de données de test
+        run: docker exec laravel-docker bash -c "php artisan migrate --env=testing --force"
+
+      - name: Exécuter les tests PHPUnit
+        run: docker exec laravel-docker bash -c "php artisan test tests/Feature"

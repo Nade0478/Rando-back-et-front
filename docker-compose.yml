@@ -1,51 +1,37 @@
+version: '3.8'
+
 services:
-  laravel-api:
+  laravel-docker:
     container_name: laravel-docker
-    build: ./randolaravel
-    ports:
-      - "8000:8000" # Laravel écoute sur le port 8000
+    build: ./
+    ports:  
+      - "8000:80"
     volumes:
-      - ./randolaravel:/var/www/html
-      - storage:/var/www/html/storage/app/public
+      - ./:/var/www/app
     depends_on:
-      - mysql
-    networks:
-      - app-net
-    restart: unless-stopped
-    environment:
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_DATABASE: rando_ouest
-      DB_USERNAME: root
-      DB_PASSWORD: root
+      - mysql_db
 
-  react-app:
-    build: ./randofront
-    container_name: react-app
-    ports:
-      - "3000:3000"
-    networks:
-      - app-net
-    restart: unless-stopped
-
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
+  mysql_db:
+    container_name: mysql_db
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel-api-rando
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - app-net
-    restart: unless-stopped
+      - dbdata:/var/lib/mysql
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:latest
+    ports:
+      - "9001:80"
+    environment:
+      PMA_HOST: mysql_db
+      PMA_PORT: 3306
+    depends_on:
+      - mysql_db
 
 volumes:
-  storage:
-  mysql_data:
-
-networks:
-  app-net:
-    driver: bridge
+  dbdata:
