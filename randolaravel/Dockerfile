@@ -23,7 +23,11 @@ COPY . /var/www/app
 
 # ⚙️ Copier les fichiers de config Apache et Laravel
 COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
-COPY docker/.env /var/www/app/.env
+COPY .env /var/www/app/.env
+
+# 🔐 Créer les dossiers critiques si absents
+RUN mkdir -p /var/www/app/storage \
+    && mkdir -p /var/www/app/bootstrap/cache
 
 # 🔐 Droits sur les fichiers Laravel
 RUN chown -R www-data:www-data /var/www/app \
@@ -32,6 +36,9 @@ RUN chown -R www-data:www-data /var/www/app \
 
 # 📦 Installer les dépendances Laravel
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# 🔗 Créer le lien symbolique vers le dossier public
+RUN php artisan storage:link || echo "Lien symbolique non créé (artisan indisponible)"
 
 # 🌐 Exposer le port Apache
 EXPOSE 80
