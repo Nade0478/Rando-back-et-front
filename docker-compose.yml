@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   laravel-docker:
     image: ghcr.io/jay19240-teaching/cda-api-prod:latest
