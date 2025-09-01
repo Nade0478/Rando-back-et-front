@@ -1,9 +1,14 @@
 services:
   laravel-docker:
     container_name: randolaravel
-    build: ./
+    build: ./randolaravel
     ports:
       - 8000:80
+    volumes:
+      - ./randolaravel:/var/www/html
+    depends_on:
+      - mysql_db
+
   mysql_db:
     image: mysql:latest
     environment:
@@ -11,6 +16,7 @@ services:
       MYSQL_DATABASE: rando_ouest
     ports:
       - 3306:3306
+
   phpmyadmin:
     image: phpmyadmin:latest
     ports:
