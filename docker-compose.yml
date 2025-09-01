@@ -1,55 +1,19 @@
 services:
   laravel-docker:
-    image: ghcr.io/jay19240-teaching/cda-api-prod:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.laravel.rule=Host(`api.tondomaine.com`)"
-      - "traefik.http.services.laravel.loadbalancer.server.port=80"
-    restart: always
-    depends_on:
-      - mysql_db
-
-  vue-docker:
-    image: ghcr.io/jay19240-teaching/cda-spa-prod:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vue.rule=Host(`www.rando-ouest.com`)"
-      - "traefik.http.services.vue.loadbalancer.server.port=80"
-    restart: always
-
+    container_name: randolaravel
+    build: ./
+    ports:
+      - 8000:80
   mysql_db:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: rando_ouest
     ports:
-      - "3306:3306"
-    volumes:
-      - dbdata:/var/lib/mysql
-    restart: always
-
-  traefik:
-    image: traefik:v2.10
-    container_name: traefik
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin:latest
     ports:
-      - "80:80"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
-
-  watchtower:
-    image: containrrr/watchtower
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - 9001:80
     environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=300
-    restart: always
-
-volumes:
-  dbdata:
+      PMA_HOST: mysql_db
