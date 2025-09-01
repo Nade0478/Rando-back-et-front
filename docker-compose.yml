@@ -1,25 +1,26 @@
 services:
-  laravel-docker:
-    container_name: randolaravel
+  laravel-api-docker:
+    container_name: laravel-api-docker
     build: ./randolaravel
     ports:
       - 8000:80
+
     volumes:
-      - ./randolaravel:/var/www/html
-    depends_on:
-      - mysql_db
+      - ~/storage:/var/www/app/storage 
+
+  react-docker:
+    container_name: react-docker
+    build: ./randoreact
+    ports:
+      - 80:80
 
   mysql_db:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: OPL2025
       MYSQL_DATABASE: rando_ouest
     ports:
       - 3306:3306
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    ports:
-      - 9001:80
-    environment:
-      PMA_HOST: mysql_db
+    volumes: 
+      - mysql_data:/var/lib/mysql
