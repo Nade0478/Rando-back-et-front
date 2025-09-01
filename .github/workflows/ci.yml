@@ -40,7 +40,7 @@ jobs:
         run: docker exec laravel-docker bash -c "php artisan migrate --env=testing --force"
 
       - name: Installer les dépendances Node.js (frontend)
-        run: docker exec ecoride-front bash -c "npm install"
+        run: docker exec randoreact bash -c "npm install"
 
       - name: Exécuter les tests Jest (frontend)
-        run: docker exec ecoride-front bash -c "npm test"
+        run: docker exec randoreact bash -c "npm test"
