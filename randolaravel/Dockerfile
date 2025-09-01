@@ -1,6 +1,7 @@
-# use PHP 8.3
+# Utiliser PHP 8.3 avec Apache
 FROM php:8.3-apache
-# Install common php extension dependencies
+
+# Installer les dépendances PHP nécessaires
 RUN apt-get update && apt-get install -y \
     libfreetype-dev \
     libjpeg62-turbo-dev \
@@ -12,18 +13,29 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip \
     && docker-php-ext-install mysqli pdo pdo_mysql
-# Set the working directory
+
+# Copier les fichiers du projet Laravel
 COPY . /var/www/app
 WORKDIR /var/www/app
+
+# Copier le fichier .env spécifique à Docker
 COPY docker/.env /var/www/app/.env
+
+# Copier la configuration Apache personnalisée
 COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
+
+# Activer mod_rewrite pour Laravel
 RUN a2enmod rewrite
+
+# Appliquer les bons droits sur les fichiers Laravel
 RUN chown -R www-data:www-data /var/www/app \
-    && chmod -R 775 /var/www/app/storage
-# install composer
-# Configurer la variable d'environnement
+    && chmod -R 775 /var/www/app/storage \
+    && chmod -R 775 /var/www/app/bootstrap/cache
+
+# Installer Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
-# copy composer.json to workdir & install dependencies
+
+# Copier composer.json et installer les dépendances PHP
 COPY composer.json ./
-RUN composer install
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
