@@ -1,26 +1,115 @@
+version: '3.8'
+
 services:
-  laravel-api-docker:
-    container_name: laravel-api-docker
-    build: ./randolaravel
-    ports:
-      - 8000:80
-
-    volumes:
-      - ~/storage:/var/www/app/storage 
-
-  react-docker:
-    container_name: react-docker
-    build: ./randoreact
-    ports:
-      - 80:80
-
-  mysql_db:
-    image: mysql:latest
+  # Base de données MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: rando-mysql
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: OPL2025
       MYSQL_DATABASE: rando_ouest
-    ports:
-      - 3306:3306
-
-    volumes: 
+      MYSQL_USER: rando_user
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
       - mysql_data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - rando-network
+
+  # PhpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: rando-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_ROOT_PASSWORD}
+      UPLOAD_LIMIT: 256M
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - rando-network
+
+  # API Laravel
+  laravel:
+    build:
+      context: ./randolaravel
+      dockerfile: Dockerfile
+    container_name: rando-laravel
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_HOST=mysql
+      - DB_DATABASE=rando_ouest
+      - DB_USERNAME=rando_user
+      - DB_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./randolaravel:/var/www/html
+      - ./randolaravel/storage:/var/www/html/storage
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mysql
+    networks:
+      - rando-network
+
+  # Application React
+  react:
+    build:
+      context: ./randoreact
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL}
+    container_name: rando-react
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - rando-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: rando-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites:/etc/nginx/conf.d
+      - ./ssl:/etc/nginx/ssl
+      - ./randoreact/build:/var/www/react
+    depends_on:
+      - laravel
+      - react
+    networks:
+      - rando-network
+
+  # Redis (optionnel pour le cache Laravel)
+  redis:
+    image: redis:7-alpine
+    container_name: rando-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - rando-network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  rando-network:
+    driver: bridge

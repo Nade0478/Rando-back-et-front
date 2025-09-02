@@ -1,41 +1,79 @@
-# Utiliser PHP 8.3 avec Apache
-FROM php:8.3-apache
+FROM php:8.2-fpm
 
-# Installer les dépendances PHP nécessaires
+# Arguments
+ARG user=rando
+ARG uid=1000
+
+# Installer les dépendances système
 RUN apt-get update && apt-get install -y \
-    libfreetype-dev \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    libzip-dev \
+    libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    zlib1g-dev \
-    libzip-dev \
-    unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install mysqli pdo pdo_mysql
+    libwebp-dev \
+    libxpm-dev \
+    && docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+        --with-xpm \
+    && docker-php-ext-install \
+        pdo_mysql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        zip
 
-# Copier les fichiers du projet Laravel
-COPY . /var/www/app
-WORKDIR /var/www/app
-
-# Copier le fichier .env spécifique à Docker
-COPY docker/.env /var/www/app/.env
-
-# Copier la configuration Apache personnalisée
-COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
-
-# Activer mod_rewrite pour Laravel
-RUN a2enmod rewrite
-
-# Appliquer les bons droits sur les fichiers Laravel
-RUN chown -R www-data:www-data /var/www/app \
-    && chmod -R 775 /var/www/app/storage \
-    && chmod -R 775 /var/www/app/bootstrap/cache
+# Nettoyer le cache apt
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Installer Composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copier composer.json et installer les dépendances PHP
-COPY composer.json ./
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+# Créer un utilisateur système pour exécuter les commandes Composer et Artisan
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+# Définir le répertoire de travail
+WORKDIR /var/www/html
+
+# Copier les fichiers de l'application
+COPY --chown=$user:www-data . .
+
+# Installer les dépendances PHP
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Définir les permissions
+RUN chown -R $user:www-data /var/www/html \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 /var/www/html/storage \
+    && chmod -R 775 /var/www/html/bootstrap/cache
+
+# Configuration PHP personnalisée
+COPY docker/php.ini /usr/local/etc/php/conf.d/app.ini
+
+# Script d'entrée
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Exposer le port
+EXPOSE 9000
+
+# Changer d'utilisateur
+USER $user
+
+# Point d'entrée
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Commande par défaut
+CMD ["php-fpm"]

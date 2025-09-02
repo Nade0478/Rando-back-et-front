@@ -1,46 +1,151 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - "NOUVELLE-BRANCHE-MAIN"
+    branches: [ NOUVELLE-BRANCHE-MAIN, develop ]
+  pull_request:
+    branches: [ NOUVELLE-BRANCHE-MAIN ]
 
 jobs:
-  docker:
-    timeout-minutes: 60
+  test-laravel:
     runs-on: ubuntu-latest
+    name: Test Laravel API
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: rando_ouest_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Checkout du code
-        uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
-      - name: Installer Docker Compose
-        uses: hoverkraft-tech/compose-action@v2.0.1
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, dom, fileinfo, mysql, gd
+        coverage: xdebug
 
-      - name: Pause pour laisser Docker démarrer
-        run: sleep 10s
-        shell: bash
+    - name: Copy Laravel Environment
+      run: |
+        cd randolaravel
+        cp .env.example .env.testing
+        echo "DB_CONNECTION=mysql" >> .env.testing
+        echo "DB_HOST=127.0.0.1" >> .env.testing
+        echo "DB_PORT=3306" >> .env.testing
+        echo "DB_DATABASE=rando_ouest_test" >> .env.testing
+        echo "DB_USERNAME=rando_user" >> .env.testing
+        echo "DB_PASSWORD=Root72" >> .env.testing
 
-      - name: Lancer les conteneurs Docker
-        run: |
-          for i in {1..5}; do
-            docker-compose up -d && break || sleep 15
-          done
+    - name: Install Laravel Dependencies
+      run: |
+        cd randolaravel
+        composer install --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Installer les dépendances PHP (Composer)
-        run: docker exec laravel-docker bash -c "composer install"
+    - name: Generate Laravel Key
+      run: |
+        cd randolaravel
+        php artisan key:generate --env=testing
 
-      - name: Migrer la base de données Laravel
-        run: docker exec laravel-docker bash -c "php artisan migrate --force"
+    - name: Run Laravel Migrations
+      run: |
+        cd randolaravel
+        php artisan migrate --env=testing --force
 
-      - name: Peupler la base de données Laravel
-        run: docker exec laravel-docker bash -c "php artisan db:seed --force"
+    - name: Run Laravel Tests
+      run: |
+        cd randolaravel
+        php artisan test
 
-      - name: Migrer la base de données de test Laravel
-        run: docker exec laravel-docker bash -c "php artisan migrate --env=testing --force"
+  test-react:
+    runs-on: ubuntu-latest
+    name: Test React App
 
-      - name: Installer les dépendances Node.js (frontend)
-        run: docker exec randoreact bash -c "npm install"
+    steps:
+    - uses: actions/checkout@v4
 
-      - name: Exécuter les tests Jest (frontend)
-        run: docker exec randoreact bash -c "npm test"
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'randoreact/package-lock.json'
+
+    - name: Install React Dependencies
+      run: |
+        cd randoreact
+        npm ci
+
+    - name: Run Jest Tests
+      run: |
+        cd randoreact
+        npm run test -- --coverage --watchAll=false
+
+    - name: Build React App
+      run: |
+        cd randoreact
+        npm run build
+
+  deploy:
+    needs: [test-laravel, test-react]
+    runs-on: ubuntu-latest
+    name: Deploy to Production
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Docker Registry (optional)
+      if: env.DOCKER_REGISTRY_URL != ''
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ secrets.DOCKER_REGISTRY_URL }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Docker Images
+      run: |
+        docker build -t rando-laravel:latest -f randolaravel/Dockerfile randolaravel/
+        docker build -t rando-react:latest -f randoreact/Dockerfile randoreact/
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOSTINGER_HOST }}
+        username: ${{ secrets.HOSTINGER_USER }}
+        key: ${{ secrets.HOSTINGER_SSH_KEY }}
+        port: 22
+        script: |
+          cd /var/www/rando-ouest.com
+          
+          # Arrêter les conteneurs existants
+          docker-compose down
+          
+          # Mettre à jour le code
+          git pull origin main
+          
+          # Rebuild et redémarrer
+          docker-compose build --no-cache
+          docker-compose up -d
+          
+          # Attendre que les services démarrent
+          sleep 30
+          
+          # Migrations Laravel
+          docker-compose exec -T laravel php artisan migrate --force
+          
+          # Cache Laravel
+          docker-compose exec -T laravel php artisan config:cache
+          docker-compose exec -T laravel php artisan route:cache
+          docker-compose exec -T laravel php artisan view:cache
+          
+          # Nettoyer les images non utilisées
+          docker system prune -af
