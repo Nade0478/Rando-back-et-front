@@ -31,19 +31,35 @@ jobs:
         extensions: mbstring, dom, fileinfo, mysql, gd
         coverage: xdebug
 
-    - name: Copy Laravel Environment
+    - name: Setup Laravel Environment
       run: |
         cd randolaravel
-        cp .env.example .env.testing
-        echo "DB_CONNECTION=mysql" >> .env.testing
-        echo "DB_HOST=127.0.0.1" >> .env.testing
-        echo "DB_PORT=3306" >> .env.testing
-        echo "DB_DATABASE=rando_ouest_test" >> .env.testing
-        echo "DB_USERNAME=root" >> .env.testing
-        echo "DB_PASSWORD=password" >> .env.testing
-        echo "CACHE_DRIVER=array" >> .env.testing
-        echo "SESSION_DRIVER=array" >> .env.testing
-        echo "QUEUE_CONNECTION=sync" >> .env.testing
+        # Utiliser le fichier .env.test corrigé
+        cp .env.test .env
+        
+        # Adapter pour GitHub Actions avec MySQL
+        sed -i 's/APP_ENV=.*/APP_ENV=testing/' .env
+        sed -i 's/APP_DEBUG=.*/APP_DEBUG=true/' .env
+        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+        sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
+        sed -i 's/DB_DATABASE=.*/DB_DATABASE=rando_ouest_test/' .env
+        sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env
+        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+        sed -i 's/CACHE_STORE=.*/CACHE_STORE=array/' .env
+        sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
+        sed -i 's/QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
+        sed -i 's/MAIL_MAILER=.*/MAIL_MAILER=log/' .env
+        sed -i 's/JWT_SECRET=.*/JWT_SECRET=test_jwt_secret_for_github_actions/' .env
+        
+        # Vérifier que le fichier .env existe
+        if [ ! -f .env ]; then
+          echo "❌ Erreur: Le fichier .env n'a pas été créé"
+          exit 1
+        fi
+        
+        echo "✅ Fichier .env créé avec succès"
+        head -10 .env
 
     - name: Install Laravel Dependencies
       run: |
@@ -53,17 +69,20 @@ jobs:
     - name: Generate Laravel Key
       run: |
         cd randolaravel
-        php artisan key:generate
+        php artisan key:generate --force
+        echo "✅ Laravel APP_KEY générée"
 
     - name: Wait for MySQL to be ready
       run: |
-        cd randolaravel
+        echo "⏳ Attente que MySQL soit prêt..."
         timeout 60s bash -c 'until mysqladmin ping -h 127.0.0.1 -u root -ppassword --silent; do sleep 1; done'
+        echo "✅ MySQL est prêt"
 
     - name: Run Laravel Migrations
       run: |
         cd randolaravel
         php artisan migrate --force --no-interaction
+        echo "✅ Migrations exécutées"
 
     - name: Run Laravel Tests
       run: |
