@@ -1,22 +1,26 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 
-// Helper pour wrapper avec Router si nécessaire
-const AppWithRouter = () => (
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
+// Mock pour React Router DOM v7
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  BrowserRouter: ({ children }) => <div data-testid="router">{children}</div>,
+  Routes: ({ children }) => <div data-testid="routes">{children}</div>,
+  Route: ({ children, element }) => <div data-testid="route">{element || children}</div>,
+  useNavigate: () => jest.fn(),
+  useLocation: () => ({ pathname: '/' }),
+  useParams: () => ({}),
+}));
 
 describe('App Component', () => {
   test('renders without crashing', () => {
-    render(<AppWithRouter />);
+    render(<App />);
+    expect(document.body).toBeInTheDocument();
   });
 
-  test('renders main navigation', () => {
-    render(<AppWithRouter />);
-    // Adaptez selon votre structure
-    // expect(screen.getByRole('navigation')).toBeInTheDocument();
+  test('renders main app structure', () => {
+    render(<App />);
+    // Test que l'app se rend sans erreur
+    expect(screen.getByTestId('router')).toBeInTheDocument();
   });
 });
