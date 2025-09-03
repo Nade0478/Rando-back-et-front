@@ -10,14 +10,14 @@ const Axios = axios.create({
 
 const user = {};
 
-// describe("User Login", () => {
-//   test("Vérification de l'authentification", async () => {
-//     await login(user, {
-//       email: "user@truc.fr",
-//       password: "password",
-//     });
-//   });
-// });
+describe("User Login", () => {
+  test("Vérification de l'authentification", async () => {
+    await login(user, {
+      email: "user@truc.fr",
+      password: "password",
+    });
+  });
+});
 
 // ------------------------------------------------------------------------------
 // UTILS
