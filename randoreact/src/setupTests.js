@@ -35,7 +35,7 @@ jest.mock('emailjs-com', () => ({
 global.alert = jest.fn();
 
 // Mock pour les images
-jest.mock('../Logo-rando-ouest.png', () => 'logo-image.png');
+// a
 
 // Nettoyage après chaque test
 afterEach(() => {
