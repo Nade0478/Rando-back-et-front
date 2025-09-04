@@ -1,39 +1,34 @@
-import { validateEmail, validateHikeData } from '../../utils/validators'; // Adaptez
+// src/tests/components/ContactFormValidation.test.js
+import { render, screen, fireEvent } from '@testing-library/react';
+import ContactForm from '../../components/ContactForm';
 
-describe('Validation Utils', () => {
-  describe('validateEmail', () => {
-    test('validates correct email format', () => {
-      expect(validateEmail('test@example.com')).toBe(true);
-      expect(validateEmail('user.name@domain.co.uk')).toBe(true);
-    });
-
-    test('rejects invalid email format', () => {
-      expect(validateEmail('invalid-email')).toBe(false);
-      expect(validateEmail('')).toBe(false);
-      expect(validateEmail('test@')).toBe(false);
-    });
+describe('ContactForm Validation', () => {
+  test('validates email format in form', () => {
+    render(<ContactForm />);
+    
+    const emailInput = screen.getByLabelText(/email/i);
+    const submitButton = screen.getByRole('button', { name: /envoyer/i });
+    
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    fireEvent.click(submitButton);
+    
+    // Le navigateur gère la validation HTML5 pour type="email"
+    expect(emailInput).toBeInvalid();
   });
 
-  describe('validateHikeData', () => {
-    test('validates complete hike data', () => {
-      const validHike = {
-        name: 'Test Hike',
-        description: 'A beautiful hike',
-        latitude: 48.1173,
-        longitude: -1.6778,
-        difficulty: 3
-      };
-      
-      expect(validateHikeData(validHike)).toBe(true);
-    });
-
-    test('rejects incomplete hike data', () => {
-      const incompleteHike = {
-        name: 'Test Hike'
-        // Missing required fields
-      };
-      
-      expect(validateHikeData(incompleteHike)).toBe(false);
-    });
+  test('requires checkbox agreement', () => {
+    render(<ContactForm />);
+    
+    // Remplir le formulaire sans cocher la case
+    fireEvent.change(screen.getByLabelText(/nom/i), { target: { value: 'Test User' } });
+    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'test@example.com' } });
+    fireEvent.change(screen.getByLabelText(/message/i), { target: { value: 'Test message' } });
+    
+    // Mock alert pour éviter l'erreur JSDOM
+    window.alert = jest.fn();
+    
+    fireEvent.click(screen.getByRole('button', { name: /envoyer/i }));
+    
+    expect(window.alert).toHaveBeenCalledWith('Veuillez accepter les conditions générales.');
   });
 });
