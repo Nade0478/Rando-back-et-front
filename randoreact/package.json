@@ -50,11 +50,17 @@
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^6.8.0",
-        "@testing-library/react": "^16.3.0"
+        "@testing-library/react": "^16.3.0",
+        "identity-obj-proxy": "^3.0.0",
+        "jest-transform-stub": "^2.0.0"
     },
     "jest": {
         "transformIgnorePatterns": [
             "node_modules/(?!axios)"
-        ]
+        ],
+        "moduleNameMapper": {
+            "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+            "\\.(png|jpg|jpeg|gif|svg)$": "jest-transform-stub"
+        }
     }
 }
