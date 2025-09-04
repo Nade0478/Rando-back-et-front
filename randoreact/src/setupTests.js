@@ -30,6 +30,13 @@ jest.mock('emailjs-com', () => ({
   init: jest.fn(),
 }));
 
+// AJOUTEZ CES LIGNES :
+// Mock pour window.alert (évite les erreurs JSDOM)
+global.alert = jest.fn();
+
+// Mock pour les images
+jest.mock('../Logo-rando-ouest.png', () => 'logo-image.png');
+
 // Nettoyage après chaque test
 afterEach(() => {
   jest.clearAllMocks();

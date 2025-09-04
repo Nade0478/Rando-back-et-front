@@ -61,6 +61,9 @@
         "moduleNameMapper": {
             "\\.(css|less|scss|sass)$": "identity-obj-proxy",
             "\\.(png|jpg|jpeg|gif|svg)$": "jest-transform-stub"
-        }
+        },
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/setupTests.js"
+        ]
     }
 }
