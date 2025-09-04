@@ -8,7 +8,7 @@
 .homeHead .image-container {
   width: 100vw;
   height: 100vh;
-  background-image: url('/images/arbre-centenaire.jpg');
+  /* background-image sera définie via JavaScript */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

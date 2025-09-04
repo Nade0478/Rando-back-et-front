@@ -1,4 +1,3 @@
-
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
@@ -7,7 +6,12 @@ import "./HomeHead.css";
 const HomeHead = () => {
   return (
     <section className="homeHead">
-      <div className="image-container">
+      <div 
+        className="image-container"
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}/images/arbre-centenaire.jpg)`
+        }}
+      >
         <div className="overlay">
           <div className="page-container">
             <div className="container text-container">
