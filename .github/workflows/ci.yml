@@ -2,15 +2,17 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ NOUVELLE-BRANCHE-MAIN, develop ]
+    branches: [NOUVELLE-BRANCHE-MAIN, develop]
   pull_request:
-    branches: [ NOUVELLE-BRANCHE-MAIN ]
+    branches: [NOUVELLE-BRANCHE-MAIN]
 
 jobs:
+
+  # 🧪 Test Laravel API
   test-laravel:
-    runs-on: ubuntu-latest
     name: Setup Laravel API
-    
+    runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8.0
@@ -19,257 +21,199 @@ jobs:
           MYSQL_DATABASE: rando_ouest_test
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: mbstring, dom, fileinfo, mysql, gd
-        coverage: xdebug
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, dom, fileinfo, mysql, gd
+          coverage: xdebug
 
-    - name: Setup Laravel Environment
-      run: |
-        cd randolaravel
-        # Utiliser le fichier .env.test corrigé
-        cp .env.test .env
-        
-        # Adapter pour GitHub Actions avec MySQL
-        sed -i 's/APP_ENV=.*/APP_ENV=testing/' .env
-        sed -i 's/APP_DEBUG=.*/APP_DEBUG=true/' .env
-        sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
-        sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-        sed -i 's/DB_PORT=.*/DB_PORT=3306/' .env
-        sed -i 's/DB_DATABASE=.*/DB_DATABASE=rando_ouest_test/' .env
-        sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env
-        sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=password/' .env
-        sed -i 's/CACHE_STORE=.*/CACHE_STORE=array/' .env
-        sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
-        sed -i 's/QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
-        sed -i 's/MAIL_MAILER=.*/MAIL_MAILER=log/' .env
-        sed -i 's/JWT_SECRET=.*/JWT_SECRET=test_jwt_secret_for_github_actions/' .env
-        
-        # Vérifier que le fichier .env existe
-        if [ ! -f .env ]; then
-          echo "❌ Erreur: Le fichier .env n'a pas été créé"
-          exit 1
-        fi
-        
-        echo "✅ Fichier .env créé avec succès"
-        head -10 .env
+      - name: Configure Laravel Environment
+        run: |
+          cd randolaravel
+          cp .env.test .env
+          sed -i 's/^APP_ENV=.*/APP_ENV=testing/' .env
+          sed -i 's/^APP_DEBUG=.*/APP_DEBUG=true/' .env
+          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
+          sed -i 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
+          sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=rando_ouest_test/' .env
+          sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env
+          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+          sed -i 's/^CACHE_STORE=.*/CACHE_STORE=array/' .env
+          sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
+          sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
+          sed -i 's/^MAIL_MAILER=.*/MAIL_MAILER=log/' .env
+          sed -i 's/^JWT_SECRET=.*/JWT_SECRET=test_jwt_secret_for_github_actions/' .env
 
-    - name: Install Laravel Dependencies
-      run: |
-        cd randolaravel
-        composer install --no-progress --prefer-dist --optimize-autoloader
+          if [ ! -f .env ]; then
+            echo "❌ Erreur: Le fichier .env n'a pas été créé"
+            exit 1
+          fi
 
-    - name: Generate Laravel Key
-      run: |
-        cd randolaravel
-        php artisan key:generate --force
-        echo "✅ Laravel APP_KEY générée"
+          echo "✅ Fichier .env créé avec succès"
+          head -10 .env
 
-    - name: Wait for MySQL to be ready
-      run: |
-        echo "⏳ Attente que MySQL soit prêt..."
-        timeout 60s bash -c 'until mysqladmin ping -h 127.0.0.1 -u root -ppassword --silent; do sleep 1; done'
-        echo "✅ MySQL est prêt"
+      - name: Install Laravel Dependencies
+        run: cd randolaravel && composer install --no-progress --prefer-dist --optimize-autoloader
 
-    - name: Run Laravel Migrations
-      run: |
-        cd randolaravel
-        php artisan migrate --force --no-interaction
-        echo "✅ Migrations exécutées"
+      - name: Generate Laravel Key
+        run: cd randolaravel && php artisan key:generate --force
 
-    - name: Run Laravel Tests
-      run: |
-        cd randolaravel
-        php artisan test
+      - name: Wait for MySQL
+        run: |
+          echo "⏳ Attente de MySQL..."
+          timeout 60s bash -c 'until mysqladmin ping -h 127.0.0.1 -u root -ppassword --silent; do sleep 1; done'
 
-    - name: Test Laravel Setup
-      run: |
-        cd randolaravel
-        php artisan route:list
-        echo "✅ Laravel API setup completed successfully"
+      - name: Run Migrations
+        run: cd randolaravel && php artisan migrate --force --no-interaction
 
+      - name: Run Laravel Tests
+        run: cd randolaravel && php artisan test
+
+      - name: Check Laravel Routes
+        run: cd randolaravel && php artisan route:list
+
+  # ⚛️ Test React App
   test-react:
-    runs-on: ubuntu-latest
     name: Test React App with Jest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: 'randoreact/package-lock.json'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'randoreact/package-lock.json'
 
-    - name: Install React Dependencies
-      run: |
-        cd randoreact
-        npm ci
+      - name: Install Dependencies
+        run: cd randoreact && npm ci
 
-    - name: Run Jest Tests
-      run: |
-        cd randoreact
-        npm run test -- --coverage --watchAll=false --verbose
+      - name: Run Jest Tests
+        run: cd randoreact && npm run test -- --coverage --watchAll=false --verbose
 
-    - name: Upload Jest Coverage Reports
-      uses: codecov/codecov-action@v3
-      if: always()
-      with:
-        file: ./randoreact/coverage/lcov.info
-        flags: jest
-        name: jest-coverage
-        fail_ci_if_error: false
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          file: ./randoreact/coverage/lcov.info
+          flags: jest
+          name: jest-coverage
+          fail_ci_if_error: false
 
-    - name: Build React App
-      run: |
-        cd randoreact
-        npm run build
+      - name: Build React App
+        run: cd randoreact && npm run build
 
-    - name: Test Build Size
-      run: |
-        cd randoreact
-        ls -la build/
-        echo "✅ React build completed successfully"
+      - name: Check Build Size
+        run: cd randoreact && ls -la build/
 
+  # 🐳 Build & Push Docker Images
   build-and-push:
-    needs: [test-laravel, test-react]
-    runs-on: ubuntu-latest
     name: Build and Push Docker Images
-    if: github.ref == 'refs/heads/NOUVELLE-BRANCHE-MAIN' && github.event_name == 'push'
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to Docker Registry
-      uses: docker/login-action@v3
-      continue-on-error: true
-      with:
-        registry: ${{ secrets.DOCKER_REGISTRY_URL || 'docker.io' }}
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-
-    - name: Set Registry Variables
-      run: |
-        echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
-        echo "DOCKER_REGISTRY_URL=${{ secrets.DOCKER_REGISTRY_URL }}" >> $GITHUB_ENV
-
-    - name: Build and Push Docker Images
-      run: |
-        # Définir le préfixe du registry
-        REGISTRY_PREFIX=""
-        if [ "$DOCKER_REGISTRY_URL" != "" ]; then
-          REGISTRY_PREFIX="${DOCKER_REGISTRY_URL}/"
-        elif [ "$DOCKER_USERNAME" != "" ]; then
-          REGISTRY_PREFIX="${DOCKER_USERNAME}/"
-        fi
-        
-        echo "🏗️ Building Laravel API..."
-        docker build -t ${REGISTRY_PREFIX}rando-laravel:latest -f randolaravel/Dockerfile randolaravel/
-        
-        echo "🏗️ Building React App..."
-        docker build -t ${REGISTRY_PREFIX}rando-react:latest -f randoreact/Dockerfile randoreact/
-        
-        # Essayer de pusher les images (si l'authentification a réussi)
-        if [ "$DOCKER_USERNAME" != "" ]; then
-          echo "📤 Pushing Laravel API..."
-          docker push ${REGISTRY_PREFIX}rando-laravel:latest || echo "⚠️ Push failed - continuing without registry"
-          
-          echo "📤 Pushing React App..."
-          docker push ${REGISTRY_PREFIX}rando-react:latest || echo "⚠️ Push failed - continuing without registry"
-          
-          echo "✅ Images processing completed!"
-        else
-          echo "⚠️ No Docker credentials found, images built locally only"
-        fi
-
-  deploy:
-    needs: [build-and-push]
     runs-on: ubuntu-latest
-    name: Deploy to Production
+    needs: [test-laravel, test-react]
     if: github.ref == 'refs/heads/NOUVELLE-BRANCHE-MAIN' && github.event_name == 'push'
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set Registry Variables for SSH
-      run: |
-        echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
-        echo "DOCKER_REGISTRY_URL=${{ secrets.DOCKER_REGISTRY_URL }}" >> $GITHUB_ENV
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Deploy to VPS
-      uses: appleboy/ssh-action@v1.0.0
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
-      with:
-        host: ${{ secrets.HOSTINGER_HOST }}
-        username: ${{ secrets.HOSTINGER_USER }}
-        key: ${{ secrets.HOSTINGER_SSH_KEY }}
-        port: 22
-        envs: DOCKER_USERNAME,DOCKER_REGISTRY_URL
-        script: |
-          cd /var/www/rando-ouest.com
-          
-          echo "🔄 Stopping existing containers..."
-          docker-compose down
-          
-          echo "📥 Updating code from GitHub..."
-          git pull origin NOUVELLE-BRANCHE-MAIN
-          
-          # Définir le préfixe du registry pour le serveur
-          DOCKER_REGISTRY_PREFIX=""
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        continue-on-error: true
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY_URL || 'docker.io' }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set Registry Variables
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+          echo "DOCKER_REGISTRY_URL=${{ secrets.DOCKER_REGISTRY_URL }}" >> $GITHUB_ENV
+
+      - name: Build & Push Images
+        run: |
+          REGISTRY_PREFIX=""
           if [ "$DOCKER_REGISTRY_URL" != "" ]; then
-            DOCKER_REGISTRY_PREFIX="${DOCKER_REGISTRY_URL}/"
+            REGISTRY_PREFIX="${DOCKER_REGISTRY_URL}/"
           elif [ "$DOCKER_USERNAME" != "" ]; then
-            DOCKER_REGISTRY_PREFIX="${DOCKER_USERNAME}/"
+            REGISTRY_PREFIX="${DOCKER_USERNAME}/"
           fi
-          
-          # Si on a des credentials, on pull les images
+
+          docker build -t ${REGISTRY_PREFIX}rando-laravel:latest -f randolaravel/Dockerfile randolaravel/
+          docker build -t ${REGISTRY_PREFIX}rando-react:latest -f randoreact/Dockerfile randoreact/
+
           if [ "$DOCKER_USERNAME" != "" ]; then
-            echo "🎯 Pulling latest Docker images..."
-            docker pull ${DOCKER_REGISTRY_PREFIX}rando-laravel:latest || echo "⚠️ Failed to pull Laravel image, will use local build"
-            docker pull ${DOCKER_REGISTRY_PREFIX}rando-react:latest || echo "⚠️ Failed to pull React image, will use local build"
+            docker push ${REGISTRY_PREFIX}rando-laravel:latest || echo "⚠️ Laravel push failed"
+            docker push ${REGISTRY_PREFIX}rando-react:latest || echo "⚠️ React push failed"
           else
-            echo "🏗️ Building Docker images locally..."
-            docker-compose build --no-cache
+            echo "⚠️ No Docker credentials, images built locally only"
           fi
-          
-          echo "🚀 Starting services..."
-          export DOCKER_REGISTRY_PREFIX=${DOCKER_REGISTRY_PREFIX}
-          docker-compose up -d
-          
-          echo "⏳ Waiting for MySQL to be ready..."
-          timeout 120s bash -c 'until docker-compose exec -T mysql mysqladmin ping -h localhost --silent; do sleep 2; done' || echo "⚠️ MySQL health check timeout"
-          
-          echo "⏳ Waiting for Laravel to be ready..."
-          sleep 30
-          
-          echo "🗃️ Running Laravel migrations..."
-          docker-compose exec -T laravel php artisan migrate --force || echo "⚠️ Migration failed"
-          
-          echo "⚡ Optimizing Laravel..."
-          docker-compose exec -T laravel php artisan config:cache || echo "⚠️ Config cache failed"
-          docker-compose exec -T laravel php artisan route:cache || echo "⚠️ Route cache failed"
-          docker-compose exec -T laravel php artisan view:cache || echo "⚠️ View cache failed"
-          docker-compose exec -T laravel php artisan storage:link || echo "⚠️ Storage link failed"
-          
-          echo "🧹 Cleaning up unused Docker images..."
-          docker image prune -af
-          
-          echo "🔍 Checking service status..."
-          docker-compose ps
-          
-          echo "✅ Deployment completed successfully!"
-          echo "🌐 Site: https://rando-ouest.com"
-          echo "🔧 API: https://api.rando-ouest.com"
+
+  # 🚀 Deploy to Production
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-and-push]
+    if: github.ref == 'refs/heads/NOUVELLE-BRANCHE-MAIN' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set Registry Variables
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
+          echo "DOCKER_REGISTRY_URL=${{ secrets.DOCKER_REGISTRY_URL }}" >> $GITHUB_ENV
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: 22
+          debug: true
+          envs: DOCKER_USERNAME,DOCKER_REGISTRY_URL
+          script: |
+            cd /var/www/rando-ouest.com
+            docker-compose down
+            git pull origin NOUVELLE-BRANCHE-MAIN
+
+            DOCKER_REGISTRY_PREFIX=""
+            if [ "$DOCKER_REGISTRY_URL" != "" ]; then
+              DOCKER_REGISTRY_PREFIX="${DOCKER_REGISTRY_URL}/"
+            elif [ "$DOCKER_USERNAME" != "" ]; then
+              DOCKER_REGISTRY_PREFIX="${DOCKER_USERNAME}/"
+            fi
+
+            if [ "$DOCKER_USERNAME" != "" ]; then
+              docker pull ${DOCKER_REGISTRY_PREFIX}rando-laravel:latest || echo "⚠️ Laravel pull failed"
+              docker pull ${DOCKER_REGISTRY_PREFIX}rando-react:latest || echo "⚠️ React pull failed"
+            else
+              docker-compose build --no-cache
+            fi
+
+            export DOCKER_REGISTRY_PREFIX=${DOCKER_REGISTRY_PREFIX}
+            docker-compose up -d
+
+            timeout 120s bash -c 'until docker-compose exec -T mysql mysqladmin ping -h localhost --silent; do sleep 2; done' || echo "⚠️ MySQL timeout"
+            sleep 30
+
+            docker-compose exec -T laravel php artisan
