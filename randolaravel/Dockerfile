@@ -59,21 +59,11 @@ RUN chown -R $user:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage \
     && chmod -R 775 /var/www/html/bootstrap/cache
 
-# Configuration PHP personnalisée
-COPY docker/php.ini /usr/local/etc/php/conf.d/app.ini
-
-# Script d'entrée
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
 # Exposer le port
 EXPOSE 9000
 
 # Changer d'utilisateur
 USER $user
-
-# Point d'entrée
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Commande par défaut
 CMD ["php-fpm"]
