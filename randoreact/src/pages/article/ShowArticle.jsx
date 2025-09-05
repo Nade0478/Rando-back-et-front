@@ -49,7 +49,7 @@ const ShowArticle = () => {
             {article.image_article && (
               <div className="text-center my-4">
                 <img
-                  src={`${process.env.REACT_APP_API_URL_IMG}/${article.image_article}`}
+                  src={`${process.env.REACT_APP_IMAGES_URL}/uploads/${article.image_article}`}
                   alt={article.title_article}
                   className="img-fluid"
                   style={{ maxWidth: "100%", height: "auto" }}

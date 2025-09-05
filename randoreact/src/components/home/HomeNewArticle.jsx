@@ -41,8 +41,7 @@ const HomeNewArticle = () => {
                 <div className="image-container">
                   <Link to={`/article/show/${item.id}`}>
                     <img
-                      src={`${process.env.REACT_APP_API_URL_IMG}/${item.image_article}`}
-                      alt={item.title_article}
+                      src={`${process.env.REACT_APP_IMAGES_URL}/uploads/${item.image_article}`}                      alt={item.title_article}
                       width="75px"
                       onError={(e) => {
                         e.target.onerror = null;

@@ -17,7 +17,7 @@ const ArticleCards = ({ articles }) => {
             <Card>
               <Card.Img
                 variant="top"
-                src={`${process.env.REACT_APP_API_URL_IMG}/${article.image_article}`}
+                src={`${process.env.REACT_APP_IMAGES_URL}/uploads/${article.image_article}`}
                 alt={article.title_article || "Image non disponible"}
                 width="75px"
                 onError={(e) => {

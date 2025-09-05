@@ -16,6 +16,7 @@ const PlaceForm = () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/places-home`);
             setItems(response.data);
+            console.log("Données récupérées:", response.data); // Pour debugging
         } catch (error) {
             console.error("Erreur lors de la récupération des lieux :", error);
         }
@@ -30,9 +31,13 @@ const PlaceForm = () => {
                         <div key={index} className="item">
                             <Link to={`/place/show/${item.id}`}>
                                 <div className="image-container">
-                                <img
-                                    src={`${process.env.REACT_APP_API_URL_IMG}/${item.image}`}
-                                    alt={item.title}
+                                    <img
+                                        src={`${process.env.REACT_APP_IMAGES_URL}/uploads/${item.image}`}
+                                        alt={item.title}
+                                        onError={(e) => {
+                                            console.log('Image non trouvée:', `${process.env.REACT_APP_IMAGES_URL}/uploads/${item.image}`);
+                                            e.target.src = '/images/placeholder.png'; // Image de fallback
+                                        }}
                                     />
                                 </div>
                             </Link>
@@ -52,4 +57,3 @@ const PlaceForm = () => {
 };
 
 export default PlaceForm;
-
