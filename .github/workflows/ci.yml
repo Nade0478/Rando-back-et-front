@@ -190,10 +190,11 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 22
           script_stop: true
+          ssh_extra_args: "-o StrictHostKeyChecking=no"
           envs: DOCKER_USERNAME,DOCKER_REGISTRY_URL
           script: |
             cd /var/www/rando-ouest.com
-          
+            
             echo "🔄 Stopping existing containers..."
             docker-compose down
             
