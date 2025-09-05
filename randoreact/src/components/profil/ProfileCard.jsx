@@ -4,32 +4,31 @@ import axios from "axios";
 import "../profil/CardProfil.css";
 
 const ProfileCard = ({id_user}) => {
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
   useEffect(() => {
-   
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/user/${id_user}`,
+          { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
+        );
+        setUser(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("Erreur lors de la récupération du profil.");
+        setLoading(false);
+      } 
+    };
 
     if (id_user) {
       fetchUser();
     }
-  }, [id_user]); // Ajout de `id` comme dépendance
-console.log(id_user);
-  const fetchUser = async () => {
-    try {
-      
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/user/${id_user}`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` } }
-      );
-      setUser(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError("Erreur lors de la récupération du profil.");
-    } 
-  };
+  }, [id_user]);
+
+  console.log(id_user);
 
   if (loading) {
     return (

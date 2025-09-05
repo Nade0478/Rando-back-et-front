@@ -11,7 +11,7 @@ const AddArticleProfil = ({ id_user }) => {
   const [title_article, setTitle_article] = useState("");
   const [date_article, setDate_article] = useState("");
   const [content_article, setContent_article] = useState("");
-  const [userId, setUserId] = useState(id_user || "");
+  const [userId] = useState(id_user || "");
   const [categoryId, setCategoryId] = useState("");
   const [image_article, setImage_article] = useState(null);
   const [validationError, setValidationError] = useState({});

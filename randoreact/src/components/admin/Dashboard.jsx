@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useTable } from 'react-table';
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
