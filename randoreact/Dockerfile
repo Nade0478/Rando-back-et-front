@@ -23,21 +23,22 @@ RUN npm run build
 # Phase de production
 FROM nginx:alpine
 
-# Copier la configuration Nginx personnalisée
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Configuration nginx inline
+RUN echo 'server { \
+    listen 80; \
+    server_name localhost; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 # Copier les fichiers buildés depuis la phase de build
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copier le script d'entrée
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
 # Exposer le port 80
 EXPOSE 80
-
-# Point d'entrée
-ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # Commande par défaut
 CMD ["nginx", "-g", "daemon off;"]
