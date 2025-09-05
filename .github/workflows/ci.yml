@@ -140,29 +140,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set Registry Variables
-        run: |
-          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
-          echo "DOCKER_REGISTRY_URL=${{ secrets.DOCKER_REGISTRY_URL }}" >> $GITHUB_ENV
-
       - name: Build & Push Images
         run: |
-          REGISTRY_PREFIX=""
-          if [ "$DOCKER_REGISTRY_URL" != "" ]; then
-            REGISTRY_PREFIX="${DOCKER_REGISTRY_URL}/"
-          elif [ "$DOCKER_USERNAME" != "" ]; then
-            REGISTRY_PREFIX="${DOCKER_USERNAME}/"
-          fi
-
-          docker build -t ${REGISTRY_PREFIX}rando-laravel:latest -f randolaravel/Dockerfile randolaravel/
-          docker build -t ${REGISTRY_PREFIX}rando-react:latest -f randoreact/Dockerfile randoreact/
-
-          if [ "$DOCKER_USERNAME" != "" ]; then
-            docker push ${REGISTRY_PREFIX}rando-laravel:latest || echo "⚠️ Laravel push failed"
-            docker push ${REGISTRY_PREFIX}rando-react:latest || echo "⚠️ React push failed"
-          else
-            echo "⚠️ No Docker credentials, images built locally only"
-          fi
+          # Build images localement (plus simple et fiable)
+          docker build -t rando-laravel:latest -f randolaravel/Dockerfile randolaravel/
+          docker build -t rando-react:latest -f randoreact/Dockerfile randoreact/
+          
+          echo "✅ Images built successfully"
 
   # 🚀 Deploy to Production
   deploy:
@@ -174,25 +158,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set Registry Variables
-        run: |
-          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> $GITHUB_ENV
-          echo "DOCKER_REGISTRY_URL=${{ secrets.DOCKER_REGISTRY_URL }}" >> $GITHUB_ENV
-
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.0
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          host: ${{ secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          port: 22
-          script_stop: true
-          ssh_extra_args: "-o StrictHostKeyChecking=no"
-          envs: DOCKER_USERNAME,DOCKER_REGISTRY_URL
-          script: |
+          ssh-private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@srv807224.hstgr.cloud '
             cd /var/www/rando-ouest.com
             
             echo "🔄 Stopping existing containers..."
@@ -208,7 +181,7 @@ jobs:
             docker-compose up -d
 
             echo "⏳ Waiting for MySQL to be ready..."
-            timeout 120s bash -c 'until docker-compose exec -T mysql mysqladmin ping -h localhost --silent; do sleep 2; done' || echo "⚠️ MySQL timeout"
+            timeout 120s bash -c "until docker-compose exec -T mysql mysqladmin ping -h localhost --silent; do sleep 2; done" || echo "⚠️ MySQL timeout"
             
             echo "⏳ Waiting for Laravel to be ready..."
             sleep 30
@@ -231,3 +204,4 @@ jobs:
             echo "✅ Deployment completed successfully!"
             echo "🌐 Site: https://rando-ouest.com"
             echo "🔧 API: https://api.rando-ouest.com"
+          '
