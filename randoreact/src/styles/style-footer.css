@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   align-items: center; /* Centre uniquement le contenu du footer */
+  max-height: fit-content;
 }
 
 .footer h4,
