@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   # Base de données MySQL
   mysql:
@@ -6,14 +8,17 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: rando_ouest
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/init:/docker-entrypoint-initdb.d
     ports:
-      - "3307:3306"
+      - "3306:3306"
     networks:
       - rando-network
+    # Ajout du healthcheck
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
@@ -40,13 +45,14 @@ services:
 
   # API Laravel
   laravel:
-    build: ./randolaravel
+    # MODIFICATION IMPORTANTE : Utilise l'image buildée par CI/CD
+    image: ${DOCKER_REGISTRY_PREFIX}rando-laravel:latest
     container_name: rando-laravel
     restart: unless-stopped
     environment:
       - APP_NAME="Rando Ouest"
-      - APP_ENV=local
-      - APP_DEBUG=true
+      - APP_ENV=production
+      - APP_DEBUG=false
       - APP_KEY=${LARAVEL_APP_KEY}
       - APP_URL=${APP_URL}
       - DB_CONNECTION=mysql
@@ -60,7 +66,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     volumes:
-      - ./randolaravel:/var/www/html
+      # MODIFICATION : Volumes plus spécifiques pour la production
       - laravel_storage:/var/www/html/storage
       - laravel_logs:/var/www/html/storage/logs
     ports:
@@ -72,6 +78,7 @@ services:
         condition: service_started
     networks:
       - rando-network
+    # Ajout du healthcheck
     healthcheck:
       test: ["CMD", "php", "artisan", "tinker", "--execute=echo 'OK';"]
       timeout: 10s
@@ -80,13 +87,12 @@ services:
 
   # Application React
   react:
-    build: ./randoreact
+    # MODIFICATION IMPORTANTE : Utilise l'image buildée par CI/CD
+    image: ${DOCKER_REGISTRY_PREFIX}rando-react:latest
     container_name: rando-react
     restart: unless-stopped
     environment:
       - REACT_APP_API_URL=${REACT_APP_API_URL}
-    volumes:
-      - ./randoreact:/app
     ports:
       - "3000:3000"
     networks:
@@ -141,5 +147,3 @@ volumes:
 networks:
   rando-network:
     driver: bridge
-
-
