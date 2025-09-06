@@ -32,23 +32,19 @@ services:
       - "3000:3000"
     networks:
       - rando-network
-
   laravel:
     build: ./randolaravel
     container_name: rando-laravel
     restart: unless-stopped
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - DB_HOST=mysql
-      - DB_PASSWORD=${DB_ROOT_PASSWORD}
-    volumes:
-      - ./randolaravel:/var/www/html
     ports:
-      - "9000:9000"
+      - "8000:8000"  # Changez de 9000 à 8000
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_DATABASE=rando_ouest
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpass2024
     networks:
       - rando-network
 
