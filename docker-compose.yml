@@ -44,7 +44,7 @@ services:
       - DB_HOST=mysql
       - DB_DATABASE=rando_ouest
       - DB_USERNAME=root
-      - DB_PASSWORD=rootpass2024
+      - DB_PASSWORD=root
     networks:
       - rando-network
 

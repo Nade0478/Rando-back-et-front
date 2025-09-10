@@ -8,7 +8,7 @@ const AboutForm1 = () => {
     <section
       className="presentation"
       style={{
-        backgroundImage: `url(${process.env.REACT_APP_API_URL}/storage/public/uploads/cheminForet_1742477581.png)`,
+        backgroundImage: `url(${process.env.PUBLIC_URL}/images/cheminForet_1742477581.png)`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

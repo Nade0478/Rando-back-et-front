@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title_article');
             $table->dateTime('date_article');
             $table->text('content_article');
-            $table->string('image_article');
+            $table->string('image_article')->nullable();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();

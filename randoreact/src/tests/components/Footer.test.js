@@ -9,7 +9,6 @@ describe('Footer Component', () => {
 
   test('contains footer content', () => {
     render(<Footer />);
-    // Adaptez selon le contenu réel de votre Footer
     // expect(screen.getByRole('contentinfo')).toBeInTheDocument();
   });
 });

@@ -13,8 +13,28 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::with(['category', 'user'])->paginate(50);
-        return response()->json($articles, 200);
+        try {
+            $articles = Article::with(['category', 'user'])->get();
+
+            if ($articles->isEmpty()) {
+                return response()->json([
+                    'message' => 'Aucun article trouvé',
+                    'data' => []
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $articles
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erreur lors de la récupération des articles',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
      /**

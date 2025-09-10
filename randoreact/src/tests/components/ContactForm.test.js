@@ -28,7 +28,6 @@ describe('ContactForm Component', () => {
     const submitButtons = screen.getAllByRole('button');
     if (submitButtons.length > 0) {
       fireEvent.click(submitButtons[0]);
-      // Le formulaire ne devrait pas causer d'erreur
     }
     expect(document.body).toBeInTheDocument();
   });
