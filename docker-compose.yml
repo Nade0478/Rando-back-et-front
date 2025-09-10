@@ -37,7 +37,7 @@ services:
     container_name: rando-laravel
     restart: unless-stopped
     ports:
-      - "8000:8000"  # Changez de 9000 à 8000
+      - "9000:8000"  # Changez de 9000 à 8000
     depends_on:
       - mysql
     environment:
