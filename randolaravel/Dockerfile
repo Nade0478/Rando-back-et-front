@@ -51,10 +51,13 @@ WORKDIR /var/www/html
 COPY composer*.json ./
 
 # Installer les dépendances en tant que root
-RUN composer install --optimize-autoloader --no-interaction
+RUN composer install --optimize-autoloader --no-interaction --no-scripts
 
 # Copier tous les fichiers de l'application
 COPY . .
+
+# Executer les scripts post-installation de Composer
+RUN composer run-script post-autoload-dump
 
 # Créer les dossiers nécessaires avec les bonnes permissions
 RUN mkdir -p storage/logs \

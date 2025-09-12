@@ -4,7 +4,7 @@ events {
 
 http {
     upstream laravel_backend {
-        server laravel:9000;
+        server laravel:8000;
     }
 
     upstream react_frontend {
