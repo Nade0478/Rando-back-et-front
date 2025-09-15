@@ -113,7 +113,6 @@ jobs:
 
       - name: Security Audit
         run: cd randoreact && npm audit --audit-level high || echo "⚠️ Security issues found but continuing build..."
-
       - name: Run Jest Tests
         run: cd randoreact && npm run test -- --coverage --watchAll=false --verbose
 
