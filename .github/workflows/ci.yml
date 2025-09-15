@@ -66,6 +66,16 @@ jobs:
       - name: Install Laravel Dependencies
         run: cd randolaravel && composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Laravel Security Audit (if package.json exists)
+        run: |
+          cd randolaravel
+          if [ -f package.json ]; then
+            npm ci
+            npm audit --audit-level moderate
+          else
+            echo "No package.json found in Laravel project"
+          fi
+
       - name: Generate Laravel Key
         run: cd randolaravel && php artisan key:generate --force
 
@@ -100,6 +110,9 @@ jobs:
 
       - name: Install Dependencies
         run: cd randoreact && npm ci
+
+      - name: Security Audit
+        run: cd randoreact && npm audit --audit-level moderate
 
       - name: Run Jest Tests
         run: cd randoreact && npm run test -- --coverage --watchAll=false --verbose
