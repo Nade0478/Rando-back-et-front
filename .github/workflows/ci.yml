@@ -48,7 +48,7 @@ jobs:
           sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
           sed -i 's/^DB_DATABASE=.*/DB_DATABASE=rando_ouest_test/' .env
           sed -i 's/^DB_USERNAME=.*/DB_USERNAME=root/' .env
-          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+          sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=Root_72/' .env
           sed -i 's/^CACHE_STORE=.*/CACHE_STORE=array/' .env
           sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
           sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
@@ -72,7 +72,7 @@ jobs:
       - name: Wait for MySQL
         run: |
           echo "⏳ Attente de MySQL..."
-          timeout 60s bash -c 'until mysqladmin ping -h 127.0.0.1 -u root -ppassword --silent; do sleep 1; done'
+          timeout 60s bash -c 'until mysqladmin ping -h 127.0.0.1 -u root -pRoot_72 --silent; do sleep 1; done'
 
       - name: Run Migrations
         run: cd randolaravel && php artisan migrate --force --no-interaction
