@@ -1,6 +1,6 @@
 // src/tests/services/token.test.js
 
-import tokenService from '../../services/token';
+import tokenService from '../../auth/Token';
 import jwtDecode from 'jwt-decode';
 
 // Mock de jwt-decode
