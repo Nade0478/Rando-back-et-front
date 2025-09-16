@@ -1,3 +1,5 @@
+# Votre fichier .github/workflows/ci.yml
+
 name: CI/CD Pipeline
 
 on:
