@@ -1,4 +1,4 @@
-# Votre fichier .github/workflows/ci.yml
+# Votre fichier .github/workflows/ci.yml corrigé complet
 
 name: CI/CD Pipeline
 
@@ -146,7 +146,16 @@ jobs:
           cache-dependency-path: 'randoreact/package-lock.json'
 
       - name: Install Dependencies
-        run: cd randoreact && npm ci
+        run: |
+          cd randoreact
+          # Nettoyer les dépendances existantes
+          rm -rf node_modules package-lock.json
+          # Vérifier et corriger package.json si nécessaire
+          if grep -q '"react-scripts": "\^5\.1\.0"' package.json; then
+            sed -i 's/"react-scripts": "\^5\.1\.0"/"react-scripts": "^5.0.1"/g' package.json
+          fi
+          # Installer les dépendances
+          npm install
 
       - name: Security Audit
         run: cd randoreact && npm audit --audit-level high || echo "⚠️ Security issues found but continuing build..."
