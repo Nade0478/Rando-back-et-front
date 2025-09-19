@@ -35,7 +35,6 @@ Route::get('/place-home', [PlaceController::class, 'indexHome']);
 //  Routes protégées par JWT
 Route::middleware('auth:api')->group(function () {
     Route::get('/currentuser', [AuthController::class, 'currentUser']);
-});
 
     //  Gestion des catégories
     Route::apiResource('category', CategoryController::class);
@@ -66,11 +65,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/user/{id}/manage_place', [UserController::class, 'getManagePlacesByUser']);
     Route::get('/user/{id}/role', [UserController::class, 'getRolesByUser']);
     Route::get('/user/{id}/category', [UserController::class, 'getCategoriesByUser']);
-
+}); // ← Accolade fermante déplacée ici
 
 //  Mise à jour du profil utilisateur via Sanctum
 Route::middleware('auth:sanctum')->put('/user/profil', [UserController::class, 'update']);
-
 
 Route::get('/images/{filename}', function ($filename) {
     return response()->file(storage_path('app/public/uploads/' . $filename));
