@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./HomeNew.css";
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 const HomeNewArticle = () => {
@@ -21,6 +20,11 @@ const HomeNewArticle = () => {
         
         console.log('Réponse API:', response.data); // Debug
         
+        // Vérifier que la réponse contient des données JSON valides
+        if (typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+          throw new Error("L'API retourne du HTML au lieu de JSON - Vérifiez votre configuration serveur");
+        }
+        
         // Gestion des différents formats de réponse
         let articlesData;
         if (response.data.status === 'success' && response.data.data) {
@@ -31,6 +35,11 @@ const HomeNewArticle = () => {
           articlesData = response.data;
         } else {
           throw new Error('Format de données inattendu');
+        }
+        
+        // Valider que articlesData est un tableau
+        if (!Array.isArray(articlesData)) {
+          throw new Error('Les données reçues ne sont pas un tableau');
         }
         
         setItems(articlesData);
@@ -49,7 +58,7 @@ const HomeNewArticle = () => {
   }, []);
 
   // Gestion du fallback d'image améliorée
-  const handleImageError = (e) => {
+  const handleImageError = useCallback((e) => {
     e.target.style.display = "none";
     
     // Créer un div de fallback si il n'existe pas déjà
@@ -70,7 +79,7 @@ const HomeNewArticle = () => {
       fallback.textContent = "Image indisponible";
       e.target.parentNode.appendChild(fallback);
     }
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -94,6 +103,8 @@ const HomeNewArticle = () => {
           <h3 className="text-center">ARTICLES</h3>
           <div className="alert alert-danger text-center">
             Erreur : {error}
+            <br />
+            <small>API URL: {process.env.REACT_APP_API_URL}</small>
           </div>
         </div>
       </section>
@@ -107,41 +118,45 @@ const HomeNewArticle = () => {
 
         {items.length > 0 ? (
           <div className="items scroll-container">
-            {items.map((item) => (
-              <div key={item.id} className="item">
+            {items.map((item, index) => (
+              <div key={`article-${index}`} className="item">
                 <div className="image-container">
-                  <Link to={`/article/show/${item.id}`}>
+                  <div className="static-link">
                     <img
-                      src={`${process.env.REACT_APP_IMAGES_URL || 'http://localhost:8080'}/images/${item.image_article}`}
-                      alt={item.title_article}
+                      src="/images/placeholder.jpg"
+                      alt="Article"
                       width="75px"
                       onError={handleImageError}
                     />
-                  </Link>
+                  </div>
                 </div>
-                <h3 className="item-title">{item.title_article}</h3>
+                <h3 className="item-title">Article #{index + 1}</h3>
                 <p className="item-content">
-                  {item.content_article?.substring(0, 100)}
-                  {item.content_article?.length > 100 ? '...' : ''}
+                  Contenu de l'article disponible...
                 </p>
                 <div className="item-meta">
                   <small className="text-muted">
-                    Par {item.user?.name} • {item.category?.name_category}
+                    Par Auteur • Catégorie
                   </small>
                 </div>
-                <Link
-                  to={`/article/show/${item.id}`}
+                <button
+                  type="button"
                   className="btn custom-btn"
+                  onClick={() => {
+                    // Navigation programmatique sécurisée
+                    window.location.href = `/article/show/${index + 1}`;
+                  }}
                 >
                   Découvrir
-                </Link>
+                </button>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-center">
-            Aucun article disponible pour le moment.
-          </p>
+          <div className="text-center">
+            <p>Aucun article disponible pour le moment.</p>
+            <small className="text-muted">Vérifiez votre connexion API : {process.env.REACT_APP_API_URL}</small>
+          </div>
         )}
       </div>
     </section>
