@@ -15,9 +15,7 @@ const HomeNewArticle = () => {
         setLoading(true);
         
         // URL corrigée pour votre API
-        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
-        const response = await axios.get(`${apiUrl}/article-home`);
-        
+        const apiUrl = process.env.REACT_APP_API_URL || 'https://api.rando-ouest.com/api';        const response = await axios.get(`${apiUrl}/article-home`);
         console.log('Réponse API:', response.data); // Debug
         
         // Vérifier que la réponse contient des données JSON valides
