@@ -6,7 +6,7 @@
         "@intlify/unplugin-vue-i18n": "^11.0.1",
         "@testing-library/dom": "^10.4.0",
         "@testing-library/user-event": "^13.5.0",
-        "axios": "^1.8.2",
+        "axios": "^1.13.5",
         "bootstrap": "^5.3.3",
         "caniuse-lite": "^1.0.30001735",
         "emailjs-com": "^3.2.0",
